@@ -33,6 +33,10 @@ export const mountNav = (mount) => {
   const address   = shop.address();
   const hours     = shop.hours();
 
+  // Nav bar only — the sheet lives on document.body (see below).
+  // Reason: #nav has backdrop-filter which creates a new containing
+  // block, trapping any fixed-positioned descendant inside the 72px
+  // nav strip. The sheet needs to escape to the viewport.
   mount.innerHTML = `
     <div class="nav__inner nav--a container">
       <a href="/" class="nav__brand" aria-label="ClipperCartel home">ClipperCartel</a>
@@ -44,33 +48,41 @@ export const mountNav = (mount) => {
         <span></span><span></span>
       </button>
     </div>
+  `;
 
-    <div class="nav__sheet" id="nav-sheet" aria-hidden="true" aria-label="Site menu">
-      <div class="nav__sheet-inner">
-        <p class="nav__sheet-eyebrow">Menu</p>
+  // Build the sheet on document.body — outside #nav's containing block.
+  let sheet = document.getElementById('nav-sheet');
+  if (sheet) sheet.remove();                       // idempotent — SPA re-mounts
+  sheet = document.createElement('div');
+  sheet.className = 'nav__sheet';
+  sheet.id = 'nav-sheet';
+  sheet.setAttribute('aria-hidden', 'true');
+  sheet.setAttribute('aria-label', 'Site menu');
+  sheet.innerHTML = `
+    <div class="nav__sheet-inner">
+      <p class="nav__sheet-eyebrow">Menu</p>
 
-        <nav class="nav__sheet-links" aria-label="Mobile menu">
-          ${links.map((l, i) => sheetLink(l.href, l.label, i)).join('')}
-        </nav>
+      <nav class="nav__sheet-links" aria-label="Mobile menu">
+        ${links.map((l, i) => sheetLink(l.href, l.label, i)).join('')}
+      </nav>
 
-        <div class="nav__sheet-footer">
-          <div class="nav__sheet-row">
-            ${phone     ? `<a href="${telLink()}" class="nav__sheet-chip">Call</a>` : ''}
-            ${phone     ? `<a href="${waLink("Hi, I'd like to book a chair.")}" class="nav__sheet-chip" rel="noopener" target="_blank">WhatsApp</a>` : ''}
-            ${instaUrl  ? `<a href="${instaUrl}"  class="nav__sheet-chip" rel="noopener" target="_blank">Instagram</a>` : ''}
-            ${tiktokUrl ? `<a href="${tiktokUrl}" class="nav__sheet-chip" rel="noopener" target="_blank">TikTok</a>` : ''}
-          </div>
-          ${address || hours ? `<div class="nav__sheet-meta">
-            ${address ? `<p>${address}</p>` : ''}
-            ${hours   ? `<p>${hours}</p>`   : ''}
-          </div>` : ''}
+      <div class="nav__sheet-footer">
+        <div class="nav__sheet-row">
+          ${phone     ? `<a href="${telLink()}" class="nav__sheet-chip">Call</a>` : ''}
+          ${phone     ? `<a href="${waLink("Hi, I'd like to book a chair.")}" class="nav__sheet-chip" rel="noopener" target="_blank">WhatsApp</a>` : ''}
+          ${instaUrl  ? `<a href="${instaUrl}"  class="nav__sheet-chip" rel="noopener" target="_blank">Instagram</a>` : ''}
+          ${tiktokUrl ? `<a href="${tiktokUrl}" class="nav__sheet-chip" rel="noopener" target="_blank">TikTok</a>` : ''}
         </div>
+        ${address || hours ? `<div class="nav__sheet-meta">
+          ${address ? `<p>${address}</p>` : ''}
+          ${hours   ? `<p>${hours}</p>`   : ''}
+        </div>` : ''}
       </div>
     </div>
   `;
+  document.body.appendChild(sheet);
 
   const burger = mount.querySelector('.nav__burger');
-  const sheet  = mount.querySelector('.nav__sheet');
   const toggleSheet = (open) => {
     const next = open ?? sheet.getAttribute('aria-hidden') === 'true';
     sheet.setAttribute('aria-hidden', String(!next));
