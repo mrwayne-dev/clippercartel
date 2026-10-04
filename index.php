@@ -78,7 +78,7 @@ $shop = [
 
   <!-- JSON-LD: HairSalon LocalBusiness -->
   <script type="application/ld+json" id="ld-business">
-  <?= json_encode([
+  <?= json_encode(array_filter([
       '@context'    => 'https://schema.org',
       '@type'       => 'HairSalon',
       'name'        => $appName,
@@ -96,7 +96,8 @@ $shop = [
       ],
       'hasMap'      => $shop['maps'] ?: null,
       'areaServed'  => $shop['city'],
-  ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) ?>
+      'sameAs'      => array_values(array_filter([getenv('SHOP_INSTAGRAM') ?: null])),
+  ]), JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) ?>
   </script>
 
   <!-- Per-route JSON-LD injected here by meta.js -->
