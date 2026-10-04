@@ -36,6 +36,21 @@ const render = () => `
 
         <!-- Mobile: image sits above the list.  Desktop: image is on the right. -->
         <div class="services__preview" aria-hidden="true" data-reveal style="--reveal-delay: 1">
+          <!-- Mobile-only eyebrow tabs above the image.
+               Auto-cycle on mobile; also tappable. Hidden on desktop
+               (the big typographic list on the left takes over there). -->
+          <div class="services__tabs" role="tablist" aria-label="Service style">
+            ${services.map((s, i) => `
+              <button
+                type="button"
+                class="services__tab ${i === 0 ? 'is-active' : ''}"
+                role="tab"
+                aria-selected="${i === 0 ? 'true' : 'false'}"
+                data-service-idx="${i}"
+              >${s.name}</button>
+            `).join('')}
+          </div>
+
           <div class="services__image-stack">
             ${services.map((s, i) => `
               <img
@@ -80,18 +95,21 @@ const render = () => `
 
 const initInteraction = (root) => {
   const items   = Array.from(root.querySelectorAll('.services__item'));
-  const buttons = Array.from(root.querySelectorAll('[data-service-idx]'));
-  const images  = Array.from(root.querySelectorAll('[data-service-image]'));
-  const noteEl  = root.querySelector('[data-service-note]');
+  // Two tab controls: desktop list buttons + mobile eyebrow tabs.
+  const desktopBtns = Array.from(root.querySelectorAll('.services__name[data-service-idx]'));
+  const mobileTabs  = Array.from(root.querySelectorAll('.services__tab[data-service-idx]'));
+  const allBtns     = [...desktopBtns, ...mobileTabs];
+  const images      = Array.from(root.querySelectorAll('[data-service-image]'));
+  const noteEl      = root.querySelector('[data-service-note]');
 
   let active = 0;
   const setActive = (idx) => {
     if (idx === active) return;
     active = idx;
-    items.forEach((li, i)  => li.classList.toggle('is-active', i === idx));
-    buttons.forEach((b, i) => b.setAttribute('aria-selected', i === idx ? 'true' : 'false'));
-    images.forEach((img, i) => img.classList.toggle('is-active', i === idx));
-    // crossfade note by fading out, swapping text, fading back in
+    items.forEach((li, i)        => li.classList.toggle('is-active', i === idx));
+    mobileTabs.forEach((t, i)    => t.classList.toggle('is-active', i === idx));
+    allBtns.forEach((b)          => b.setAttribute('aria-selected', Number(b.dataset.serviceIdx) === idx ? 'true' : 'false'));
+    images.forEach((img, i)      => img.classList.toggle('is-active', i === idx));
     noteEl.classList.add('is-swapping');
     setTimeout(() => {
       noteEl.textContent = services[idx].note;
@@ -99,20 +117,48 @@ const initInteraction = (root) => {
     }, 180);
   };
 
-  buttons.forEach((btn, i) => {
-    btn.addEventListener('mouseenter', () => setActive(i));
-    btn.addEventListener('focus',      () => setActive(i));
-    btn.addEventListener('click',      () => setActive(i));
+  // Desktop list: hover + focus + click drive active state.
+  desktopBtns.forEach((btn, i) => {
+    btn.addEventListener('mouseenter', () => { stopAuto(); setActive(i); });
+    btn.addEventListener('focus',      () => { stopAuto(); setActive(i); });
+    btn.addEventListener('click',      () => { stopAuto(); setActive(i); });
   });
 
-  // Keyboard: arrow keys navigate between tabs
-  root.querySelector('[role="tablist"]').addEventListener('keydown', (e) => {
+  // Mobile tabs: tap to switch, resets the auto-cycle timer.
+  mobileTabs.forEach((btn, i) => {
+    btn.addEventListener('click', () => { setActive(i); startAuto(); });
+  });
+
+  // Keyboard: arrow keys navigate between desktop tabs.
+  const list = root.querySelector('.services__list');
+  if (list) list.addEventListener('keydown', (e) => {
     if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
     e.preventDefault();
     const dir = e.key === 'ArrowDown' ? 1 : -1;
-    const next = (active + dir + buttons.length) % buttons.length;
-    buttons[next].focus();
+    const next = (active + dir + desktopBtns.length) % desktopBtns.length;
+    desktopBtns[next].focus();
   });
+
+  // ---------- Auto-cycle (mobile only) ----------
+  const mql = window.matchMedia('(max-width: 899px)');
+  let timer = null;
+  const INTERVAL = 3800;
+  const startAuto = () => {
+    stopAuto();
+    if (!mql.matches || document.hidden) return;
+    timer = setInterval(() => setActive((active + 1) % services.length), INTERVAL);
+  };
+  const stopAuto = () => { if (timer) { clearInterval(timer); timer = null; } };
+
+  // Kick off / tear down when the viewport crosses the mobile breakpoint
+  mql.addEventListener('change', (e) => { e.matches ? startAuto() : stopAuto(); });
+
+  // Pause when the tab/window is hidden; resume on return (mobile only)
+  document.addEventListener('visibilitychange', () => {
+    document.hidden ? stopAuto() : startAuto();
+  });
+
+  startAuto();
 };
 
 export const mountServicesTeaser = (mount) => {
