@@ -15,7 +15,16 @@ require_once __DIR__ . '/config/constants.php';
 
 $appUrl   = rtrim(getenv('APP_URL') ?: 'https://clippercartel.test', '/');
 $appName  = getenv('APP_NAME') ?: 'ClipperCartel';
-$defaultDescription = 'ClipperCartel — precision cuts, hot-towel shaves and beard sculpts. Book your chair.';
+$defaultDescription = 'ClipperCartel — precision cuts, hot-towel shaves and beard sculpts in Port Harcourt. Book your chair.';
+
+$shop = [
+    'phone'    => getenv('SHOP_PHONE_E164') ?: '',
+    'street'   => getenv('SHOP_ADDRESS_STREET') ?: '',
+    'city'     => getenv('SHOP_ADDRESS_CITY')   ?: '',
+    'region'   => getenv('SHOP_ADDRESS_REGION') ?: '',
+    'country'  => getenv('SHOP_ADDRESS_COUNTRY') ?: '',
+    'maps'     => getenv('SHOP_MAPS_URL') ?: '',
+];
 ?>
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
@@ -67,23 +76,40 @@ $defaultDescription = 'ClipperCartel — precision cuts, hot-towel shaves and be
   <link rel="stylesheet" href="/assets/css/components.css">
   <link rel="stylesheet" href="/assets/css/animations.css">
 
-  <!-- JSON-LD: LocalBusiness (populate real values once shop details land) -->
+  <!-- JSON-LD: HairSalon LocalBusiness -->
   <script type="application/ld+json" id="ld-business">
-  {
-    "@context": "https://schema.org",
-    "@type": "HairSalon",
-    "name": "<?= htmlspecialchars($appName) ?>",
-    "url": "<?= htmlspecialchars($appUrl) ?>",
-    "image": "<?= htmlspecialchars($appUrl) ?>/assets/images/og/og-default.jpg",
-    "priceRange": "$$",
-    "description": "<?= htmlspecialchars($defaultDescription) ?>"
-  }
+  <?= json_encode([
+      '@context'    => 'https://schema.org',
+      '@type'       => 'HairSalon',
+      'name'        => $appName,
+      'url'         => $appUrl,
+      'image'       => $appUrl . '/assets/images/og/og-default.jpg',
+      'telephone'   => $shop['phone'],
+      'priceRange'  => '$$',
+      'description' => $defaultDescription,
+      'address'     => [
+          '@type'           => 'PostalAddress',
+          'streetAddress'   => $shop['street'],
+          'addressLocality' => $shop['city'],
+          'addressRegion'   => $shop['region'],
+          'addressCountry'  => $shop['country'],
+      ],
+      'hasMap'      => $shop['maps'] ?: null,
+      'areaServed'  => $shop['city'],
+  ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) ?>
   </script>
 
   <!-- Per-route JSON-LD injected here by meta.js -->
   <script type="application/ld+json" id="ld-route"></script>
 </head>
-<body>
+<body
+    data-shop-name="<?= htmlspecialchars($appName) ?>"
+    data-shop-phone="<?= htmlspecialchars(getenv('SHOP_PHONE') ?: '') ?>"
+    data-shop-phone-e164="<?= htmlspecialchars($shop['phone']) ?>"
+    data-shop-whatsapp="<?= htmlspecialchars(getenv('SHOP_WHATSAPP') ?: '') ?>"
+    data-shop-address="<?= htmlspecialchars(getenv('SHOP_ADDRESS') ?: '') ?>"
+    data-shop-instagram="<?= htmlspecialchars(getenv('SHOP_INSTAGRAM') ?: '') ?>"
+    data-shop-maps="<?= htmlspecialchars($shop['maps']) ?>">
 
   <a class="skip-link" href="#app">Skip to content</a>
 

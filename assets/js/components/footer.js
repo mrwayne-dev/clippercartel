@@ -1,36 +1,36 @@
 /**
  * footer.js — persistent site footer.
  *
- * Shop details (address, phone, hours, socials) are hard-coded as TODO
- * placeholders until you send them through; swap them in `shop` below.
+ * Reads shop details from <body data-shop-*> via services/shop.js so
+ * values are stamped once by PHP from .env and never duplicated here.
  */
 
 import { h } from '../utils/dom.js';
-
-const shop = {
-  name:      'ClipperCartel',
-  phone:     '+000 000 0000',  // TODO: real number
-  address:   'Address pending',
-  hours:     'Hours pending',
-  instagram: '#',
-  whatsapp:  '#',
-};
+import { shop, waLink, telLink } from '../services/shop.js';
 
 export const mountFooter = (mount) => {
   const year = new Date().getFullYear();
+  const name     = shop.name();
+  const phone    = shop.phone();
+  const address  = shop.address();
+  const insta    = shop.instagram();
+  const maps     = shop.maps();
+
   mount.innerHTML = '';
   const container = h('div', { class: 'container' },
-    h('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--space-lg)', marginBottom: 'var(--space-lg)' } },
+    h('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 'var(--space-lg)', marginBottom: 'var(--space-lg)' } },
       h('div', {},
-        h('h3', { style: { marginBottom: 'var(--space-sm)' } }, shop.name),
-        h('p', {}, shop.address),
-        h('p', {}, shop.hours),
+        h('h3', { style: { marginBottom: 'var(--space-sm)' } }, name),
+        maps
+          ? h('p', {}, h('a', { href: maps, rel: 'noopener', target: '_blank' }, address || 'View on map'))
+          : h('p', {}, address || 'Address pending'),
+        h('p', { style: { color: 'var(--color-text-dim)', marginTop: 'var(--space-sm)', fontSize: 'var(--text-sm)' } }, 'Hours: pending'),
       ),
       h('div', {},
         h('h4', { style: { marginBottom: 'var(--space-sm)' } }, 'Contact'),
-        h('p', {}, h('a', { href: `tel:${shop.phone.replace(/\s/g, '')}` }, shop.phone)),
-        h('p', {}, h('a', { href: shop.whatsapp, rel: 'noopener', target: '_blank' }, 'WhatsApp')),
-        h('p', {}, h('a', { href: shop.instagram, rel: 'noopener', target: '_blank' }, 'Instagram')),
+        phone ? h('p', {}, h('a', { href: telLink() }, phone))                              : null,
+        phone ? h('p', {}, h('a', { href: waLink('Hi, I\'d like to book a chair.'), rel: 'noopener', target: '_blank' }, 'WhatsApp')) : null,
+        insta ? h('p', {}, h('a', { href: insta, rel: 'noopener', target: '_blank' }, 'Instagram')) : null,
       ),
       h('div', {},
         h('h4', { style: { marginBottom: 'var(--space-sm)' } }, 'More'),
@@ -40,8 +40,8 @@ export const mountFooter = (mount) => {
       ),
     ),
     h('div', { style: { borderTop: '1px solid var(--color-border)', paddingTop: 'var(--space-md)', display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 'var(--space-sm)' } },
-      h('p', {}, `© ${year} ${shop.name}. All rights reserved.`),
-      h('p', {}, 'Built with care.'),
+      h('p', {}, `© ${year} ${name}. All rights reserved.`),
+      h('p', { style: { color: 'var(--color-text-dim)' } }, 'Port Harcourt, Nigeria'),
     )
   );
   mount.appendChild(container);
