@@ -11,6 +11,9 @@ main#app {
   min-height: calc(100vh - var(--nav-h));
   padding-block-start: var(--nav-h);
 }
+/* Hero bleeds under the fixed nav; the page-wrapper padding is cancelled
+ * on routes whose first child uses this class. */
+main#app:has(> .hero) { padding-block-start: 0; }
 
 /* Simple section rhythm — real sections will override */
 .section {
@@ -79,26 +82,64 @@ main#app {
   border-radius: var(--radius-full);
 }
 
-/* -- Variant A: logo left · links right · CTA far right ---------- */
+/* Variant A — logo left · links right · CTA far right. */
 .nav--a {
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto 1fr auto auto;
 }
 .nav--a .nav__links { justify-self: end; }
 
-/* -- Variant B: links left · logo centred · links+CTA right ------ */
-.nav--b {
-  grid-template-columns: 1fr auto 1fr;
+/* Mobile burger — hidden on desktop */
+.nav__burger {
+  display: none;
+  width: 40px; height: 40px;
+  position: relative;
+  background: none; border: none;
+  cursor: pointer;
 }
-.nav--b .nav__links--left   { justify-self: start; }
-.nav--b .nav__brand-slot--center { justify-self: center; }
-.nav--b .nav__links--right  { justify-self: end; }
+.nav__burger span {
+  display: block;
+  width: 22px; height: 1.5px;
+  background: var(--color-text);
+  margin: 5px auto;
+  transition: transform var(--t-base), opacity var(--t-base);
+}
+.nav__burger[aria-expanded="true"] span:nth-child(1) { transform: translateY(3.5px) rotate(45deg); }
+.nav__burger[aria-expanded="true"] span:nth-child(2) { transform: translateY(-3px) rotate(-45deg); }
 
-/* Mobile — collapse to brand + burger (burger lands next pass) */
-@media (max-width: 768px) {
-  .nav__inner             { grid-template-columns: auto 1fr auto; }
-  .nav__links             { display: none; }
-  .nav--b .nav__brand-slot--center { justify-self: start; }
+.nav__sheet {
+  position: fixed;
+  top: var(--nav-h); left: 0; right: 0; bottom: 0;
+  background: var(--color-bg);
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-xl) var(--container-pad);
+  gap: var(--space-md);
+  transform: translateY(-8px);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform var(--t-base), opacity var(--t-base);
+  z-index: 99;
 }
+.nav__sheet[aria-hidden="false"] {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+.nav__sheet .nav__link {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  color: var(--color-text);
+}
+.nav__cta-mobile { margin-top: var(--space-md); align-self: flex-start; }
+
+@media (max-width: 820px) {
+  .nav--a            { grid-template-columns: auto 1fr auto; }
+  .nav__links        { display: none; }
+  .nav__cta          { display: none; }
+  .nav__burger       { display: block; justify-self: end; }
+}
+
+body.body--locked { overflow: hidden; }
 
 #site-footer {
   border-top: 1px solid var(--color-border);

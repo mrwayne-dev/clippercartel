@@ -1,16 +1,11 @@
 /**
- * nav.js — primary nav.
- *
- * Two variants, picked via ?nav=A|B in the URL (persisted in localStorage
- * so navigation preserves the choice). Default = A. This exists so you
- * can toggle live before we lock the final layout.
- *
- *   A — logo left, links right                (Animos / Framer pattern)
- *   B — logo centre, links split either side  (Watts / Samuel Snider pattern)
+ * nav.js — primary nav. Variant A, locked.
+ * Logo left · links right · Book CTA far right.
  */
 
+import { h } from '../utils/dom.js';
+
 const links = [
-  { href: '/',         label: 'Home'     },
   { href: '/services', label: 'Services' },
   { href: '/gallery',  label: 'Gallery'  },
   { href: '/about',    label: 'About'    },
@@ -18,47 +13,35 @@ const links = [
   { href: '/contact',  label: 'Contact'  },
 ];
 
-const KEY = 'cc:nav-variant';
-
-const readVariant = () => {
-  const url = new URLSearchParams(location.search).get('nav');
-  if (url === 'A' || url === 'B') {
-    try { localStorage.setItem(KEY, url); } catch {}
-    return url;
-  }
-  try { return localStorage.getItem(KEY) === 'B' ? 'B' : 'A'; } catch { return 'A'; }
-};
-
 const link = (href, label) =>
   `<a href="${href}" data-nav-link="${href}" class="nav__link">${label}</a>`;
 
-const bookCta = `<a href="/book" class="nav__cta btn btn-accent">Book</a>`;
-const brand   = `<a href="/" class="nav__brand" aria-label="ClipperCartel home">ClipperCartel</a>`;
-
-const renderA = () => `
-  <div class="nav__inner nav--a container">
-    <div class="nav__brand-slot">${brand}</div>
-    <nav class="nav__links">${links.map(l => link(l.href, l.label)).join('')}</nav>
-    <div class="nav__cta-slot">${bookCta}</div>
-  </div>
-`;
-
-const renderB = () => {
-  const left  = links.slice(0, 3);
-  const right = links.slice(3);
-  return `
-    <div class="nav__inner nav--b container">
-      <nav class="nav__links nav__links--left">${left.map(l => link(l.href, l.label)).join('')}</nav>
-      <div class="nav__brand-slot nav__brand-slot--center">${brand}</div>
-      <nav class="nav__links nav__links--right">${right.map(l => link(l.href, l.label)).join('')}${bookCta}</nav>
+export const mountNav = (mount) => {
+  mount.innerHTML = `
+    <div class="nav__inner nav--a container">
+      <a href="/" class="nav__brand" aria-label="ClipperCartel home">ClipperCartel</a>
+      <nav class="nav__links">${links.map(l => link(l.href, l.label)).join('')}</nav>
+      <a href="/book" class="nav__cta btn btn-accent">Book</a>
+      <button class="nav__burger" type="button" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span>
+      </button>
+    </div>
+    <div class="nav__sheet" aria-hidden="true">
+      ${links.map(l => link(l.href, l.label)).join('')}
+      <a href="/book" class="nav__cta-mobile btn btn-accent">Book your chair</a>
     </div>
   `;
-};
 
-export const mountNav = (mount) => {
-  const variant = readVariant();
-  mount.dataset.variant = variant;
-  mount.innerHTML = variant === 'B' ? renderB() : renderA();
+  const burger = mount.querySelector('.nav__burger');
+  const sheet  = mount.querySelector('.nav__sheet');
+  const toggleSheet = (open) => {
+    const next = open ?? sheet.getAttribute('aria-hidden') === 'true';
+    sheet.setAttribute('aria-hidden', String(!next));
+    burger.setAttribute('aria-expanded', String(next));
+    document.body.classList.toggle('body--locked', next);
+  };
+  burger.addEventListener('click', () => toggleSheet());
+  sheet.addEventListener('click',  (e) => { if (e.target.tagName === 'A') toggleSheet(false); });
 
   const highlight = () => {
     mount.querySelectorAll('[data-nav-link]').forEach(a => {

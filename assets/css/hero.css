@@ -1,0 +1,255 @@
+/* hero.css — home hero section.
+ *
+ * Composition:
+ *   - fixed vh-based canvas (fallback for small screens below)
+ *   - background image full-bleed, right-biased on desktop so copy on
+ *     the bottom-left and the Visit card on the right both breathe
+ *   - scrim gradient so bottom-left text keeps 4.5:1 against any portrait
+ */
+
+.hero {
+  position: relative;
+  width: 100%;
+  min-height: 100svh;      /* small-viewport height — stable on mobile */
+  min-height: 100vh;       /* fallback */
+  overflow: hidden;
+  background: var(--color-bg);
+  isolation: isolate;
+  margin-top: calc(-1 * var(--nav-h)); /* bleed under the fixed nav */
+}
+
+/* ---- image layer ---- */
+.hero__image {
+  position: absolute; inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+.hero__image img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  will-change: transform, opacity;
+}
+.hero__scrim {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(180deg,
+      rgba(255,255,255,0.00) 0%,
+      rgba(255,255,255,0.00) 55%,
+      rgba(10,10,10,0.55) 100%),
+    linear-gradient(90deg,
+      rgba(10,10,10,0.35) 0%,
+      rgba(10,10,10,0.08) 40%,
+      rgba(10,10,10,0.00) 70%);
+  pointer-events: none;
+}
+
+/* ---- bottom-left copy stack ---- */
+.hero__copy {
+  position: absolute;
+  left: var(--container-pad);
+  right: var(--container-pad);
+  bottom: clamp(32px, 6vh, 72px);
+  z-index: 2;
+  color: #fff;
+  max-width: 720px;
+}
+.hero__eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: var(--text-xs);
+  color: rgba(255,255,255,0.78);
+  margin-bottom: var(--space-md);
+}
+.hero__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2.5rem, 7.5vw, 5.75rem);
+  line-height: 1.0;
+  letter-spacing: -0.025em;
+  color: #fff;
+  display: block;
+}
+.hero__title span {
+  display: block;
+  will-change: transform, opacity;
+}
+.hero__title span:nth-child(2) { color: rgba(255,255,255,0.85); }
+.hero__title span:nth-child(3) { color: var(--color-accent-soft); }
+
+.hero__cta {
+  display: flex;
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
+  flex-wrap: wrap;
+  will-change: transform, opacity;
+}
+.hero__cta .btn-ghost {
+  color: #fff;
+  border-color: rgba(255,255,255,0.6);
+}
+.hero__cta .btn-ghost:hover { border-color: #fff; }
+
+/* ---- top-right open-now status ---- */
+.hero__status {
+  position: absolute;
+  top: calc(var(--nav-h) + 16px);
+  right: var(--container-pad);
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: rgba(10,10,10,0.55);
+  color: #fff;
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  letter-spacing: 0.02em;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  will-change: transform, opacity;
+}
+.hero__status-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--color-success);
+  box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-success) 60%, transparent);
+  animation: dotPulse 2.4s ease-out infinite;
+}
+@keyframes dotPulse {
+  0%   { box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-success) 60%, transparent); }
+  70%  { box-shadow: 0 0 0 10px rgba(0,0,0,0); }
+  100% { box-shadow: 0 0 0 0 rgba(0,0,0,0); }
+}
+
+/* ---- right-side Visit card ---- */
+.hero__card {
+  position: absolute;
+  top: 50%;
+  right: var(--container-pad);
+  transform: translateY(-50%);
+  z-index: 2;
+  width: min(360px, 32vw);
+  padding: 20px 22px;
+  background: color-mix(in oklab, var(--color-bg) 92%, transparent);
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  box-shadow: 0 24px 60px -24px rgba(10,10,10,0.35);
+  -webkit-backdrop-filter: blur(18px) saturate(1.1);
+  backdrop-filter: blur(18px) saturate(1.1);
+  color: var(--color-text);
+  will-change: transform, opacity;
+}
+.hero__card-eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: var(--text-xs);
+  color: var(--color-accent);
+  margin-bottom: 10px;
+}
+.hero__card-address {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  line-height: 1.25;
+  color: var(--color-text);
+  margin-bottom: 4px;
+}
+.hero__card-hours {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-md);
+}
+.hero__card-actions {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--color-border-soft);
+}
+.hero__card-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  font-size: var(--text-sm);
+  border-bottom: 1px solid var(--color-border-soft);
+  color: var(--color-text);
+  transition: color var(--t-fast);
+}
+.hero__card-row:last-child { border-bottom: none; }
+.hero__card-row:hover      { color: var(--color-accent); }
+.hero__card-row span:first-child  { color: var(--color-text-muted); font-weight: 500; }
+.hero__card-row span:last-child   { font-weight: 500; }
+
+.hero__card-socials {
+  display: flex;
+  gap: var(--space-md);
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border-soft);
+}
+.hero__card-socials a {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-text-muted);
+  transition: color var(--t-fast);
+}
+.hero__card-socials a:hover { color: var(--color-accent); }
+
+/* ---- scroll indicator ---- */
+.hero__scroll {
+  position: absolute;
+  bottom: var(--space-md);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: rgba(255,255,255,0.7);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  will-change: opacity;
+}
+.hero__scroll-line {
+  width: 1px; height: 36px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0) 100%);
+  animation: scrollLine 1.8s ease-out infinite;
+  transform-origin: top;
+}
+@keyframes scrollLine {
+  0%   { transform: scaleY(0); opacity: 1; }
+  60%  { transform: scaleY(1); opacity: 0.8; }
+  100% { transform: scaleY(1); opacity: 0; }
+}
+
+/* ---- responsive --------------------------------------------------- */
+
+/* tablet: tighten the card width */
+@media (max-width: 1100px) {
+  .hero__card { width: min(320px, 36vw); }
+}
+
+/* mobile: card tucks under copy, lives at the top */
+@media (max-width: 820px) {
+  .hero                   { min-height: 92svh; }
+  .hero__image img        { object-position: center 25%; }
+  .hero__status           { top: calc(var(--nav-h) + 10px); font-size: 10px; padding: 6px 10px; }
+  .hero__card {
+    position: static;
+    width: calc(100% - 2 * var(--container-pad));
+    margin: calc(var(--nav-h) + 72px) var(--container-pad) 0;
+    transform: none;
+    background: color-mix(in oklab, var(--color-bg) 96%, transparent);
+  }
+  .hero__copy             { bottom: 24px; }
+  .hero__title            { font-size: clamp(2.25rem, 10vw, 3.5rem); }
+  .hero__cta              { gap: 10px; }
+  .hero__scroll           { display: none; }
+}
+
+/* reduced motion — no decorative animations */
+@media (prefers-reduced-motion: reduce) {
+  .hero__status-dot,
+  .hero__scroll-line { animation: none; }
+}
