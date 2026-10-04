@@ -56,7 +56,7 @@ RewriteRule \.(jpe?g|png|webp|avif|gif|svg)$ - [F,NC,L]
     #   frame-src same reason.
     #   style 'unsafe-inline' is required for the inline critical CSS block in index.php.
     #   Loosen img-src if we later serve from a CDN.
-    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com https://www.google.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests"
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://maps.gstatic.com https://maps.googleapis.com; font-src 'self' data:; connect-src 'self' https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com https://www.google.com https://maps.google.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests"
 
     # Fonts never change under the same URL — cache aggressively.
     <FilesMatch "\.(woff2|woff|ttf|otf)$">
