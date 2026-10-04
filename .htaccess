@@ -58,12 +58,20 @@ RewriteRule \.(jpe?g|png|webp|avif|gif|svg)$ - [F,NC,L]
     #   Loosen img-src if we later serve from a CDN.
     Header always set Content-Security-Policy "default-src 'self'; script-src 'self' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com https://www.google.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests"
 
-    # Cache fonts and hashed assets aggressively; HTML not at all.
+    # Fonts never change under the same URL — cache aggressively.
     <FilesMatch "\.(woff2|woff|ttf|otf)$">
         Header set Cache-Control "public, max-age=31536000, immutable"
     </FilesMatch>
-    <FilesMatch "\.(css|js|png|jpg|jpeg|webp|avif|svg|ico)$">
-        Header set Cache-Control "public, max-age=2592000"
+    # Images cache for a day; swap the URL to invalidate.
+    <FilesMatch "\.(png|jpg|jpeg|webp|avif|gif|svg|ico|mp4|webm)$">
+        Header set Cache-Control "public, max-age=86400"
+    </FilesMatch>
+    # CSS and JS: cache but ALWAYS revalidate.
+    # Our module URLs don't carry a content hash yet, so a stale import
+    # could pin a broken build for weeks. no-cache = cheap ETag check per
+    # request, 0 KB over the wire on a 304.
+    <FilesMatch "\.(css|js|mjs)$">
+        Header set Cache-Control "no-cache, must-revalidate"
     </FilesMatch>
     <FilesMatch "\.(php|html)$">
         Header set Cache-Control "no-store, must-revalidate"
