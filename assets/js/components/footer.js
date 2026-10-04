@@ -13,6 +13,7 @@ export const mountFooter = (mount) => {
   const name     = shop.name();
   const phone    = shop.phone();
   const address  = shop.address();
+  const hours    = shop.hours();
   const insta    = shop.instagram();
   const maps     = shop.maps();
 
@@ -24,7 +25,7 @@ export const mountFooter = (mount) => {
         maps
           ? h('p', {}, h('a', { href: maps, rel: 'noopener', target: '_blank' }, address || 'View on map'))
           : h('p', {}, address || 'Address pending'),
-        h('p', { style: { color: 'var(--color-text-dim)', marginTop: 'var(--space-sm)', fontSize: 'var(--text-sm)' } }, 'Hours: pending'),
+        hours ? h('p', { style: { color: 'var(--color-text-muted)', marginTop: 'var(--space-sm)', fontSize: 'var(--text-sm)' } }, hours) : null,
       ),
       h('div', {},
         h('h4', { style: { marginBottom: 'var(--space-sm)' } }, 'Contact'),

@@ -15,6 +15,7 @@ export const shop = {
   phoneTel:    () => readAttr('phone-e164', ''),
   whatsapp:    () => readAttr('whatsapp',   ''),
   address:     () => readAttr('address',    ''),
+  hours:       () => readAttr('hours',      ''),
   instagram:   () => readAttr('instagram',  ''),
   maps:        () => readAttr('maps',       ''),
 };

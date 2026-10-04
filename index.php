@@ -24,7 +24,20 @@ $shop = [
     'region'   => getenv('SHOP_ADDRESS_REGION') ?: '',
     'country'  => getenv('SHOP_ADDRESS_COUNTRY') ?: '',
     'maps'     => getenv('SHOP_MAPS_URL') ?: '',
+    'hours'    => getenv('SHOP_HOURS') ?: '',
 ];
+
+// Build openingHoursSpecification for JSON-LD.
+// All weekdays NOT in SHOP_HOURS_CLOSED_DAYS open [OPEN, CLOSE].
+$weekdays   = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+$closedDays = array_filter(array_map('trim', explode(',', (string) getenv('SHOP_HOURS_CLOSED_DAYS'))));
+$openDays   = array_values(array_diff($weekdays, $closedDays));
+$openingSpec = $openDays ? [[
+    '@type'     => 'OpeningHoursSpecification',
+    'dayOfWeek' => $openDays,
+    'opens'     => getenv('SHOP_HOURS_OPEN')  ?: '09:00',
+    'closes'    => getenv('SHOP_HOURS_CLOSE') ?: '20:00',
+]] : [];
 ?>
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
@@ -97,6 +110,7 @@ $shop = [
       'hasMap'      => $shop['maps'] ?: null,
       'areaServed'  => $shop['city'],
       'sameAs'      => array_values(array_filter([getenv('SHOP_INSTAGRAM') ?: null])),
+      'openingHoursSpecification' => $openingSpec,
   ]), JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) ?>
   </script>
 
@@ -109,6 +123,7 @@ $shop = [
     data-shop-phone-e164="<?= htmlspecialchars($shop['phone']) ?>"
     data-shop-whatsapp="<?= htmlspecialchars(getenv('SHOP_WHATSAPP') ?: '') ?>"
     data-shop-address="<?= htmlspecialchars(getenv('SHOP_ADDRESS') ?: '') ?>"
+    data-shop-hours="<?= htmlspecialchars($shop['hours']) ?>"
     data-shop-instagram="<?= htmlspecialchars(getenv('SHOP_INSTAGRAM') ?: '') ?>"
     data-shop-maps="<?= htmlspecialchars($shop['maps']) ?>">
 
