@@ -27,8 +27,9 @@ export const mountNav = (mount) => {
       </button>
     </div>
     <div class="nav__sheet" aria-hidden="true">
-      ${links.map(l => link(l.href, l.label)).join('')}
-      <a href="/book" class="nav__cta-mobile btn btn-accent">Book your chair</a>
+      <nav class="nav__sheet-links" aria-label="Mobile menu">
+        ${links.map(l => link(l.href, l.label)).join('')}
+      </nav>
     </div>
   `;
 

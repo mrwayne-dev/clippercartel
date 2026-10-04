@@ -31,6 +31,22 @@
 }
 .btn-accent:hover { background: var(--color-accent-deep); }
 
+/* Outline: border + matching text, inverts to filled on hover.
+ * Both the border/text colour and the inverted (hover) text colour are
+ * tokens so you can tune per surface (brown on white, white on dark). */
+.btn-outline {
+  --btn-outline-color:  var(--color-accent);
+  --btn-outline-invert: #ffffff;
+  background: transparent;
+  color: var(--btn-outline-color);
+  border: 1.5px solid var(--btn-outline-color);
+  transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast);
+}
+.btn-outline:hover {
+  background: var(--btn-outline-color);
+  color: var(--btn-outline-invert);
+}
+
 .btn-ghost {
   background: transparent;
   color: inherit;
