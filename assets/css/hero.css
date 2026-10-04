@@ -105,7 +105,12 @@
   color: var(--color-text);
 }
 .hero__title span          { display: block; will-change: transform, opacity; }
-.hero__title span:nth-child(2) { color: var(--color-accent); font-style: italic; }
+.hero__title span:nth-child(2) {
+  font-family: var(--font-accent);     /* Instrument Serif italic */
+  font-style: italic;
+  color: var(--color-accent);
+  letter-spacing: -0.015em;
+}
 
 .hero__cta {
   display: inline-flex;

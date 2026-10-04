@@ -1,9 +1,13 @@
 /**
- * nav.js — primary nav. Variant A, locked.
- * Logo left · links right · Book CTA far right.
+ * nav.js — primary nav. Logo left · links right · Book CTA (desktop only).
+ *
+ * On mobile the Book CTA is hidden (CSS). The burger opens a full-page
+ * drawer: large serif links staggered in, a hairline divider, a contact
+ * strip (Call / WhatsApp / Instagram / TikTok), and the shop address +
+ * hours at the base. No Book CTA inside the drawer either.
  */
 
-import { h } from '../utils/dom.js';
+import { shop, telLink, waLink } from '../services/shop.js';
 
 const links = [
   { href: '/services', label: 'Services' },
@@ -16,20 +20,52 @@ const links = [
 const link = (href, label) =>
   `<a href="${href}" data-nav-link="${href}" class="nav__link">${label}</a>`;
 
+const sheetLink = (href, label, index) =>
+  `<a href="${href}" data-nav-link="${href}" class="nav__sheet-link" style="--i:${index}">
+     <span class="nav__sheet-num">${String(index + 1).padStart(2, '0')}</span>
+     <span class="nav__sheet-label">${label}</span>
+   </a>`;
+
 export const mountNav = (mount) => {
+  const phone     = shop.phone();
+  const instaUrl  = shop.instagram();
+  const tiktokUrl = shop.tiktok();
+  const address   = shop.address();
+  const hours     = shop.hours();
+
   mount.innerHTML = `
     <div class="nav__inner nav--a container">
       <a href="/" class="nav__brand" aria-label="ClipperCartel home">ClipperCartel</a>
-      <nav class="nav__links">${links.map(l => link(l.href, l.label)).join('')}</nav>
+      <nav class="nav__links" aria-label="Main navigation">
+        ${links.map(l => link(l.href, l.label)).join('')}
+      </nav>
       <a href="/book" class="nav__cta btn btn-accent">Book</a>
-      <button class="nav__burger" type="button" aria-label="Open menu" aria-expanded="false">
+      <button class="nav__burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav-sheet">
         <span></span><span></span>
       </button>
     </div>
-    <div class="nav__sheet" aria-hidden="true">
-      <nav class="nav__sheet-links" aria-label="Mobile menu">
-        ${links.map(l => link(l.href, l.label)).join('')}
-      </nav>
+
+    <div class="nav__sheet" id="nav-sheet" aria-hidden="true" aria-label="Site menu">
+      <div class="nav__sheet-inner">
+        <p class="nav__sheet-eyebrow">Menu</p>
+
+        <nav class="nav__sheet-links" aria-label="Mobile menu">
+          ${links.map((l, i) => sheetLink(l.href, l.label, i)).join('')}
+        </nav>
+
+        <div class="nav__sheet-footer">
+          <div class="nav__sheet-row">
+            ${phone     ? `<a href="${telLink()}" class="nav__sheet-chip">Call</a>` : ''}
+            ${phone     ? `<a href="${waLink("Hi, I'd like to book a chair.")}" class="nav__sheet-chip" rel="noopener" target="_blank">WhatsApp</a>` : ''}
+            ${instaUrl  ? `<a href="${instaUrl}"  class="nav__sheet-chip" rel="noopener" target="_blank">Instagram</a>` : ''}
+            ${tiktokUrl ? `<a href="${tiktokUrl}" class="nav__sheet-chip" rel="noopener" target="_blank">TikTok</a>` : ''}
+          </div>
+          ${address || hours ? `<div class="nav__sheet-meta">
+            ${address ? `<p>${address}</p>` : ''}
+            ${hours   ? `<p>${hours}</p>`   : ''}
+          </div>` : ''}
+        </div>
+      </div>
     </div>
   `;
 
@@ -39,10 +75,16 @@ export const mountNav = (mount) => {
     const next = open ?? sheet.getAttribute('aria-hidden') === 'true';
     sheet.setAttribute('aria-hidden', String(!next));
     burger.setAttribute('aria-expanded', String(next));
+    burger.setAttribute('aria-label', next ? 'Close menu' : 'Open menu');
     document.body.classList.toggle('body--locked', next);
   };
   burger.addEventListener('click', () => toggleSheet());
-  sheet.addEventListener('click',  (e) => { if (e.target.tagName === 'A') toggleSheet(false); });
+  // Any link inside the sheet closes it (SPA router handles the navigation)
+  sheet.addEventListener('click', (e) => { if (e.target.closest('a')) toggleSheet(false); });
+  // Escape closes
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && sheet.getAttribute('aria-hidden') === 'false') toggleSheet(false);
+  });
 
   const highlight = () => {
     mount.querySelectorAll('[data-nav-link]').forEach(a => {
