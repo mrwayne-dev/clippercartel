@@ -1,15 +1,30 @@
 /**
- * app.js — SPA Entry Point
+ * app.js — SPA entry point.
  *
- * Bootstraps the application:
- *   1. Waits for DOM to be ready
- *   2. Initialises the router
- *   3. Mounts global components (nav, footer, etc.)
- *   4. Runs any app-wide setup (theme, auth state, analytics)
+ *   1. Mount nav + footer (persistent across routes)
+ *   2. Install anti-cloning guards (production only)
+ *   3. Boot the router — it owns #app and all per-route meta updates
  */
 
-document.addEventListener('DOMContentLoaded', () => {
-  // TODO: import and initialise router
-  // TODO: mount global components
-  // TODO: run app-wide setup
-});
+import { mountNav }        from './components/nav.js';
+import { mountFooter }     from './components/footer.js';
+import { installGuards }   from './lib/anti-cloning.js';
+import { startRouter }     from './router.js';
+
+const bootstrap = async () => {
+  mountNav(document.getElementById('nav'));
+  mountFooter(document.getElementById('site-footer'));
+
+  // Guards are soft layer only; real content protection is server-side.
+  // Skipped on localhost / .test so devtools stays usable in development.
+  const isLocal = /\.test$|localhost|127\.0\.0\.1/.test(location.hostname);
+  if (!isLocal) installGuards();
+
+  await startRouter(document.getElementById('app'));
+};
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bootstrap);
+} else {
+  bootstrap();
+}

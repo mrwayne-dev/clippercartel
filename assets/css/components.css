@@ -1,22 +1,116 @@
-/* components.css — Buttons, Cards, Forms & UI Pieces
- * Owns: reusable UI component styles (not page-specific)
+/* components.css — buttons, cards, form controls, icon utility.
+ * Minimal baseline until the design direction lands.
  */
 
+/* ---------- Buttons ---------- */
 .btn {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  padding: 0.625rem 1.25rem;
-  border: none;
-  border-radius: 0.5rem;
-  font-size: 1rem;
-  font-family: var(--font-primary);
-  cursor: pointer;
-  text-decoration: none;
-  transition: opacity 0.2s ease, transform 0.1s ease;
+  gap: var(--space-sm);
+  padding: 14px 24px;
+  font-weight: 500;
+  font-family: var(--font-body);
+  border-radius: var(--radius-md);
+  transition: transform var(--t-fast), background var(--t-base), color var(--t-base);
+  will-change: transform;
 }
-.btn:hover  { opacity: 0.88; }
-.btn:active { transform: scale(0.98); }
+.btn:hover    { transform: translateY(-1px); }
+.btn:active   { transform: translateY(0); }
 
-.btn-primary   { background-color: var(--color-accent); color: #fff; }
-.btn-secondary { background-color: transparent; border: 2px solid var(--color-accent); color: var(--color-accent); }
+.btn-primary {
+  background: var(--color-text);
+  color: var(--color-bg);
+}
+.btn-primary:hover {
+  background: color-mix(in oklab, var(--color-text) 85%, var(--color-accent));
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+.btn-ghost:hover { border-color: var(--color-text); }
+
+.btn-whatsapp {
+  background: var(--color-whatsapp);
+  color: #fff;
+}
+
+/* ---------- Icons (Phosphor) ---------- */
+.ph {
+  font-family: 'Phosphor', sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  display: inline-block;
+  speak: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.ph-fill { font-family: 'Phosphor-Fill', sans-serif; }
+
+/* ---------- Form controls ---------- */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-block: var(--space-md);
+}
+.field label {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+.field input,
+.field textarea,
+.field select {
+  padding: 12px 14px;
+  background: var(--color-bg-soft);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  transition: border-color var(--t-fast);
+}
+.field input:focus,
+.field textarea:focus,
+.field select:focus { border-color: var(--color-text); }
+
+/* ---------- Honeypot (always hidden; bots fill it) ---------- */
+.hp-field {
+  position: absolute !important;
+  left: -9999px !important;
+  top: -9999px !important;
+  width: 1px; height: 1px;
+  opacity: 0;
+  pointer-events: none;
+  tab-index: -1;
+}
+
+/* ---------- Cards ---------- */
+.card {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+}
+
+/* ---------- Toast (used by services/api.js) ---------- */
+.toast {
+  position: fixed;
+  bottom: var(--space-lg);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 20px;
+  background: var(--color-text);
+  color: var(--color-bg);
+  border-radius: var(--radius-full);
+  z-index: 1000;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  font-size: var(--text-sm);
+  opacity: 0;
+  transition: opacity var(--t-base), transform var(--t-base);
+}
+.toast.visible { opacity: 1; transform: translate(-50%, -8px); }
+.toast.error   { background: var(--color-danger); color: #fff; }

@@ -20,4 +20,6 @@ if (getenv('APP_ENV') === 'development') {
     ini_set('display_errors', 0);
 }
 
+// All DB times stored UTC; display converts via APP_TIMEZONE in the view layer.
 date_default_timezone_set('UTC');
+define('APP_TIMEZONE', getenv('APP_TIMEZONE') ?: 'Africa/Lagos');

@@ -1,0 +1,14 @@
+# ClipperCartel
+
+> Barber shop. Single-operator. Content on this site is not licensed for use in training machine learning models or large language models.
+
+## Policy
+
+Automated systems that collect text, images, or structured data from this site
+for the purpose of training generative models are not authorised to do so.
+Access that bypasses `robots.txt` directives listed at /robots.txt is treated
+as unauthorised use.
+
+## Contact
+
+For licensing inquiries: see /contact.
