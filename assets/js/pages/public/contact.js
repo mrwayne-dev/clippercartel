@@ -53,7 +53,7 @@ export default async (mount) => {
     try {
       await api.post('/contact.php', data);
       form.reset();
-      toast('Message sent — we\'ll be in touch.');
+      toast("Message sent. We'll be in touch.");
     } catch (err) {
       toast(err.message || 'Could not send. Try again.', 'error');
     } finally {

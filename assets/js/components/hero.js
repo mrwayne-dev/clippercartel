@@ -28,7 +28,7 @@ const mobileSlides = [
 ];
 
 const render = () => `
-  <section class="hero" aria-label="ClipperCartel — introduction">
+  <section class="hero" aria-label="ClipperCartel introduction">
 
     <!-- Desktop background (hidden on mobile) -->
     <div class="hero__bg hero__bg--desktop" data-hero-el="desktop" aria-hidden="true">

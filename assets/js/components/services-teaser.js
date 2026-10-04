@@ -2,25 +2,24 @@
  * services-teaser.js — home section 02.
  *
  * Hydroxyapatite-pattern (see design-direction/servicedesign1.webp):
- *   - Small eyebrow label
  *   - Big typographic list of service names on the left
  *   - Image preview on the right that crossfades when a name is
  *     hovered/focused/tapped
  *   - Short note + Book CTA beneath the preview
  *
- * No prices, no durations — the shop hasn't finalised them.
- *
- * Service data is a module-local placeholder (names + preview images).
- * Swap to a fetch from /api/services.php once the admin backend lands.
+ * No prices, no durations, no eyebrow label.
+ * Names are general placeholders (Signature / Precision / Craft /
+ * Finish) because the shop photos we have aren't tied to specific
+ * service types. Swap for real services once the admin backend lands.
  */
 
 import { observeReveal } from '../utils/reveal.js';
 
 const services = [
-  { name: 'Signature Cut',   note: 'Clipper and scissor finish — tailored to your head shape and style.', image: '/assets/images/gallery/gallery5.jpeg' },
-  { name: 'Fade & Line-up',  note: 'Taper, mid or skin fade. Crisp line-up to finish.',                   image: '/assets/images/gallery/gallery3.jpeg' },
-  { name: 'Beard Sculpt',    note: 'Shape, trim and define — contoured to your jawline.',                 image: '/assets/images/gallery/gallery7.jpeg' },
-  { name: 'Hot-Towel Shave', note: 'Pre-oil, warm lather, straight-razor finish — the full ritual.',     image: '/assets/images/gallery/gallery9.jpeg' },
+  { name: 'Signature', note: 'An everyday precision cut, tailored to your head shape.',   image: '/assets/images/gallery/gallery5.jpeg' },
+  { name: 'Precision', note: 'Clean lines, defined edges. The look that gets noticed.',   image: '/assets/images/gallery/gallery3.jpeg' },
+  { name: 'Craft',     note: 'Shape, trim, sculpt. Full styling treatment.',              image: '/assets/images/gallery/gallery7.jpeg' },
+  { name: 'Finish',    note: 'Ritual close. Warm towel, line-up, every detail.',          image: '/assets/images/gallery/gallery9.jpeg' },
 ];
 
 const render = () => `
@@ -28,8 +27,7 @@ const render = () => `
     <div class="services__inner container">
 
       <header class="services__header">
-        <p class="services__eyebrow" data-reveal>02 — Services</p>
-        <h2 class="services__heading" id="services-heading" data-reveal style="--reveal-delay: 1">
+        <h2 class="services__heading" id="services-heading" data-reveal>
           A sharper <em>line</em>.
         </h2>
       </header>
@@ -37,7 +35,7 @@ const render = () => `
       <div class="services__grid">
 
         <!-- Mobile: image sits above the list.  Desktop: image is on the right. -->
-        <div class="services__preview" aria-hidden="true" data-reveal style="--reveal-delay: 2">
+        <div class="services__preview" aria-hidden="true" data-reveal style="--reveal-delay: 1">
           <div class="services__image-stack">
             ${services.map((s, i) => `
               <img
@@ -59,7 +57,7 @@ const render = () => `
 
         <ol class="services__list" role="tablist" aria-label="Service menu">
           ${services.map((s, i) => `
-            <li class="services__item ${i === 0 ? 'is-active' : ''}" role="presentation" data-reveal style="--reveal-delay: ${i + 2}">
+            <li class="services__item ${i === 0 ? 'is-active' : ''}" role="presentation" data-reveal style="--reveal-delay: ${i + 1}">
               <button
                 type="button"
                 class="services__name"

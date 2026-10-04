@@ -15,7 +15,7 @@ require_once __DIR__ . '/config/constants.php';
 
 $appUrl   = rtrim(getenv('APP_URL') ?: 'https://clippercartel.test', '/');
 $appName  = getenv('APP_NAME') ?: 'ClipperCartel';
-$defaultDescription = 'ClipperCartel — precision cuts, hot-towel shaves and beard sculpts in Port Harcourt. Book your chair.';
+$defaultDescription = 'ClipperCartel. Precision cuts, hot-towel shaves and beard sculpts in Port Harcourt. Book your chair.';
 
 $shop = [
     'phone'    => getenv('SHOP_PHONE_E164') ?: '',
