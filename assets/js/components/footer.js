@@ -19,6 +19,14 @@ const siteLinks = [
   { href: '/faq',      label: 'FAQ'      },
 ];
 
+/* Phosphor-style brand icons (16px, inline SVG so no extra font fetch).
+ * stroke="currentColor" so they adopt the surrounding text colour. */
+const icons = {
+  instagram: `<svg class="footer__icon" width="16" height="16" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="36" y="36" width="184" height="184" rx="48"/><circle cx="128" cy="128" r="40"/><circle cx="180" cy="76" r="10" fill="currentColor" stroke="none"/></svg>`,
+  tiktok:    `<svg class="footer__icon" width="16" height="16" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M168,24V88a40,40,0,0,0,40,40"/><path d="M168,88V168a56,56,0,1,1-56-56"/></svg>`,
+  whatsapp:  `<svg class="footer__icon" width="16" height="16" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M44.1,208.6l15.5-45.8a80,80,0,1,1,33.6,33.6L44.1,212A3.4,3.4,0,0,1,44.1,208.6Z"/><path d="M100,112a16,16,0,0,0,16,16"/><path d="M140,144a16,16,0,0,0,16-16"/></svg>`,
+};
+
 export const mountFooter = (mount) => {
   const year     = new Date().getFullYear();
   const name     = shop.name();
@@ -53,9 +61,9 @@ export const mountFooter = (mount) => {
           <div class="footer__col">
             <p class="footer__col-head">Follow</p>
             <ul>
-              ${insta    ? `<li><a href="${insta}"  rel="noopener" target="_blank">Instagram <span aria-hidden="true">↗</span></a></li>` : ''}
-              ${tiktok   ? `<li><a href="${tiktok}" rel="noopener" target="_blank">TikTok <span aria-hidden="true">↗</span></a></li>` : ''}
-              ${whatsapp ? `<li><a href="${waLink("Hi, I'd like to book a chair.")}" rel="noopener" target="_blank">WhatsApp <span aria-hidden="true">↗</span></a></li>` : ''}
+              ${insta    ? `<li><a href="${insta}"  rel="noopener" target="_blank">${icons.instagram}<span class="footer__link-label">Instagram</span></a></li>` : ''}
+              ${tiktok   ? `<li><a href="${tiktok}" rel="noopener" target="_blank">${icons.tiktok}<span class="footer__link-label">TikTok</span></a></li>` : ''}
+              ${whatsapp ? `<li><a href="${waLink("Hi, I'd like to book a chair.")}" rel="noopener" target="_blank">${icons.whatsapp}<span class="footer__link-label">WhatsApp</span></a></li>` : ''}
             </ul>
           </div>
         </nav>

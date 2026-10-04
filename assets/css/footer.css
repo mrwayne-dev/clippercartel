@@ -92,10 +92,20 @@
   transition: color var(--t-fast);
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 10px;
 }
 .footer__col a:hover { color: var(--color-accent); }
-.footer__col a span  { font-size: 0.85em; opacity: 0.6; }
+
+/* Social icons sit before the label */
+.footer__icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: var(--color-text-dim);
+  transition: color var(--t-fast);
+}
+.footer__col a:hover .footer__icon { color: var(--color-accent); }
+.footer__link-label { line-height: 1; }
 
 /* ---- Bottom row ---------- */
 .footer__bottom {

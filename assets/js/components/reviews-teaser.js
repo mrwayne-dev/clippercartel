@@ -18,21 +18,9 @@ const aggregate = {
 };
 
 const reviews = [
-  {
-    quote:  'The best fade in Port Harcourt. Hands down.',
-    name:   'Chuks O.',
-    detail: 'Regular since 2023',
-  },
-  {
-    quote:  'Attention to detail is next level. Never had a cut this clean.',
-    name:   'Ada N.',
-    detail: 'Monthly client',
-  },
-  {
-    quote:  'Been coming here three years. Never leaves me down.',
-    name:   'Tunde A.',
-    detail: 'Weekly',
-  },
+  { quote: 'The best fade in Port Harcourt. Hands down.' },
+  { quote: 'Attention to detail is next level. Never had a cut this clean.' },
+  { quote: 'Been coming here three years. Never leaves me down.' },
 ];
 
 // Filled star + empty star by rounded rating value.
@@ -44,10 +32,6 @@ const stars = (rating) => {
 const reviewCard = (r, i) => `
   <blockquote class="review" data-reveal style="--reveal-delay: ${i + 1}">
     <p class="review__quote">${r.quote}</p>
-    <footer class="review__footer">
-      <p class="review__name">${r.name}</p>
-      <p class="review__detail">${r.detail}</p>
-    </footer>
   </blockquote>
 `;
 

@@ -1,7 +1,12 @@
 /* services-teaser.css — home section 02.
  *
- * Hydroxyapatite-pattern: eyebrow + headline on top, two-column grid
- * below (list left, preview right). Mobile stacks preview above list.
+ * Desktop (≥900px): two columns — headline + list on the left,
+ * image preview + note + CTA on the right. Preview is sticky so it
+ * stays visible as the eye scans the list.
+ *
+ * Mobile (<900px): single column — headline, then preview (which
+ * contains the tabs row above the image). The list is hidden; the
+ * tabs row + auto-cycle do the picking for the thumb.
  */
 
 .services {
@@ -10,71 +15,58 @@
 }
 
 .services__inner {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(24px, 5vh, 64px);     /* was clamp(40px, 8vh, 96px) — tighter header → content */
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(28px, 5vh, 56px);
+}
+@media (min-width: 900px) {
+  .services__inner {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(56px, 7vw, 128px);
+    align-items: start;
+  }
 }
 
-/* ---- Header (eyebrow + big italic headline) ---------- */
-.services__header {
+/* ---- Left column: intro (headline + list) ---------- */
+.services__intro {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: clamp(32px, 5vh, 56px);
 }
-.services__eyebrow {
-  text-transform: uppercase;
-  letter-spacing: 0.22em;
-  font-size: var(--text-xs);
-  color: var(--color-text-dim);
-}
+
 .services__heading {
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: clamp(2.75rem, 7vw, 6rem);
-  line-height: 0.95;
+  font-size: clamp(2.5rem, 5.5vw, 4.75rem);
+  line-height: 0.98;
   letter-spacing: -0.02em;
   color: var(--color-text);
-  max-width: 14ch;
+  max-width: 12ch;
 }
 .services__heading em {
   font-family: var(--font-accent);
   font-style: italic;
   color: var(--color-accent);
-  font-size: 1.12em;                 /* match the italic bump in signature-work */
+  font-size: 1.12em;
   line-height: 0.9;
   padding-right: 0.08em;
 }
 
-/* ---- Two-column grid ---------- */
-.services__grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: clamp(32px, 6vh, 80px);
-  align-items: start;
-}
-@media (min-width: 900px) {
-  .services__grid {
-    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
-  }
-}
-
-/* ---- Service list (left on desktop, below preview on mobile) ---------- */
+/* ---- Service list ---------- */
 .services__list {
   list-style: none;
   padding: 0;
   margin: 0;
   border-top: 1px solid var(--color-border);
 }
-.services__item {
-  border-bottom: 1px solid var(--color-border);
-}
+.services__item { border-bottom: 1px solid var(--color-border); }
 
 .services__name {
   display: flex;
   align-items: baseline;
-  gap: clamp(14px, 2vw, 28px);
+  gap: clamp(14px, 1.8vw, 24px);
   width: 100%;
-  padding-block: clamp(18px, 2.6vh, 30px);
+  padding-block: clamp(16px, 2.4vh, 24px);
   background: none;
   border: none;
   cursor: pointer;
@@ -82,10 +74,10 @@
   color: var(--color-text-dim);
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: clamp(2rem, 5.5vw, 4rem);
+  font-size: clamp(1.75rem, 3.6vw, 2.75rem);
   line-height: 1.0;
   letter-spacing: -0.018em;
-  transition: color var(--t-base);
+  transition: color var(--t-base), padding-left var(--t-base);
 }
 .services__name:hover,
 .services__name:focus-visible { color: var(--color-text); outline: none; }
@@ -94,28 +86,26 @@
 .services__arrow {
   display: inline-block;
   flex-shrink: 0;
-  width: 0.8em;
+  width: 0.9em;
   color: var(--color-accent);
   opacity: 0;
-  transform: translateX(-14px);
+  transform: translateX(-12px);
   transition: opacity 320ms ease, transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
   font-family: var(--font-body);
-  font-size: 0.65em;
+  font-size: 0.6em;
   line-height: 1;
 }
 .services__item.is-active .services__arrow { opacity: 1; transform: translateX(0); }
 
-/* ---- Preview column (right on desktop, top on mobile) ---------- */
+/* ---- Right column: preview (image + note + CTA) ---------- */
 .services__preview {
   position: relative;
 }
 @media (min-width: 900px) {
   .services__preview {
     position: sticky;
-    top: calc(var(--nav-h) + 24px);
-    order: 2;                       /* right side on desktop */
+    top: calc(var(--nav-h) + 32px);
   }
-  .services__list { order: 1; }     /* left side on desktop */
 }
 
 .services__image-stack {
@@ -124,13 +114,12 @@
   aspect-ratio: 4/5;
   overflow: hidden;
   background: var(--color-bg-soft);
-  border-radius: 2px;              /* nearly square corners — editorial */
+  border-radius: 2px;
 }
 .services__image {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
+  width: 100%; height: 100%;
   object-fit: cover;
   object-position: center 25%;
   opacity: 0;
@@ -142,14 +131,13 @@
 }
 .services__image.is-active { opacity: 1; transform: scale(1); }
 
-/* ---- Note + CTA beneath the preview ---------- */
 .services__note {
   font-size: var(--text-base);
   color: var(--color-text-muted);
   line-height: 1.55;
   max-width: 42ch;
   margin-top: var(--space-lg);
-  min-height: 3.1em;               /* reserve space so swap doesn't shift layout */
+  min-height: 3.1em;
   transition: opacity 180ms ease;
 }
 .services__note.is-swapping { opacity: 0; }
@@ -169,13 +157,13 @@
 }
 .services__book:hover { background: var(--color-accent-deep); gap: 16px; }
 
-/* ---- Mobile eyebrow tabs (above the preview) ---------- */
+/* ---- Mobile eyebrow tabs (above the preview image) ---------- */
 .services__tabs {
-  display: none;                      /* desktop hides */
-  justify-content: space-between;     /* first flush left, last flush right of the image above */
+  display: none;
+  justify-content: space-between;
   align-items: center;
   width: 100%;
-  gap: 8px;                            /* fallback cushion if text is tight */
+  gap: 8px;
   margin-bottom: 14px;
   padding-bottom: 2px;
   flex-wrap: nowrap;
@@ -185,7 +173,7 @@
   border: none;
   padding: 6px 0;
   font-family: var(--font-body);
-  font-size: 11px;                     /* slightly tighter so all 4 fit cleanly on narrow screens */
+  font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.18em;
   color: var(--color-text-dim);
@@ -216,5 +204,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .services__tab::after   { transition: none; }
+  .services__tab::after,
+  .services__image        { transition: none; }
 }

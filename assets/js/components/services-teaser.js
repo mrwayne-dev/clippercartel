@@ -26,50 +26,13 @@ const render = () => `
   <section class="services section" aria-labelledby="services-heading">
     <div class="services__inner container">
 
-      <header class="services__header">
+      <!-- Left column: headline + big typographic list.
+           On mobile the list is hidden; the tabs row above the image
+           (inside .services__preview) picks the active service. -->
+      <div class="services__intro">
         <h2 class="services__heading" id="services-heading" data-reveal>
           A sharper <em>line</em>.
         </h2>
-      </header>
-
-      <div class="services__grid">
-
-        <!-- Mobile: image sits above the list.  Desktop: image is on the right. -->
-        <div class="services__preview" aria-hidden="true" data-reveal style="--reveal-delay: 1">
-          <!-- Mobile-only eyebrow tabs above the image.
-               Auto-cycle on mobile; also tappable. Hidden on desktop
-               (the big typographic list on the left takes over there). -->
-          <div class="services__tabs" role="tablist" aria-label="Service style">
-            ${services.map((s, i) => `
-              <button
-                type="button"
-                class="services__tab ${i === 0 ? 'is-active' : ''}"
-                role="tab"
-                aria-selected="${i === 0 ? 'true' : 'false'}"
-                data-service-idx="${i}"
-              >${s.name}</button>
-            `).join('')}
-          </div>
-
-          <div class="services__image-stack">
-            ${services.map((s, i) => `
-              <img
-                src="${s.image}"
-                alt=""
-                class="services__image ${i === 0 ? 'is-active' : ''}"
-                data-service-image="${i}"
-                loading="${i === 0 ? 'eager' : 'lazy'}"
-                decoding="async"
-              >
-            `).join('')}
-          </div>
-          <p class="services__note" data-service-note>${services[0].note}</p>
-          <a href="/book" class="services__book" data-service-cta>
-            Book this
-            <span aria-hidden="true">→</span>
-          </a>
-        </div>
-
         <ol class="services__list" role="tablist" aria-label="Service menu">
           ${services.map((s, i) => `
             <li class="services__item ${i === 0 ? 'is-active' : ''}" role="presentation" data-reveal style="--reveal-delay: ${i + 1}">
@@ -87,7 +50,39 @@ const render = () => `
             </li>
           `).join('')}
         </ol>
+      </div>
 
+      <!-- Right column: tabs (mobile only), image stack, note, Book CTA. -->
+      <div class="services__preview" aria-hidden="true" data-reveal style="--reveal-delay: 1">
+        <div class="services__tabs" role="tablist" aria-label="Service style">
+          ${services.map((s, i) => `
+            <button
+              type="button"
+              class="services__tab ${i === 0 ? 'is-active' : ''}"
+              role="tab"
+              aria-selected="${i === 0 ? 'true' : 'false'}"
+              data-service-idx="${i}"
+            >${s.name}</button>
+          `).join('')}
+        </div>
+
+        <div class="services__image-stack">
+          ${services.map((s, i) => `
+            <img
+              src="${s.image}"
+              alt=""
+              class="services__image ${i === 0 ? 'is-active' : ''}"
+              data-service-image="${i}"
+              loading="${i === 0 ? 'eager' : 'lazy'}"
+              decoding="async"
+            >
+          `).join('')}
+        </div>
+        <p class="services__note" data-service-note>${services[0].note}</p>
+        <a href="/book" class="services__book" data-service-cta>
+          Book this
+          <span aria-hidden="true">→</span>
+        </a>
       </div>
     </div>
   </section>

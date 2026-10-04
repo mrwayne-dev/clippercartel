@@ -100,10 +100,6 @@
 }
 
 .review {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: var(--space-lg);
   margin: 0;
   padding: 0;
 }
@@ -116,29 +112,6 @@
   color: var(--color-text);
   letter-spacing: -0.01em;
   margin: 0;
-  /* Opening + closing curly quotes rendered via ::before/::after */
 }
-.review__quote::before { content: '“'; margin-right: 0.1em; color: var(--color-accent); }
-.review__quote::after  { content: '”'; margin-left:  0.05em; color: var(--color-accent); }
-
-.review__footer {
-  margin-top: var(--space-md);
-  padding-top: var(--space-md);
-  border-top: 1px solid var(--color-border);
-}
-.review__name {
-  font-family: var(--font-body);
-  font-weight: 500;
-  font-size: var(--text-sm);
-  color: var(--color-text);
-  margin: 0;
-}
-.review__detail {
-  font-family: var(--font-body);
-  font-weight: 400;
-  font-size: var(--text-xs);
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: var(--color-text-dim);
-  margin-top: 4px;
-}
+.review__quote::before { content: '\201C'; margin-right: 0.1em; color: var(--color-accent); }
+.review__quote::after  { content: '\201D'; margin-left:  0.05em; color: var(--color-accent); }
