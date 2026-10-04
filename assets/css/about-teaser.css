@@ -1,0 +1,99 @@
+/* about-teaser.css — home section 04.
+ *
+ * Text left, portrait right. Back to white bg (previous section was
+ * warm off-white) so the page alternates: white → soft → white →
+ * soft... Clean rhythm.
+ */
+
+.about-teaser {
+  background: var(--color-bg);
+  padding-block: clamp(96px, 16vh, 200px);
+}
+
+.about-teaser__inner {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(32px, 6vh, 72px);
+  align-items: start;
+}
+@media (min-width: 900px) {
+  .about-teaser__inner {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(48px, 7vw, 120px);
+    align-items: center;
+  }
+}
+
+/* ---- Text column ---------- */
+.about-teaser__text {
+  max-width: 48ch;
+}
+.about-teaser__label {
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: var(--text-xs);
+  color: var(--color-text-dim);
+  margin-bottom: clamp(20px, 3vh, 32px);
+}
+.about-teaser__title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.25rem, 4.8vw, 4rem);
+  line-height: 1.02;
+  letter-spacing: -0.018em;
+  color: var(--color-text);
+}
+.about-teaser__title em {
+  font-family: var(--font-accent);
+  font-style: italic;
+  color: var(--color-accent);
+  font-size: 1.12em;
+  line-height: 0.9;
+  padding-right: 0.05em;
+}
+.about-teaser__body {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(14px, 2vh, 20px);
+  margin-top: clamp(24px, 4vh, 36px);
+  color: var(--color-text-muted);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  max-width: 42ch;
+}
+.about-teaser__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: clamp(24px, 3.5vh, 36px);
+  padding-bottom: 4px;
+  border-bottom: 1px solid currentColor;
+  color: var(--color-text);
+  font-weight: 500;
+  font-size: var(--text-sm);
+  transition: color var(--t-fast), gap var(--t-base);
+}
+.about-teaser__cta:hover { color: var(--color-accent); gap: 16px; }
+.about-teaser__cta span  { transition: transform var(--t-base); }
+.about-teaser__cta:hover span { transform: translateX(2px); }
+
+/* ---- Image column ---------- */
+.about-teaser__media {
+  position: relative;
+  aspect-ratio: 4/5;
+  overflow: hidden;
+  background: var(--color-bg-soft);
+  margin: 0;
+}
+.about-teaser__media img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center 20%;
+  transition: transform 1600ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+.about-teaser__media:hover img { transform: scale(1.03); }
+
+@media (max-width: 899px) {
+  .about-teaser__media  { aspect-ratio: 3/4; }
+}

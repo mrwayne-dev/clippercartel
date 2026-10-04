@@ -56,6 +56,8 @@
   font-family: var(--font-accent);
   font-style: italic;
   color: var(--color-accent);
+  font-size: 1.12em;                 /* Instrument Serif runs small vs Kudryashev — bump to visually match */
+  line-height: 0.9;
   padding-right: 0.05em;
 }
 .signature__sub {

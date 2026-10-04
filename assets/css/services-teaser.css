@@ -40,6 +40,8 @@
   font-family: var(--font-accent);
   font-style: italic;
   color: var(--color-accent);
+  font-size: 1.12em;                 /* match the italic bump in signature-work */
+  line-height: 0.9;
   padding-right: 0.08em;
 }
 
