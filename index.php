@@ -95,6 +95,8 @@ $openingSpec = $openDays ? [[
   <link rel="stylesheet" href="/assets/css/gallery-marquee.css">
   <link rel="stylesheet" href="/assets/css/reviews-teaser.css">
   <link rel="stylesheet" href="/assets/css/visit.css">
+  <link rel="stylesheet" href="/assets/css/final-cta.css">
+  <link rel="stylesheet" href="/assets/css/footer.css">
 
   <!-- JSON-LD: HairSalon LocalBusiness -->
   <script type="application/ld+json" id="ld-business">

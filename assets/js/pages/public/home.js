@@ -1,9 +1,8 @@
 /**
  * home.js — landing page.
- * Sections built: 01 hero · 02 services · 03 signature work ·
- *                 04 about · 05 gallery marquee · 06 reviews teaser ·
- *                 07 visit.
- * Still to come: final CTA.
+ * All 8 sections built: 01 hero · 02 services · 03 signature work ·
+ *                       04 about · 05 gallery marquee · 06 reviews ·
+ *                       07 visit · 08 final CTA.
  */
 
 import { mountHero }           from '../../components/hero.js';
@@ -13,6 +12,7 @@ import { mountAboutTeaser }    from '../../components/about-teaser.js';
 import { mountGalleryMarquee } from '../../components/gallery-marquee.js';
 import { mountReviewsTeaser }  from '../../components/reviews-teaser.js';
 import { mountVisit }          from '../../components/visit.js';
+import { mountFinalCta }       from '../../components/final-cta.js';
 
 export default async (mount) => {
   await mountHero(mount);
@@ -22,4 +22,5 @@ export default async (mount) => {
   mountGalleryMarquee(mount);
   mountReviewsTeaser(mount);
   mountVisit(mount);
+  mountFinalCta(mount);
 };

@@ -1,0 +1,64 @@
+/* final-cta.css — home section 08.
+ * Dark closing moment. data-surface="dark" (defined in main.css)
+ * flips every token to its dark counterpart automatically.
+ */
+
+.final-cta {
+  padding-block: clamp(120px, 22vh, 260px);
+}
+
+.final-cta__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: clamp(32px, 5vh, 52px);
+}
+
+/* ---- Headline ---------- */
+.final-cta__title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(3rem, 9vw, 7.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.025em;
+  color: var(--color-text);
+  max-width: 14ch;
+  margin: 0;
+}
+.final-cta__title em {
+  display: block;
+  font-family: var(--font-accent);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--color-accent);
+  font-size: 1.12em;
+  line-height: 0.9;
+}
+
+/* ---- Actions ---------- */
+.final-cta__actions {
+  display: flex;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.final-cta__btn {
+  padding: 16px 32px;
+  font-size: var(--text-base);
+  font-weight: 500;
+  border-radius: var(--radius-full);
+}
+/* Outline button: white border/text on dark; inverts to dark text on white fill */
+.final-cta__actions .btn-outline {
+  --btn-outline-color: #ffffff;
+  --btn-outline-invert: #0a0a0a;
+}
+
+/* ---- Shop meta ---------- */
+.final-cta__meta {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  letter-spacing: 0.02em;
+  margin-top: clamp(4px, 1vh, 12px);
+}
