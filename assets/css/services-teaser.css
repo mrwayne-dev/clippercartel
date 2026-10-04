@@ -12,7 +12,7 @@
 .services__inner {
   display: flex;
   flex-direction: column;
-  gap: clamp(40px, 8vh, 96px);
+  gap: clamp(24px, 5vh, 64px);     /* was clamp(40px, 8vh, 96px) — tighter header → content */
 }
 
 /* ---- Header (eyebrow + big italic headline) ---------- */
@@ -170,24 +170,28 @@
 /* ---- Mobile eyebrow tabs (above the preview) ---------- */
 .services__tabs {
   display: none;                      /* desktop hides */
-  gap: clamp(16px, 4vw, 28px);
-  margin-bottom: var(--space-md);
+  justify-content: space-between;     /* first flush left, last flush right of the image above */
+  align-items: center;
+  width: 100%;
+  gap: 8px;                            /* fallback cushion if text is tight */
+  margin-bottom: 14px;
   padding-bottom: 2px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 .services__tab {
   background: none;
   border: none;
   padding: 6px 0;
   font-family: var(--font-body);
-  font-size: var(--text-xs);
+  font-size: 11px;                     /* slightly tighter so all 4 fit cleanly on narrow screens */
   text-transform: uppercase;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.18em;
   color: var(--color-text-dim);
   cursor: pointer;
   position: relative;
   transition: color var(--t-base);
   flex: 0 0 auto;
+  white-space: nowrap;
 }
 .services__tab::after {
   content: '';
