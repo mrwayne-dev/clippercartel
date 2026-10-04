@@ -60,11 +60,12 @@ export const mountNav = (mount) => {
   sheet.setAttribute('aria-label', 'Site menu');
   sheet.innerHTML = `
     <div class="nav__sheet-inner">
-      <p class="nav__sheet-eyebrow">Menu</p>
 
       <nav class="nav__sheet-links" aria-label="Mobile menu">
         ${links.map((l, i) => sheetLink(l.href, l.label, i)).join('')}
       </nav>
+
+      <a href="/book" class="nav__sheet-cta btn btn-accent" data-nav-link="/book">Book your chair</a>
 
       <div class="nav__sheet-footer">
         <div class="nav__sheet-row">
