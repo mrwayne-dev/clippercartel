@@ -1,0 +1,25 @@
+# clippercartel — Apache Configuration
+Options -Indexes
+RewriteEngine On
+RewriteBase /
+
+# Remove .php extension from URLs
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.php -f
+RewriteRule ^(.*)$ $1.php [L]
+
+# SPA fallback — route all non-file, non-directory requests to index.php
+# This lets app.js + router.js handle client-side navigation.
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [L,QSA]
+
+# Block direct access to sensitive files
+<FilesMatch "^\.(env|gitignore|htaccess)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+<IfModule mod_rewrite.c>
+    RewriteRule ^vendor/ - [F,L]
+</IfModule>
