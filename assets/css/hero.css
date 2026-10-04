@@ -15,7 +15,7 @@
   overflow: hidden;
   background: var(--color-bg);
   isolation: isolate;
-  margin-top: calc(-1 * var(--nav-h)); /* bleed under the fixed nav */
+  /* main#app:has(> .hero) { padding-block-start: 0 } handles the nav bleed. */
 }
 
 /* ---- image layer ---- */

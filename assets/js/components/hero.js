@@ -55,7 +55,7 @@ const render = () => {
         <a href="${telLink()}" class="hero__card-row">
           <span>Call</span><span>${phone || ''}</span>
         </a>
-        <a href="${waLink('Hi, I\\'d like to book a chair.')}" class="hero__card-row" rel="noopener" target="_blank">
+        <a href="${waLink("Hi, I'd like to book a chair.")}" class="hero__card-row" rel="noopener" target="_blank">
           <span>WhatsApp</span><span>Message us →</span>
         </a>
         ${maps ? `<a href="${maps}" class="hero__card-row" rel="noopener" target="_blank">
