@@ -1,0 +1,144 @@
+/* reviews-teaser.css — home section 06.
+ *
+ * White background (gallery marquee above was warm soft).
+ * Header → aggregate rating → three editorial quote cards.
+ */
+
+.reviews-teaser {
+  background: var(--color-bg);
+  padding-block: clamp(96px, 16vh, 200px);
+}
+
+.reviews-teaser__inner {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(32px, 5vh, 56px);
+}
+
+/* ---- Header ---------- */
+.reviews-teaser__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
+.reviews-teaser__title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.25rem, 5vw, 4rem);
+  line-height: 0.98;
+  letter-spacing: -0.018em;
+  color: var(--color-text);
+  margin: 0;
+}
+.reviews-teaser__title em {
+  font-family: var(--font-accent);
+  font-style: italic;
+  color: var(--color-accent);
+  font-size: 1.12em;
+  line-height: 0.9;
+  padding-right: 0.05em;
+}
+
+.reviews-teaser__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid currentColor;
+  color: var(--color-text);
+  font-weight: 500;
+  font-size: var(--text-sm);
+  transition: color var(--t-fast), gap var(--t-base);
+}
+.reviews-teaser__cta:hover { color: var(--color-accent); gap: 16px; }
+.reviews-teaser__cta span  { transition: transform var(--t-base); }
+.reviews-teaser__cta:hover span { transform: translateX(2px); }
+
+/* ---- Aggregate rating strip ---------- */
+.reviews-teaser__meta {
+  display: flex;
+  align-items: baseline;
+  gap: clamp(14px, 2vw, 24px);
+  padding-block: clamp(16px, 3vh, 24px);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+.reviews-teaser__stars {
+  font-size: clamp(1.1rem, 1.4vw, 1.4rem);
+  color: var(--color-accent);
+  letter-spacing: 0.08em;
+  line-height: 1;
+}
+.reviews-teaser__rating {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+.reviews-teaser__score {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.5rem, 2vw, 1.875rem);
+  color: var(--color-text);
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+/* ---- Review grid ---------- */
+.reviews-teaser__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(28px, 4vw, 56px);
+}
+@media (min-width: 760px) {
+  .reviews-teaser__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.review {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-lg);
+  margin: 0;
+  padding: 0;
+}
+.review__quote {
+  font-family: var(--font-accent);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.375rem, 2vw, 1.75rem);
+  line-height: 1.3;
+  color: var(--color-text);
+  letter-spacing: -0.01em;
+  margin: 0;
+  /* Opening + closing curly quotes rendered via ::before/::after */
+}
+.review__quote::before { content: '“'; margin-right: 0.1em; color: var(--color-accent); }
+.review__quote::after  { content: '”'; margin-left:  0.05em; color: var(--color-accent); }
+
+.review__footer {
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border);
+}
+.review__name {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: var(--text-sm);
+  color: var(--color-text);
+  margin: 0;
+}
+.review__detail {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--color-text-dim);
+  margin-top: 4px;
+}
