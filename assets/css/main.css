@@ -54,22 +54,31 @@
 }
 
 /* ------------------------------------------------------------------
- *  Design tokens — placeholders until the design direction lands.
- *  Dark-first; light mode defined but gated behind data-theme="light".
+ *  Design tokens — ClipperCartel palette.
+ *  White bg · black type · brown accent.
+ *  Dark surfaces (hero overlays, dark sections) are the inverse.
  * ------------------------------------------------------------------ */
 :root {
-  /* Palette (placeholder — swap when design lands) */
-  --color-bg:          #0a0a0a;
-  --color-bg-soft:     #111111;
-  --color-bg-card:     #141414;
-  --color-border:      #222222;
-  --color-text:        #ffffff;
-  --color-text-muted:  #a1a1aa;
-  --color-text-dim:    #52525b;
-  --color-accent:      #ffffff;
+  /* Palette */
+  --color-bg:          #ffffff;
+  --color-bg-soft:     #f8f6f3;   /* warm off-white for alternating sections */
+  --color-bg-card:     #ffffff;
+  --color-bg-invert:   #0a0a0a;   /* for dark CTA/hero overlay sections */
+  --color-border:      #ececec;
+  --color-border-soft: #f2efea;
+  --color-text:        #0a0a0a;
+  --color-text-muted:  #595247;
+  --color-text-dim:    #a39a8a;
+  --color-text-invert: #ffffff;
+
+  /* Brown accent (warm, leather-adjacent — the one colour on the page) */
+  --color-accent:      #7a4a2b;   /* base brown */
+  --color-accent-deep: #593318;   /* hover/press */
+  --color-accent-soft: #f0e6dc;   /* tints, chip backgrounds */
+
   --color-whatsapp:    #25D366;
-  --color-danger:      #ef4444;
-  --color-success:     #22c55e;
+  --color-danger:      #c0392b;
+  --color-success:     #2e7d4f;
 
   /* Typography */
   --font-display: 'Cal Sans', ui-sans-serif, system-ui, sans-serif;
@@ -113,15 +122,20 @@
   --nav-h:         72px;
 }
 
-:root[data-theme="light"] {
-  --color-bg:         #ffffff;
-  --color-bg-soft:    #f8fafc;
-  --color-bg-card:    #ffffff;
-  --color-border:     #e5e7eb;
-  --color-text:       #0a0a0a;
-  --color-text-muted: #52525b;
-  --color-text-dim:   #a1a1aa;
-  --color-accent:     #0a0a0a;
+/* Dark section helper — opt-in per <section data-surface="dark">.
+ * Avoids a full dark mode: our brand is light-first, dark surfaces
+ * are tactical (hero overlays, closing CTAs). */
+[data-surface="dark"] {
+  --color-bg:          #0a0a0a;
+  --color-bg-soft:     #141414;
+  --color-bg-card:     #1a1a1a;
+  --color-border:      #262626;
+  --color-text:        #ffffff;
+  --color-text-muted:  #a39a8a;
+  --color-text-dim:    #5c5347;
+  --color-accent-soft: #2a1b11;
+  background: var(--color-bg);
+  color: var(--color-text);
 }
 
 /* ------------------------------------------------------------------

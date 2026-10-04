@@ -40,13 +40,12 @@ $openingSpec = $openDays ? [[
 ]] : [];
 ?>
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="color-scheme" content="dark light">
-  <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)">
-  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#ffffff">
   <meta name="format-detection" content="telephone=no">
 
   <title><?= htmlspecialchars($appName) ?></title>
@@ -109,7 +108,10 @@ $openingSpec = $openDays ? [[
       ],
       'hasMap'      => $shop['maps'] ?: null,
       'areaServed'  => $shop['city'],
-      'sameAs'      => array_values(array_filter([getenv('SHOP_INSTAGRAM') ?: null])),
+      'sameAs'      => array_values(array_filter([
+          getenv('SHOP_INSTAGRAM') ?: null,
+          getenv('SHOP_TIKTOK')    ?: null,
+      ])),
       'openingHoursSpecification' => $openingSpec,
   ]), JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) ?>
   </script>
@@ -125,6 +127,7 @@ $openingSpec = $openDays ? [[
     data-shop-address="<?= htmlspecialchars(getenv('SHOP_ADDRESS') ?: '') ?>"
     data-shop-hours="<?= htmlspecialchars($shop['hours']) ?>"
     data-shop-instagram="<?= htmlspecialchars(getenv('SHOP_INSTAGRAM') ?: '') ?>"
+    data-shop-tiktok="<?= htmlspecialchars(getenv('SHOP_TIKTOK') ?: '') ?>"
     data-shop-maps="<?= htmlspecialchars($shop['maps']) ?>">
 
   <a class="skip-link" href="#app">Skip to content</a>

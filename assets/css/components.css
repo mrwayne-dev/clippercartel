@@ -19,18 +19,25 @@
 
 .btn-primary {
   background: var(--color-text);
-  color: var(--color-bg);
+  color: var(--color-text-invert);
 }
 .btn-primary:hover {
-  background: color-mix(in oklab, var(--color-text) 85%, var(--color-accent));
+  background: var(--color-accent-deep);
 }
+
+.btn-accent {
+  background: var(--color-accent);
+  color: #fff;
+}
+.btn-accent:hover { background: var(--color-accent-deep); }
 
 .btn-ghost {
   background: transparent;
-  color: var(--color-text);
-  border: 1px solid var(--color-border);
+  color: inherit;
+  border: 1px solid currentColor;
+  opacity: 0.9;
 }
-.btn-ghost:hover { border-color: var(--color-text); }
+.btn-ghost:hover { opacity: 1; }
 
 .btn-whatsapp {
   background: var(--color-whatsapp);

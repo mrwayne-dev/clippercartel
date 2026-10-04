@@ -17,6 +17,7 @@ export const shop = {
   address:     () => readAttr('address',    ''),
   hours:       () => readAttr('hours',      ''),
   instagram:   () => readAttr('instagram',  ''),
+  tiktok:      () => readAttr('tiktok',     ''),
   maps:        () => readAttr('maps',       ''),
 };
 
