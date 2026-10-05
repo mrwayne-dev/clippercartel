@@ -102,6 +102,7 @@ $openingSpec = $openDays ? [[
   <link rel="stylesheet" href="/assets/css/about-page.css">
   <link rel="stylesheet" href="/assets/css/contact-page.css">
   <link rel="stylesheet" href="/assets/css/faq-page.css">
+  <link rel="stylesheet" href="/assets/css/legal-page.css">
 
   <!-- JSON-LD: HairSalon LocalBusiness -->
   <script type="application/ld+json" id="ld-business">
