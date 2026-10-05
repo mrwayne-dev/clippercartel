@@ -167,15 +167,16 @@
 
 
 /* ============================
- *  Mobile — stack image on top
+ *  Mobile — text first, image carousel second
  * ============================ */
 @media (max-width: 899px) {
   .services__split {
     grid-template-columns: 1fr;
-    grid-template-rows: 55svh auto;
+    grid-template-rows: auto 55svh;
+    min-height: 0;                  /* let content height drive, not viewport */
   }
-  .services__image-pane { order: 1; min-height: 0; }
-  .services__text       { order: 2; padding-block: clamp(32px, 5vh, 56px); }
+  .services__text       { order: 1; padding-block: clamp(32px, 5vh, 56px); padding-top: calc(var(--nav-h) + clamp(32px, 5vh, 56px)); }
+  .services__image-pane { order: 2; min-height: 0; }
   .services__text-inner { max-width: 100%; }
   .services__name       { font-size: clamp(2.75rem, 11vw, 4rem); }
 }

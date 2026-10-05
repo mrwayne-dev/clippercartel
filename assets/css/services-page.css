@@ -1,0 +1,141 @@
+/* services-page.css — /services route.
+ *
+ * Hero (big editorial title) + two-column grid of service cards +
+ * closing Final CTA (dark, same component as home 08).
+ */
+
+.services-page {
+  background: var(--color-bg);
+}
+
+/* ---- Hero ---------------------------------------------- */
+.services-page__hero {
+  padding-block: clamp(120px, 20vh, 220px) clamp(60px, 10vh, 120px);
+}
+.services-page__hero-inner {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(16px, 2vh, 28px);
+}
+.services-page__eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: var(--text-xs);
+  color: var(--color-text-dim);
+  margin: 0;
+}
+.services-page__title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(3rem, 8vw, 6.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.025em;
+  color: var(--color-text);
+  margin: 0;
+  max-width: 14ch;
+}
+.services-page__title em {
+  font-family: var(--font-accent);
+  font-style: italic;
+  color: var(--color-accent);
+  font-size: 1.12em;
+  line-height: 0.9;
+  padding-right: 0.05em;
+}
+.services-page__sub {
+  font-size: clamp(1rem, 1.3vw, 1.25rem);
+  color: var(--color-text-muted);
+  line-height: 1.55;
+  margin: 0;
+  max-width: 52ch;
+}
+
+/* ---- Grid section ------------------------------------- */
+.services-page__grid-section {
+  padding-block: clamp(48px, 8vh, 112px) clamp(96px, 16vh, 200px);
+}
+
+.services-page__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(48px, 8vh, 96px);
+}
+@media (min-width: 760px) {
+  .services-page__grid {
+    grid-template-columns: 1fr 1fr;
+    column-gap: clamp(32px, 5vw, 72px);
+    row-gap:    clamp(72px, 10vh, 128px);
+  }
+}
+
+/* ---- Service card ------------------------------------- */
+.service-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.service-card__media {
+  position: relative;
+  aspect-ratio: 4/5;
+  overflow: hidden;
+  margin: 0 0 clamp(20px, 3vh, 32px);
+  background: var(--color-bg-soft);
+}
+.service-card__media img {
+  width: 100%;
+  /* Overscale so parallax Y-translate never exposes edges inside the frame. */
+  height: 115%;
+  margin-top: -7.5%;
+  object-fit: cover;
+  object-position: center 25%;
+  transition: transform 800ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+.service-card:hover .service-card__media img { transform: scale(1.03); }
+
+.service-card__index {
+  position: absolute;
+  top: var(--space-md);
+  left: var(--space-md);
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: var(--text-xs);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #fff;
+  mix-blend-mode: difference;    /* reads against any photo colour */
+}
+
+.service-card__name {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2rem, 3.6vw, 2.75rem);
+  line-height: 1;
+  letter-spacing: -0.018em;
+  color: var(--color-text);
+  margin: 0 0 clamp(12px, 2vh, 20px);
+}
+
+.service-card__note {
+  font-size: var(--text-base);
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  max-width: 42ch;
+  margin: 0 0 clamp(16px, 2.4vh, 24px);
+}
+
+.service-card__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid currentColor;
+  color: var(--color-text);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  transition: color var(--t-fast), gap var(--t-base);
+  align-self: flex-start;
+}
+.service-card__cta:hover { color: var(--color-accent); gap: 14px; }
+.service-card__cta span  { transition: transform var(--t-base); }
+.service-card__cta:hover span { transform: translateX(2px); }
