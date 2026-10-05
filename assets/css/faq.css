@@ -52,10 +52,13 @@
   padding-right: 0.05em;
 }
 
-/* ---- Accordion list ---------------------------------- */
+/* ---- Accordion list ----------------------------------
+ *
+ * Markup is button + aria-expanded + controlled panel (not <details>),
+ * so the animation is fully in our hands. JS owns the height; CSS
+ * sets the initial collapsed state + transition timing.
+ */
 .faq {
-  margin: 0;
-  padding: 0;
   border-top: 1px solid var(--color-border);
 }
 
@@ -63,20 +66,24 @@
   border-bottom: 1px solid var(--color-border);
 }
 
+/* -- Question button -- */
 .faq__q {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: var(--space-md);
+  width: 100%;
   padding: clamp(20px, 2.8vh, 32px) 0;
+  background: none;
+  border: none;
   cursor: pointer;
-  list-style: none;
+  text-align: left;
   color: var(--color-text);
+  font: inherit;
   transition: color var(--t-fast);
 }
-.faq__q:hover         { color: var(--color-accent); }
-.faq__q::-webkit-details-marker { display: none; }
-.faq__q::marker       { content: ''; }
+.faq__q:hover,
+.faq__q:focus-visible { color: var(--color-accent); outline: none; }
 
 .faq__q-text {
   font-family: var(--font-display);
@@ -86,7 +93,7 @@
   letter-spacing: -0.012em;
 }
 
-/* +/× indicator */
+/* -- +/× indicator -- */
 .faq__icon {
   position: relative;
   flex-shrink: 0;
@@ -105,15 +112,18 @@
   transition: transform 320ms cubic-bezier(0.16, 1, 0.3, 1);
   transform-origin: center;
 }
-.faq__item[open] .faq__icon::after { transform: rotate(90deg); }
+.faq__item.is-open .faq__icon::after { transform: rotate(90deg); }
 
-/* Answer wrapper — JS animates height on this element so we don't
- * have to fight the browser's default <details> instant toggle. */
+/* -- Answer panel -- JS animates height. --
+ * Start: height 0 + opacity 0, overflow:hidden so the content is
+ * clipped but still in the DOM for scrollHeight to measure. */
 .faq__a-outer {
   overflow: hidden;
+  height: 0;
+  opacity: 0;
   will-change: height, opacity;
   transition:
-    height  420ms cubic-bezier(0.16, 1, 0.3, 1),
+    height  440ms cubic-bezier(0.16, 1, 0.3, 1),
     opacity 320ms ease;
 }
 
@@ -130,5 +140,5 @@
 
 @media (prefers-reduced-motion: reduce) {
   .faq__icon::after,
-  .faq__a-outer     { transition: none; }
+  .faq__a-outer { transition: none; }
 }

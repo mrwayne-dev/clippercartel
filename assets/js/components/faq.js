@@ -1,24 +1,21 @@
 /**
  * faq.js — reusable FAQ accordion.
  *
- * Uses native <details><summary> markup for a11y (keyboard, screen
- * readers), then intercepts summary clicks and animates the answer's
- * height for a smooth open/close. The browser's default `open`
- * attribute is still what state we read, but we delay flipping it on
- * close until the shrink finishes.
+ * Why not <details>: native <details> can't be reliably animated —
+ * Chrome 131+ exposes ::details-content, older browsers hide children
+ * via internal rules, and the UA instant toggle fights any JS height
+ * transition. We rebuild the pattern with button + aria-expanded +
+ * controlled panel so the animation is fully in our hands.
  *
- * Call initFaq(root) once after inserting the markup, otherwise the
- * accordion falls back to the native (instant) toggle.
+ * A11y preserved: button is a real button, aria-expanded tracks state,
+ * aria-controls links to the panel's id, role="region" + aria-labelledby
+ * links the panel back to the button for screen readers.
  *
- * Usage:
- *   mount.insertAdjacentHTML('beforeend', renderFaq({ eyebrow, title, items }));
- *   initFaq(mount.querySelector('.faq-section'));
+ * Call initFaq(root) once after inserting the markup to wire the
+ * open/close animation.
  */
 
-const OPEN_DURATION  = 420;      // keep in sync with .faq__a transition in faq.css
-const CLOSE_DURATION = 320;
-
-export const renderFaq = ({ eyebrow, title, items, headingId = 'faq-heading' }) => `
+export const renderFaq = ({ eyebrow, title, items, headingId = 'faq-heading', idPrefix = 'faq' }) => `
   <section class="faq-section" aria-labelledby="${headingId}">
     <div class="faq-section__inner container">
       <header class="faq-section__header">
@@ -26,21 +23,34 @@ export const renderFaq = ({ eyebrow, title, items, headingId = 'faq-heading' }) 
         <h2 class="faq-section__title" id="${headingId}" data-reveal="clip" style="--reveal-delay: 1">${title}</h2>
       </header>
 
-      <dl class="faq">
-        ${items.map((item, i) => `
-          <details class="faq__item" data-reveal style="--reveal-delay: ${i + 1}">
-            <summary class="faq__q">
-              <span class="faq__q-text">${item.q}</span>
-              <span class="faq__icon" aria-hidden="true"></span>
-            </summary>
-            <div class="faq__a-outer">
-              <div class="faq__a">
-                <p>${item.a}</p>
+      <div class="faq" role="list">
+        ${items.map((item, i) => {
+          const btnId    = `${idPrefix}-btn-${i}`;
+          const panelId  = `${idPrefix}-panel-${i}`;
+          return `
+            <div class="faq__item" role="listitem" data-reveal style="--reveal-delay: ${i + 1}">
+              <button
+                class="faq__q"
+                type="button"
+                id="${btnId}"
+                aria-expanded="false"
+                aria-controls="${panelId}"
+              >
+                <span class="faq__q-text">${item.q}</span>
+                <span class="faq__icon" aria-hidden="true"></span>
+              </button>
+              <div
+                class="faq__a-outer"
+                id="${panelId}"
+                role="region"
+                aria-labelledby="${btnId}"
+              >
+                <div class="faq__a"><p>${item.a}</p></div>
               </div>
             </div>
-          </details>
-        `).join('')}
-      </dl>
+          `;
+        }).join('')}
+      </div>
     </div>
   </section>
 `;
@@ -49,42 +59,53 @@ export const initFaq = (root) => {
   if (!root) return;
   const items = root.querySelectorAll('.faq__item');
 
-  items.forEach((details) => {
-    const summary = details.querySelector('.faq__q');
-    const panel   = details.querySelector('.faq__a-outer');
-    if (!summary || !panel) return;
+  items.forEach((item) => {
+    const btn   = item.querySelector('.faq__q');
+    const panel = item.querySelector('.faq__a-outer');
+    if (!btn || !panel) return;
 
-    summary.addEventListener('click', (e) => {
-      e.preventDefault();
+    let cleanup = null;
 
-      if (details.open) {
-        // -------- Close --------
-        // Lock current height, flush, then animate to 0.
-        panel.style.height  = panel.scrollHeight + 'px';
-        panel.style.opacity = '1';
-        requestAnimationFrame(() => {
-          panel.style.height  = '0px';
-          panel.style.opacity = '0';
-        });
-        setTimeout(() => {
-          details.open = false;
-          panel.style.height  = '';
-          panel.style.opacity = '';
-        }, CLOSE_DURATION);
-      } else {
-        // -------- Open --------
-        details.open = true;                     // reveal content so we can measure
-        const target = panel.scrollHeight;
+    btn.addEventListener('click', () => {
+      // Cancel any pending transitionend from a previous click so a
+      // mid-animation re-click doesn't fire its stale cleanup.
+      if (cleanup) {
+        panel.removeEventListener('transitionend', cleanup);
+        cleanup = null;
+      }
+
+      const open = btn.getAttribute('aria-expanded') === 'true';
+
+      if (open) {
+        // -------- Collapse --------
+        // Lock the current natural height into an inline value so the
+        // transition has a defined start point, flush, then go to 0.
+        panel.style.height = panel.scrollHeight + 'px';
+        void panel.offsetHeight;              // force reflow
         panel.style.height  = '0px';
         panel.style.opacity = '0';
-        requestAnimationFrame(() => {
-          panel.style.height  = target + 'px';
-          panel.style.opacity = '1';
-        });
-        setTimeout(() => {
-          panel.style.height  = '';            // let natural height take over (handles reflow)
-          panel.style.opacity = '';
-        }, OPEN_DURATION);
+        btn.setAttribute('aria-expanded', 'false');
+        item.classList.remove('is-open');
+      } else {
+        // -------- Expand --------
+        // Start height is CSS default (0). Measuring scrollHeight on
+        // the clipped panel still returns the natural content height.
+        const target = panel.scrollHeight;
+        panel.style.height  = target + 'px';
+        panel.style.opacity = '1';
+        btn.setAttribute('aria-expanded', 'true');
+        item.classList.add('is-open');
+
+        // After the height animation lands, let the panel breathe at
+        // auto height so later reflow (fonts loading, responsive
+        // wrapping) still shows the full content.
+        cleanup = (e) => {
+          if (e.propertyName !== 'height') return;
+          panel.style.height = 'auto';
+          panel.removeEventListener('transitionend', cleanup);
+          cleanup = null;
+        };
+        panel.addEventListener('transitionend', cleanup);
       }
     });
   });
