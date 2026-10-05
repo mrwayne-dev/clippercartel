@@ -81,17 +81,13 @@ const render = () => `
         </div>
       </div>
 
-      <!-- Top-left eyebrow -->
+      <!-- Chrome -->
       <p class="rail__eyebrow" aria-hidden="true">Scroll →</p>
-
-      <!-- Top-right counter -->
       <p class="rail__counter" aria-hidden="true">
         <span data-counter-current>01</span>
         <span class="rail__counter-sep">/</span>
         <span>${String(images.length).padStart(2, '0')}</span>
       </p>
-
-      <!-- Bottom progress bar -->
       <div class="rail__progress" aria-hidden="true">
         <span class="rail__progress-fill" data-rail-progress></span>
       </div>
@@ -133,10 +129,44 @@ const render = () => `
 `;
 
 /* -------------------------------------------------------------
- *  Rail interaction (GSAP ScrollTrigger, horizontal pin-scroll)
+ *  Rail interaction
+ *    - Desktop (≥821px, no reduced motion): GSAP ScrollTrigger
+ *      pins the section; vertical scroll scrubs horizontal pan.
+ *    - Mobile  (<821px, no reduced motion): native horizontal
+ *      swipe with scroll-snap. We just listen for scroll on the
+ *      viewport and update the counter + progress bar.
+ *    - Reduced motion (any viewport): bail to the static grid
+ *      fallback (data-rail-skipped flag).
  * ----------------------------------------------------------- */
 
-const initRail = async (root) => {
+const updateChrome = (viewport, slides, counter, progress) => {
+  const maxScroll = viewport.scrollWidth - viewport.clientWidth;
+  const p = maxScroll > 0 ? viewport.scrollLeft / maxScroll : 0;
+  const idx = Math.min(slides.length - 1, Math.round(p * (slides.length - 1)));
+  counter.textContent = String(idx + 1).padStart(2, '0');
+  if (progress) progress.style.transform = `scaleX(${p})`;
+};
+
+const initRailMobile = (root) => {
+  const viewport = root.querySelector('.rail__viewport');
+  const slides   = Array.from(root.querySelectorAll('.rail__slide'));
+  const counter  = root.querySelector('[data-counter-current]');
+  const progress = root.querySelector('[data-rail-progress]');
+  if (!viewport) return;
+
+  let frame;
+  const onScroll = () => {
+    if (frame) return;
+    frame = requestAnimationFrame(() => {
+      updateChrome(viewport, slides, counter, progress);
+      frame = null;
+    });
+  };
+  viewport.addEventListener('scroll', onScroll, { passive: true });
+  updateChrome(viewport, slides, counter, progress);
+};
+
+const initRailDesktop = async (root) => {
   const rail     = root.querySelector('.rail');
   const track    = root.querySelector('[data-rail-track]');
   const slides   = Array.from(root.querySelectorAll('.rail__slide'));
@@ -144,28 +174,15 @@ const initRail = async (root) => {
   const progress = root.querySelector('[data-rail-progress]');
   if (!rail || !track || !slides.length) return;
 
-  // Skip on small screens / reduced motion — fallback grid shows instead.
-  const isMobile = window.matchMedia('(max-width: 820px)').matches;
-  if (isMobile || prefersReducedMotion()) {
-    rail.setAttribute('data-rail-skipped', 'true');
-    return;
-  }
-
   let gsapCtx;
   try { gsapCtx = await loadScrollTrigger(); } catch { return; }
   const { gsap, ScrollTrigger } = gsapCtx;
 
-  // Compute scroll distance once images (and so widths) are known.
-  const setup = () => {
-    const distance = Math.max(0, track.scrollWidth - window.innerWidth);
-    if (distance <= 0) return null;
-    return distance;
-  };
-
+  const setup = () => Math.max(0, track.scrollWidth - window.innerWidth);
   let distance = setup();
-  if (!distance) return;
+  if (distance <= 0) return;
 
-  const tween = gsap.to(track, {
+  gsap.to(track, {
     x: () => -distance,
     ease: 'none',
     scrollTrigger: {
@@ -173,8 +190,8 @@ const initRail = async (root) => {
       start:   'top top',
       end:     () => `+=${distance}`,
       pin:     true,
-      anticipatePin: 1,         // pre-prep the pin so entering/leaving doesn't jump
-      scrub:   0.6,             // tighter now that Lenis smooths the input
+      anticipatePin: 1,
+      scrub:   0.6,
       invalidateOnRefresh: true,
       onUpdate: (self) => {
         const p = self.progress;
@@ -185,16 +202,32 @@ const initRail = async (root) => {
     },
   });
 
-  // Refresh ScrollTrigger after each image loads so the rail length
-  // reflects true widths (prevents under-/over-scroll).
-  const imgs = root.querySelectorAll('.rail img');
-  imgs.forEach((img) => {
+  // Recompute after each image loads so the pin distance matches real widths.
+  root.querySelectorAll('.rail img').forEach((img) => {
     if (img.complete) return;
     img.addEventListener('load', () => {
-      distance = setup() ?? 0;
+      distance = setup();
       ScrollTrigger.refresh();
     }, { once: true });
   });
+};
+
+const initRail = async (root) => {
+  const rail = root.querySelector('.rail');
+  if (!rail) return;
+
+  // Reduced-motion → bail entirely; static grid fallback shows.
+  if (prefersReducedMotion()) {
+    rail.setAttribute('data-rail-skipped', 'true');
+    return;
+  }
+
+  const isMobile = window.matchMedia('(max-width: 820px)').matches;
+  if (isMobile) {
+    initRailMobile(root);
+  } else {
+    await initRailDesktop(root);
+  }
 };
 
 export default async (mount) => {
