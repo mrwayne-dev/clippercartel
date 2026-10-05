@@ -83,16 +83,16 @@ export const initSmoothScroll = async () => {
   ]);
 
   lenisInstance = new Lenis({
-    duration: 1.1,
+    // Snappier settling than the default 1.1s so ScrollTrigger-driven
+    // animations don't feel like they're catching up behind the scroll.
+    duration: 0.9,
     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),  // ease-out expo
     smoothWheel: true,
-    // smoothTouch:true is needed so vertical finger-drag on mobile
-    // drives ScrollTrigger-scrubbed sections (pinned horizontal rail
-    // on /gallery) frame-by-frame instead of batching through the
-    // native fling. Mild inertia loss vs iOS native scroll is worth
-    // it for the parity in motion between desktop and mobile.
+    // smoothTouch:true drives vertical finger-drag frame-by-frame into
+    // ScrollTrigger-scrubbed sections (pinned horizontal rail on
+    // /gallery) so mobile matches desktop motion.
     smoothTouch: true,
-    touchMultiplier: 1.5,
+    touchMultiplier: 1.2,
   });
 
   // Keep ScrollTrigger in sync with every Lenis-reported scroll frame.

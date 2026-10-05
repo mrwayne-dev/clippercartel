@@ -165,7 +165,11 @@ const initRail = async (root) => {
       end:     () => `+=${distance}`,
       pin:     true,
       anticipatePin: 1,
-      scrub:   0.6,
+      // scrub: true tracks the smoothed scroll position exactly.
+      // Previously scrub:0.6 added its own 0.6s catch-up ON TOP of
+      // Lenis's smoothing, giving a double-smoothed hesitation
+      // between every discrete wheel/touch delta.
+      scrub:   true,
       invalidateOnRefresh: true,
       onUpdate: (self) => {
         const p = self.progress;
@@ -176,13 +180,18 @@ const initRail = async (root) => {
     },
   });
 
-  // Recompute after each image loads so the pin distance matches real widths.
-  root.querySelectorAll('.rail img').forEach((img) => {
-    if (img.complete) return;
-    img.addEventListener('load', () => {
-      distance = setup();
-      ScrollTrigger.refresh();
-    }, { once: true });
+  // Wait for ALL images to load, then refresh ScrollTrigger ONCE.
+  // Previously we refreshed per-image, which recomputed `distance`
+  // mid-scroll and nudged the animation each time a late image came
+  // in. One batched refresh = no visible nudges.
+  const imgs = Array.from(root.querySelectorAll('.rail img'));
+  Promise.all(imgs.map((img) => (
+    img.complete
+      ? Promise.resolve()
+      : new Promise((resolve) => img.addEventListener('load',  resolve, { once: true }))
+  ))).then(() => {
+    distance = setup();
+    ScrollTrigger.refresh();
   });
 };
 
