@@ -18,6 +18,8 @@ export const shop = {
   hours:       () => readAttr('hours',      ''),
   instagram:   () => readAttr('instagram',  ''),
   tiktok:      () => readAttr('tiktok',     ''),
+  facebook:    () => readAttr('facebook',   ''),
+  snapchat:    () => readAttr('snapchat',   ''),
   maps:        () => readAttr('maps',       ''),
 };
 

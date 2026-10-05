@@ -27,11 +27,13 @@ const sheetLink = (href, label, index) =>
    </a>`;
 
 export const mountNav = (mount) => {
-  const phone     = shop.phone();
-  const instaUrl  = shop.instagram();
-  const tiktokUrl = shop.tiktok();
-  const address   = shop.address();
-  const hours     = shop.hours();
+  const phone      = shop.phone();
+  const instaUrl   = shop.instagram();
+  const tiktokUrl  = shop.tiktok();
+  const snapchatUrl = shop.snapchat();
+  const facebookUrl = shop.facebook();
+  const address    = shop.address();
+  const hours      = shop.hours();
 
   // Nav bar only — the sheet lives on document.body (see below).
   // Reason: #nav has backdrop-filter which creates a new containing
@@ -69,10 +71,12 @@ export const mountNav = (mount) => {
 
       <div class="nav__sheet-footer">
         <div class="nav__sheet-row">
-          ${phone     ? `<a href="${telLink()}" class="nav__sheet-chip">Call</a>` : ''}
-          ${phone     ? `<a href="${waLink("Hi, I'd like to book a chair.")}" class="nav__sheet-chip" rel="noopener" target="_blank">WhatsApp</a>` : ''}
-          ${instaUrl  ? `<a href="${instaUrl}"  class="nav__sheet-chip" rel="noopener" target="_blank">Instagram</a>` : ''}
-          ${tiktokUrl ? `<a href="${tiktokUrl}" class="nav__sheet-chip" rel="noopener" target="_blank">TikTok</a>` : ''}
+          ${phone        ? `<a href="${telLink()}" class="nav__sheet-chip">Call</a>` : ''}
+          ${phone        ? `<a href="${waLink("Hi, I'd like to book a chair.")}" class="nav__sheet-chip" rel="noopener" target="_blank">WhatsApp</a>` : ''}
+          ${instaUrl     ? `<a href="${instaUrl}"    class="nav__sheet-chip" rel="noopener" target="_blank">Instagram</a>` : ''}
+          ${tiktokUrl    ? `<a href="${tiktokUrl}"   class="nav__sheet-chip" rel="noopener" target="_blank">TikTok</a>` : ''}
+          ${snapchatUrl  ? `<a href="${snapchatUrl}" class="nav__sheet-chip" rel="noopener" target="_blank">Snapchat</a>` : ''}
+          ${facebookUrl  ? `<a href="${facebookUrl}" class="nav__sheet-chip" rel="noopener" target="_blank">Facebook</a>` : ''}
         </div>
         ${address || hours ? `<div class="nav__sheet-meta">
           ${address ? `<p>${address}</p>` : ''}

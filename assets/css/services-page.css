@@ -55,6 +55,56 @@
   padding-block: clamp(48px, 8vh, 112px) clamp(96px, 16vh, 200px);
 }
 
+/* ---- Custom-cuts callout (between grid and FAQ) ------- */
+.services-page__callout {
+  background: var(--color-bg-soft);
+  padding-block: clamp(80px, 14vh, 160px);
+}
+.services-page__callout-inner {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(16px, 2vh, 28px);
+  max-width: 640px;
+}
+.services-page__callout-eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: var(--text-xs);
+  color: var(--color-text-dim);
+  margin: 0;
+}
+.services-page__callout-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2rem, 5vw, 3.75rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+  margin: 0;
+}
+.services-page__callout-title em {
+  font-family: var(--font-accent);
+  font-style: italic;
+  color: var(--color-accent);
+  font-size: 1.12em;
+  line-height: 0.9;
+  padding-right: 0.05em;
+}
+.services-page__callout-sub {
+  font-size: var(--text-base);
+  color: var(--color-text-muted);
+  line-height: 1.55;
+  max-width: 48ch;
+  margin: 0;
+}
+.services-page__callout-cta {
+  align-self: flex-start;
+  margin-top: clamp(16px, 2vh, 24px);
+  padding: 14px 24px;
+  font-size: var(--text-sm);
+  border-radius: var(--radius-full);
+}
+
 .services-page__grid {
   display: grid;
   grid-template-columns: 1fr;

@@ -98,6 +98,7 @@ $openingSpec = $openDays ? [[
   <link rel="stylesheet" href="/assets/css/final-cta.css">
   <link rel="stylesheet" href="/assets/css/footer.css">
   <link rel="stylesheet" href="/assets/css/services-page.css">
+  <link rel="stylesheet" href="/assets/css/faq.css">
 
   <!-- JSON-LD: HairSalon LocalBusiness -->
   <script type="application/ld+json" id="ld-business">
@@ -122,6 +123,8 @@ $openingSpec = $openDays ? [[
       'sameAs'      => array_values(array_filter([
           getenv('SHOP_INSTAGRAM') ?: null,
           getenv('SHOP_TIKTOK')    ?: null,
+          getenv('SHOP_FACEBOOK')  ?: null,
+          getenv('SHOP_SNAPCHAT')  ?: null,
       ])),
       'openingHoursSpecification' => $openingSpec,
   ]), JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) ?>
@@ -139,6 +142,8 @@ $openingSpec = $openDays ? [[
     data-shop-hours="<?= htmlspecialchars($shop['hours']) ?>"
     data-shop-instagram="<?= htmlspecialchars(getenv('SHOP_INSTAGRAM') ?: '') ?>"
     data-shop-tiktok="<?= htmlspecialchars(getenv('SHOP_TIKTOK') ?: '') ?>"
+    data-shop-facebook="<?= htmlspecialchars(getenv('SHOP_FACEBOOK') ?: '') ?>"
+    data-shop-snapchat="<?= htmlspecialchars(getenv('SHOP_SNAPCHAT') ?: '') ?>"
     data-shop-maps="<?= htmlspecialchars($shop['maps']) ?>">
 
   <a class="skip-link" href="#app">Skip to content</a>

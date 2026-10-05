@@ -1,0 +1,129 @@
+/* faq.css — reusable FAQ accordion.
+ * Paired with components/faq.js (renderFaq).
+ */
+
+.faq-section {
+  background: var(--color-bg);
+  padding-block: clamp(96px, 16vh, 200px);
+}
+
+.faq-section__inner {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(40px, 6vh, 72px);
+}
+@media (min-width: 900px) {
+  .faq-section__inner {
+    grid-template-columns: minmax(260px, 0.9fr) minmax(0, 1.4fr);
+    gap: clamp(48px, 7vw, 120px);
+    align-items: start;
+  }
+}
+
+/* ---- Header ---------------------------------- */
+.faq-section__header {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(16px, 2vh, 24px);
+}
+.faq-section__eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: var(--text-xs);
+  color: var(--color-text-dim);
+  margin: 0;
+}
+.faq-section__title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.25rem, 4.8vw, 4rem);
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+  margin: 0;
+  max-width: 14ch;
+}
+.faq-section__title em {
+  font-family: var(--font-accent);
+  font-style: italic;
+  color: var(--color-accent);
+  font-size: 1.12em;
+  line-height: 0.9;
+  padding-right: 0.05em;
+}
+
+/* ---- Accordion list ---------------------------------- */
+.faq {
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.faq__item {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.faq__q {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-md);
+  padding: clamp(20px, 2.8vh, 32px) 0;
+  cursor: pointer;
+  list-style: none;
+  color: var(--color-text);
+  transition: color var(--t-fast);
+}
+.faq__q:hover         { color: var(--color-accent); }
+.faq__q::-webkit-details-marker { display: none; }
+.faq__q::marker       { content: ''; }
+
+.faq__q-text {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.25rem, 2.2vw, 1.75rem);
+  line-height: 1.15;
+  letter-spacing: -0.012em;
+}
+
+/* +/× indicator */
+.faq__icon {
+  position: relative;
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+}
+.faq__icon::before,
+.faq__icon::after {
+  content: '';
+  position: absolute;
+  background: currentColor;
+}
+.faq__icon::before { top: 10px; left: 0; right: 0; height: 2px; }
+.faq__icon::after  {
+  top: 0; left: 10px; bottom: 0; width: 2px;
+  transition: transform 320ms cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: center;
+}
+.faq__item[open] .faq__icon::after { transform: rotate(90deg); }
+
+/* Answer */
+.faq__a {
+  overflow: hidden;
+  padding: 0 0 clamp(20px, 2.8vh, 28px);
+}
+.faq__a p {
+  color: var(--color-text-muted);
+  font-size: var(--text-base);
+  line-height: 1.65;
+  max-width: 60ch;
+  margin: 0;
+}
+
+/* Native animated open — rely on content height; `details-content`
+ * CSS not widely enough supported yet, so fall back on no transition
+ * for the slide. Users still get a crisp instant open which reads fine. */
+
+@media (prefers-reduced-motion: reduce) {
+  .faq__icon::after { transition: none; }
+}

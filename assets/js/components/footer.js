@@ -24,6 +24,8 @@ const siteLinks = [
 const icons = {
   instagram: `<svg class="footer__icon" width="16" height="16" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="36" y="36" width="184" height="184" rx="48"/><circle cx="128" cy="128" r="40"/><circle cx="180" cy="76" r="10" fill="currentColor" stroke="none"/></svg>`,
   tiktok:    `<svg class="footer__icon" width="16" height="16" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M168,24V88a40,40,0,0,0,40,40"/><path d="M168,88V168a56,56,0,1,1-56-56"/></svg>`,
+  snapchat:  `<svg class="footer__icon" width="16" height="16" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M128,24c-32,0-56,20-56,56,0,16,0,28-4,36-6,12-20,16-28,20,0,0,16,16,36,16,8,0,20,4,24,16,0,0,12-8,28-8s28,8,28,8c4-12,16-16,24-16,20,0,36-16,36-16-8-4-22-8-28-20-4-8-4-20-4-36C184,44,160,24,128,24Z"/></svg>`,
+  facebook:  `<svg class="footer__icon" width="16" height="16" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="128" cy="128" r="96"/><path d="M168,88H152a16,16,0,0,0-16,16V224"/><line x1="112" y1="152" x2="168" y2="152"/></svg>`,
   whatsapp:  `<svg class="footer__icon" width="16" height="16" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M44.1,208.6l15.5-45.8a80,80,0,1,1,33.6,33.6L44.1,212A3.4,3.4,0,0,1,44.1,208.6Z"/><path d="M100,112a16,16,0,0,0,16,16"/><path d="M140,144a16,16,0,0,0,16-16"/></svg>`,
 };
 
@@ -35,6 +37,8 @@ export const mountFooter = (mount) => {
   const hours    = shop.hours();
   const insta    = shop.instagram();
   const tiktok   = shop.tiktok();
+  const snapchat = shop.snapchat();
+  const facebook = shop.facebook();
   const whatsapp = shop.whatsapp();
 
   mount.setAttribute('data-surface', 'dark');
@@ -61,9 +65,11 @@ export const mountFooter = (mount) => {
           <div class="footer__col">
             <p class="footer__col-head">Follow</p>
             <ul>
-              ${insta    ? `<li><a href="${insta}"  rel="noopener" target="_blank">${icons.instagram}<span class="footer__link-label">Instagram</span></a></li>` : ''}
-              ${tiktok   ? `<li><a href="${tiktok}" rel="noopener" target="_blank">${icons.tiktok}<span class="footer__link-label">TikTok</span></a></li>` : ''}
-              ${whatsapp ? `<li><a href="${waLink("Hi, I'd like to book a chair.")}" rel="noopener" target="_blank">${icons.whatsapp}<span class="footer__link-label">WhatsApp</span></a></li>` : ''}
+              ${insta     ? `<li><a href="${insta}"     rel="noopener" target="_blank">${icons.instagram}<span class="footer__link-label">Instagram</span></a></li>` : ''}
+              ${tiktok    ? `<li><a href="${tiktok}"    rel="noopener" target="_blank">${icons.tiktok}<span class="footer__link-label">TikTok</span></a></li>` : ''}
+              ${snapchat  ? `<li><a href="${snapchat}"  rel="noopener" target="_blank">${icons.snapchat}<span class="footer__link-label">Snapchat</span></a></li>` : ''}
+              ${facebook  ? `<li><a href="${facebook}"  rel="noopener" target="_blank">${icons.facebook}<span class="footer__link-label">Facebook</span></a></li>` : ''}
+              ${whatsapp  ? `<li><a href="${waLink("Hi, I'd like to book a chair.")}" rel="noopener" target="_blank">${icons.whatsapp}<span class="footer__link-label">WhatsApp</span></a></li>` : ''}
             </ul>
           </div>
         </nav>
