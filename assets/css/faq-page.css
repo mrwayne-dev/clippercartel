@@ -1,0 +1,61 @@
+/* faq-page.css — /faq route shell (hero only).
+ * The accordion itself is styled by faq.css (reusable component).
+ */
+
+.faq-page {
+  background: var(--color-bg);
+}
+
+/* ---- Hero ---- */
+.faq-page__hero {
+  padding-block: clamp(120px, 20vh, 220px) clamp(32px, 6vh, 72px);
+}
+.faq-page__hero-inner {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(16px, 2vh, 28px);
+}
+.faq-page__eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: var(--text-xs);
+  color: var(--color-text-dim);
+  margin: 0;
+}
+.faq-page__title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(3rem, 8vw, 6.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.025em;
+  color: var(--color-text);
+  margin: 0;
+  max-width: 14ch;
+}
+.faq-page__title em {
+  font-family: var(--font-accent);
+  font-style: italic;
+  color: var(--color-accent);
+  font-size: 1.12em;
+  line-height: 0.9;
+  padding-right: 0.05em;
+}
+.faq-page__sub {
+  font-size: clamp(1rem, 1.3vw, 1.25rem);
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  margin: 0;
+  max-width: 56ch;
+}
+.faq-page__wa-link {
+  color: var(--color-text);
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 2px;
+  font-weight: 500;
+  transition: color var(--t-fast);
+}
+.faq-page__wa-link:hover { color: var(--color-accent); }
+
+/* Tighten the gap between the hero and the FAQ section below so they
+ * read as one spread, not two disjoint blocks. */
+.faq-page + .faq-section { padding-top: clamp(48px, 8vh, 96px); }
