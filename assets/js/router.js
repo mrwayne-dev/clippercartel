@@ -45,13 +45,6 @@ const routes = {
     ogImage:     'og-book.jpg',
     schema:      null,
   },
-  '/reviews': {
-    view:        () => import('./pages/public/reviews.js'),
-    title:       'Reviews — ClipperCartel',
-    description: 'What clients say after sitting in the chair.',
-    ogImage:     'og-default.jpg',
-    schema:      null,
-  },
   '/about': {
     view:        () => import('./pages/public/about.js'),
     title:       'About — ClipperCartel',
