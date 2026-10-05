@@ -1,152 +1,131 @@
-/* services-teaser.css — home section 02.
+/* services-teaser.css — home section 02 (full-height split).
  *
- * Desktop (≥900px): two columns — headline + list on the left,
- * image preview + note + CTA on the right. Preview is sticky so it
- * stays visible as the eye scans the list.
- *
- * Mobile (<900px): single column — headline, then preview (which
- * contains the tabs row above the image). The list is hidden; the
- * tabs row + auto-cycle do the picking for the thumb.
+ * Desktop: 50/50 grid. Text panel left (vertically centred),
+ * image panel right (full-height, edge-to-edge).
+ * Mobile: image panel on top (55svh), text panel below.
  */
 
 .services {
   background: var(--color-bg);
-  padding-block: clamp(80px, 14vh, 180px);
+  padding: 0;                                 /* section fills viewport, no vertical padding */
 }
 
-.services__inner {
+.services__split {
   display: grid;
   grid-template-columns: 1fr;
-  gap: clamp(28px, 5vh, 56px);
+  width: 100%;
+  min-height: 100svh;
+  min-height: 100vh;
+  outline: none;
 }
 @media (min-width: 900px) {
-  .services__inner {
-    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-    gap: clamp(56px, 7vw, 128px);
-    align-items: start;
+  .services__split {
+    grid-template-columns: 1fr 1fr;
   }
 }
 
-/* ---- Left column: intro (headline + list) ---------- */
-.services__intro {
+/* ============================
+ *  Text panel
+ * ============================ */
+.services__text {
   display: flex;
-  flex-direction: column;
-  gap: clamp(32px, 5vh, 56px);
+  align-items: center;
+  padding:
+    clamp(32px, 6vh, 72px)
+    clamp(24px, 6vw, 96px);
+  background: var(--color-bg);
+}
+.services__text-inner {
+  width: 100%;
+  max-width: 520px;
 }
 
-.services__heading {
-  font-family: var(--font-display);
-  font-weight: 400;
-  font-size: clamp(2.5rem, 5.5vw, 4.75rem);
-  line-height: 0.98;
-  letter-spacing: -0.02em;
-  color: var(--color-text);
-  max-width: 12ch;
-}
-.services__heading em {
-  font-family: var(--font-accent);
-  font-style: italic;
-  color: var(--color-accent);
-  font-size: 1.12em;
-  line-height: 0.9;
-  padding-right: 0.08em;
-}
-
-/* ---- Service list ---------- */
-.services__list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  border-top: 1px solid var(--color-border);
-}
-.services__item { border-bottom: 1px solid var(--color-border); }
-
-.services__name {
-  display: flex;
+/* -- Index (01 / 04) ----------- */
+.services__index {
+  display: inline-flex;
   align-items: baseline;
-  gap: clamp(14px, 1.8vw, 24px);
-  width: 100%;
-  padding-block: clamp(16px, 2.4vh, 24px);
-  background: none;
-  border: none;
-  cursor: pointer;
-  text-align: left;
+  gap: 6px;
+  margin: 0 0 clamp(28px, 4vh, 40px);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
   color: var(--color-text-dim);
+  font-variant-numeric: tabular-nums;
+}
+.services__index-sep {
+  color: var(--color-border);
+  padding-inline: 2px;
+}
+[data-active-index] {
+  color: var(--color-text);
+}
+
+/* -- Service name (BIG) -------- */
+.services__name {
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: clamp(1.75rem, 3.6vw, 2.75rem);
-  line-height: 1.0;
-  letter-spacing: -0.018em;
-  transition: color var(--t-base), padding-left var(--t-base);
+  font-size: clamp(3rem, 7vw, 6rem);
+  line-height: 0.95;
+  letter-spacing: -0.025em;
+  color: var(--color-text);
+  margin: 0 0 clamp(16px, 2.4vh, 24px);
+  transition: opacity 220ms ease, transform 320ms cubic-bezier(0.16, 1, 0.3, 1);
 }
-.services__name:hover,
-.services__name:focus-visible { color: var(--color-text); outline: none; }
-.services__item.is-active .services__name { color: var(--color-text); }
+.services__name.is-swapping { opacity: 0; transform: translateY(10px); }
 
-.services__arrow {
-  display: inline-block;
-  flex-shrink: 0;
-  width: 0.9em;
-  color: var(--color-accent);
-  opacity: 0;
-  transform: translateX(-12px);
-  transition: opacity 320ms ease, transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
-  font-family: var(--font-body);
-  font-size: 0.6em;
-  line-height: 1;
-}
-.services__item.is-active .services__arrow { opacity: 1; transform: translateX(0); }
-
-/* ---- Right column: preview (image + note + CTA) ---------- */
-.services__preview {
-  position: relative;
-}
-@media (min-width: 900px) {
-  .services__preview {
-    position: sticky;
-    top: calc(var(--nav-h) + 32px);
-  }
-}
-
-.services__image-stack {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 4/5;
-  overflow: hidden;
-  background: var(--color-bg-soft);
-  border-radius: 2px;
-}
-.services__image {
-  position: absolute;
-  inset: 0;
-  width: 100%; height: 100%;
-  object-fit: cover;
-  object-position: center 25%;
-  opacity: 0;
-  transform: scale(1.02);
-  transition:
-    opacity   520ms cubic-bezier(0.4, 0, 0.2, 1),
-    transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity, transform;
-}
-.services__image.is-active { opacity: 1; transform: scale(1); }
-
+/* -- Subtitle note ------------- */
 .services__note {
-  font-size: var(--text-base);
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 1.2vw, 1.125rem);
   color: var(--color-text-muted);
   line-height: 1.55;
-  max-width: 42ch;
-  margin-top: var(--space-lg);
-  min-height: 3.1em;
-  transition: opacity 180ms ease;
+  max-width: 36ch;
+  margin: 0 0 clamp(32px, 5vh, 48px);
+  transition: opacity 220ms ease, transform 320ms cubic-bezier(0.16, 1, 0.3, 1);
 }
-.services__note.is-swapping { opacity: 0; }
+.services__note.is-swapping { opacity: 0; transform: translateY(8px); }
 
+/* -- Progress bar (dots) ------- */
+.services__nav {
+  display: flex;
+  gap: 8px;
+  margin-bottom: clamp(28px, 4vh, 40px);
+}
+.services__dot {
+  flex: 1 1 0;
+  max-width: 72px;
+  min-width: 24px;
+  height: 2px;
+  background: var(--color-border);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: background var(--t-fast);
+}
+.services__dot:hover         { background: var(--color-text-dim); }
+.services__dot-fill {
+  position: absolute;
+  inset: 0;
+  background: var(--color-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 220ms ease;
+}
+.services__dot.is-active { background: var(--color-border); }
+.services__dot.is-active .services__dot-fill {
+  transform: scaleX(1);
+  transition: transform calc(var(--interval, 6000ms) - 220ms) linear;   /* fills over the auto-advance window */
+}
+.services__dot:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 4px; }
+
+/* -- Book CTA ------------------ */
 .services__book {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  margin-top: var(--space-md);
   padding: 14px 24px;
   background: var(--color-text);
   color: var(--color-bg);
@@ -157,53 +136,56 @@
 }
 .services__book:hover { background: var(--color-accent-deep); gap: 16px; }
 
-/* ---- Mobile eyebrow tabs (above the preview image) ---------- */
-.services__tabs {
-  display: none;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  gap: 8px;
-  margin-bottom: 14px;
-  padding-bottom: 2px;
-  flex-wrap: nowrap;
-}
-.services__tab {
-  background: none;
-  border: none;
-  padding: 6px 0;
-  font-family: var(--font-body);
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  color: var(--color-text-dim);
-  cursor: pointer;
+
+/* ============================
+ *  Image panel
+ * ============================ */
+.services__image-pane {
   position: relative;
-  transition: color var(--t-base);
-  flex: 0 0 auto;
-  white-space: nowrap;
+  overflow: hidden;
+  background: var(--color-bg-soft);
+  min-height: 55svh;
 }
-.services__tab::after {
-  content: '';
+.services__image {
   position: absolute;
-  left: 0; right: 0; bottom: 0;
-  height: 1px;
-  background: var(--color-accent);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 25%;
+  opacity: 0;
+  transform: scale(1.03);
+  transition:
+    opacity   520ms cubic-bezier(0.4, 0, 0.2, 1),
+    transform 1200ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
 }
-.services__tab.is-active        { color: var(--color-text); }
-.services__tab.is-active::after { transform: scaleX(1); }
+.services__image.is-active {
+  opacity: 1;
+  transform: scale(1);
+}
 
-/* ---- Mobile tightening ---------- */
+
+/* ============================
+ *  Mobile — stack image on top
+ * ============================ */
 @media (max-width: 899px) {
-  .services__list         { display: none; }
-  .services__tabs         { display: flex; }
-  .services__image-stack  { aspect-ratio: 3/4; }
+  .services__split {
+    grid-template-columns: 1fr;
+    grid-template-rows: 55svh auto;
+  }
+  .services__image-pane { order: 1; min-height: 0; }
+  .services__text       { order: 2; padding-block: clamp(32px, 5vh, 56px); }
+  .services__text-inner { max-width: 100%; }
+  .services__name       { font-size: clamp(2.75rem, 11vw, 4rem); }
 }
 
+/* ============================
+ *  Reduced motion
+ * ============================ */
 @media (prefers-reduced-motion: reduce) {
-  .services__tab::after,
-  .services__image        { transition: none; }
+  .services__name,
+  .services__note,
+  .services__image,
+  .services__dot-fill  { transition: none; }
 }
