@@ -87,14 +87,15 @@ const render = () => `
 `;
 
 const initInteraction = (root) => {
-  const nameEl    = root.querySelector('[data-active-name]');
-  const noteEl    = root.querySelector('[data-active-note]');
-  const indexEl   = root.querySelector('[data-active-index]');
-  const dots      = Array.from(root.querySelectorAll('.services__dot'));
-  const images    = Array.from(root.querySelectorAll('[data-service-image]'));
-  const split     = root.querySelector('.services__split');
+  const nameEl  = root.querySelector('[data-active-name]');
+  const noteEl  = root.querySelector('[data-active-note]');
+  const indexEl = root.querySelector('[data-active-index]');
+  const dots    = Array.from(root.querySelectorAll('.services__dot'));
+  const images  = Array.from(root.querySelectorAll('[data-service-image]'));
+  const split   = root.querySelector('.services__split');
   let active = 0;
   let timer  = null;
+  let inView = false;       // true while the section is on screen
 
   const setActive = (idx) => {
     if (idx === active) return;
@@ -121,40 +122,52 @@ const initInteraction = (root) => {
   const next = () => setActive((active + 1) % services.length);
   const prev = () => setActive((active - 1 + services.length) % services.length);
 
-  const start = () => { stop(); if (!document.hidden) timer = setInterval(next, INTERVAL); };
+  const start = () => {
+    stop();
+    if (!inView || document.hidden) return;
+    timer = setInterval(next, INTERVAL);
+  };
   const stop  = () => { if (timer) { clearInterval(timer); timer = null; } };
   const kick  = () => { stop(); start(); };
 
+  // Dots: tap/click to jump + reset the timer
   dots.forEach((d, i) => d.addEventListener('click', () => { setActive(i); kick(); }));
 
+  // Arrow-key navigation (section must be focused)
   split.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowRight') { e.preventDefault(); next(); kick(); }
     if (e.key === 'ArrowLeft')  { e.preventDefault(); prev(); kick(); }
   });
 
-  // Swipe (touch only)
+  // Swipe (touch only). Do NOT stop the timer during the gesture —
+  // scroll-touches would unintentionally pause the carousel on mobile.
   let startX = null;
-  split.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; stop(); }, { passive: true });
+  split.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; }, { passive: true });
   split.addEventListener('touchend',   (e) => {
     if (startX == null) return;
     const dx = e.changedTouches[0].clientX - startX;
-    if (Math.abs(dx) > 50) dx < 0 ? next() : prev();
+    if (Math.abs(dx) > 50) { dx < 0 ? next() : prev(); kick(); }
     startX = null;
-    start();
   });
 
-  // Pause on hover (desktop pointer only)
-  if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
-    split.addEventListener('mouseenter', stop);
-    split.addEventListener('mouseleave', start);
+  // Viewport gate — auto-advance only runs while the section is on screen.
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        inView = e.isIntersecting;
+        inView ? start() : stop();
+      }
+    }, { threshold: 0.35 }).observe(split);
+  } else {
+    inView = true;
+    start();
   }
 
-  // Pause when the tab is hidden
+  // Pause when the whole browser tab is hidden; resume (if still in view).
   document.addEventListener('visibilitychange', () => {
-    document.hidden ? stop() : start();
+    if (document.hidden) stop();
+    else                 start();
   });
-
-  start();
 };
 
 export const mountServicesTeaser = (mount) => {
