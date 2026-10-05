@@ -13,6 +13,7 @@ import { mountGalleryMarquee } from '../../components/gallery-marquee.js';
 import { mountReviewsTeaser }  from '../../components/reviews-teaser.js';
 import { mountVisit }          from '../../components/visit.js';
 import { mountFinalCta }       from '../../components/final-cta.js';
+import { applyParallax }       from '../../lib/parallax.js';
 
 export default async (mount) => {
   await mountHero(mount);
@@ -23,4 +24,8 @@ export default async (mount) => {
   mountReviewsTeaser(mount);
   mountVisit(mount);
   mountFinalCta(mount);
+
+  // Universal parallax — any element with [data-parallax] gets a
+  // scroll-driven Y translate. Fire after sections are in the DOM.
+  applyParallax(mount);
 };

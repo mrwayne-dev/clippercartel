@@ -30,7 +30,7 @@ const stars = (rating) => {
 };
 
 const reviewCard = (r, i) => `
-  <blockquote class="review" data-reveal style="--reveal-delay: ${i + 1}">
+  <blockquote class="review" data-reveal="fade-up" style="--reveal-delay: ${i + 1}">
     <p class="review__quote">${r.quote}</p>
   </blockquote>
 `;
@@ -40,16 +40,16 @@ const render = () => `
     <div class="reviews-teaser__inner container">
 
       <header class="reviews-teaser__header">
-        <h2 class="reviews-teaser__title" id="reviews-teaser-heading" data-reveal>
+        <h2 class="reviews-teaser__title" id="reviews-teaser-heading" data-reveal="clip">
           Kind <em>words</em>.
         </h2>
-        <a href="/reviews" class="reviews-teaser__cta" data-reveal style="--reveal-delay: 1">
+        <a href="/reviews" class="reviews-teaser__cta" data-reveal="fade-left" style="--reveal-delay: 1">
           View all reviews
           <span aria-hidden="true">→</span>
         </a>
       </header>
 
-      <div class="reviews-teaser__meta" data-reveal style="--reveal-delay: 1" aria-label="Average rating ${aggregate.rating} out of 5 across ${aggregate.count} reviews">
+      <div class="reviews-teaser__meta" data-reveal="scale" style="--reveal-delay: 1" aria-label="Average rating ${aggregate.rating} out of 5 across ${aggregate.count} reviews">
         <span class="reviews-teaser__stars" aria-hidden="true">${stars(aggregate.rating)}</span>
         <div class="reviews-teaser__rating">
           <span class="reviews-teaser__score">${aggregate.rating.toFixed(1)}</span>

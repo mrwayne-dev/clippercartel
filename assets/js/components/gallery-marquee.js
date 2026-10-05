@@ -46,16 +46,16 @@ const render = () => `
   <section class="marquee section" aria-labelledby="marquee-heading">
 
     <div class="marquee__header container">
-      <h2 class="marquee__title" id="marquee-heading" data-reveal>
+      <h2 class="marquee__title" id="marquee-heading" data-reveal="clip">
         The <em>look</em>.
       </h2>
-      <a href="/gallery" class="marquee__cta" data-reveal style="--reveal-delay: 1">
+      <a href="/gallery" class="marquee__cta" data-reveal="fade-left" style="--reveal-delay: 1">
         View the full gallery
         <span aria-hidden="true">→</span>
       </a>
     </div>
 
-    <div class="marquee__viewport" data-reveal style="--reveal-delay: 1">
+    <div class="marquee__viewport" data-reveal="scale" style="--reveal-delay: 1">
       <div class="marquee__track">
         ${images.map(src => tile(src)).join('')}
         ${images.map(src => tile(src, true)).join('')}

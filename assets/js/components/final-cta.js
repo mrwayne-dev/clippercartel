@@ -19,18 +19,18 @@ const render = () => {
   return `
   <section class="final-cta section" data-surface="dark" aria-labelledby="final-cta-heading">
     <div class="final-cta__inner container">
-      <h2 class="final-cta__title" id="final-cta-heading" data-reveal>
+      <h2 class="final-cta__title" id="final-cta-heading" data-reveal="scale">
         Your chair
         <em>is waiting.</em>
       </h2>
-      <div class="final-cta__actions" data-reveal style="--reveal-delay: 1">
+      <div class="final-cta__actions" data-reveal="fade-up" style="--reveal-delay: 2">
         <a href="/book" class="btn btn-accent final-cta__btn">Book your chair</a>
         ${shop.whatsapp() ? `
           <a href="${waLink("Hi, I'd like to book a chair.")}" class="btn btn-outline final-cta__btn" rel="noopener" target="_blank">WhatsApp us</a>
         ` : ''}
       </div>
       ${phone || hours ? `
-        <p class="final-cta__meta" data-reveal style="--reveal-delay: 2">
+        <p class="final-cta__meta" data-reveal="fade-up" style="--reveal-delay: 3">
           ${[phone, hours].filter(Boolean).join('  ·  ')}
         </p>
       ` : ''}
