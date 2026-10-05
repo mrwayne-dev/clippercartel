@@ -26,7 +26,7 @@ const render = () => {
       <div class="final-cta__actions" data-reveal="fade-up" style="--reveal-delay: 2">
         <a href="/book" class="btn btn-accent final-cta__btn">Book your chair</a>
         ${shop.whatsapp() ? `
-          <a href="${waLink("Hi, I'd like to book a chair.")}" class="btn btn-outline final-cta__btn" rel="noopener" target="_blank">WhatsApp us</a>
+          <a href="${waLink("Hi, I'd like to book a chair.")}" class="btn btn-outline final-cta__btn" rel="noopener" target="_blank">WhatsApp me</a>
         ` : ''}
       </div>
       ${phone || hours ? `

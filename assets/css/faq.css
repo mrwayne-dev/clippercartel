@@ -107,10 +107,18 @@
 }
 .faq__item[open] .faq__icon::after { transform: rotate(90deg); }
 
-/* Answer */
-.faq__a {
+/* Answer wrapper — JS animates height on this element so we don't
+ * have to fight the browser's default <details> instant toggle. */
+.faq__a-outer {
   overflow: hidden;
-  padding: 0 0 clamp(20px, 2.8vh, 28px);
+  will-change: height, opacity;
+  transition:
+    height  420ms cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 320ms ease;
+}
+
+.faq__a {
+  padding: 2px 0 clamp(20px, 2.8vh, 28px);
 }
 .faq__a p {
   color: var(--color-text-muted);
@@ -120,10 +128,7 @@
   margin: 0;
 }
 
-/* Native animated open — rely on content height; `details-content`
- * CSS not widely enough supported yet, so fall back on no transition
- * for the slide. Users still get a crisp instant open which reads fine. */
-
 @media (prefers-reduced-motion: reduce) {
-  .faq__icon::after { transition: none; }
+  .faq__icon::after,
+  .faq__a-outer     { transition: none; }
 }

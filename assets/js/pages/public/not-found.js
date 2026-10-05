@@ -7,7 +7,7 @@ export default async (mount) => {
       <p style="font-family: var(--font-display); font-size: var(--text-hero); line-height: 1;">404</p>
       <h1 style="margin-top: var(--space-md);">Page not found</h1>
       <p style="color: var(--color-text-muted); margin-top: var(--space-sm);">
-        We couldn't find what you were looking for.
+        Couldn't find what you were looking for.
       </p>
       <div style="margin-top: var(--space-lg); display:inline-flex; gap: var(--space-md);">
         <a href="/" class="btn btn-primary">Back home</a>

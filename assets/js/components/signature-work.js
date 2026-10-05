@@ -18,7 +18,7 @@ import { observeReveal } from '../utils/reveal.js';
 
 const heroImage = {
   src:  '/assets/images/gallery/gallery11.jpeg',
-  alt:  'A recent cut at ClipperCartel — twist braids finished with a sharp line, ClipperCartel wordmark visible in the mirror behind.',
+  alt:  'A recent cut at ClipperCartel. Twist braids finished with a sharp line, ClipperCartel wordmark visible in the mirror behind.',
 };
 
 const render = () => `

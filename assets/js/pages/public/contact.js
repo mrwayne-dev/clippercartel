@@ -11,7 +11,7 @@ export default async (mount) => {
   mount.innerHTML = `
     <section class="section container">
       <h1>Contact</h1>
-      <p style="color: var(--color-text-muted); margin-top: var(--space-sm);">Send a message. We'll get back to you.</p>
+      <p style="color: var(--color-text-muted); margin-top: var(--space-sm);">Send a message. I'll get back to you.</p>
 
       <form id="contact-form" style="max-width: 520px; margin-top: var(--space-lg);" novalidate>
         <div class="field">
@@ -53,7 +53,7 @@ export default async (mount) => {
     try {
       await api.post('/contact.php', data);
       form.reset();
-      toast("Message sent. We'll be in touch.");
+      toast("Message sent. I'll be in touch.");
     } catch (err) {
       toast(err.message || 'Could not send. Try again.', 'error');
     } finally {

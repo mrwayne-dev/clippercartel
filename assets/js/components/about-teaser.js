@@ -33,7 +33,7 @@ const render = () => `
           <p>Every chair, every blade, every towel. Craft is what the mirror shows when the cape comes off.</p>
         </div>
         <a href="/about" class="about-teaser__cta" data-reveal="fade-right" style="--reveal-delay: 3">
-          Our story
+          My story
           <span aria-hidden="true">→</span>
         </a>
       </div>
