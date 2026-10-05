@@ -49,120 +49,160 @@
   max-width: 52ch;
 }
 
-/* ---- Deck (scroll-pinned stack) ---------------------- *
- *  Only visible on desktop. On mobile / reduced-motion the
- *  .deck-fallback grid below takes over.                   */
-.deck {
+/* ---- Rail (horizontal pinned scroll) ---------------- *
+ *  Pinned 100vh. Vertical scroll translates the inner track
+ *  horizontally. On mobile/reduced-motion the .rail-fallback
+ *  grid below takes over.                                 */
+
+.rail {
   position: relative;
   height: 100vh;
-  min-height: 640px;
+  min-height: 620px;
   background: var(--color-bg);
   overflow: hidden;
   isolation: isolate;
 }
-.deck__inner {
-  position: absolute;
-  inset: 0;
+.rail__viewport {
+  height: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
+  overflow: hidden;        /* ScrollTrigger moves the track inside */
 }
-.deck__stage {
-  position: relative;
-  width: clamp(300px, 32vw, 440px);
-  aspect-ratio: 4/5;
-  perspective: 1200px;
-}
-.deck__card {
-  position: absolute;
-  inset: 0;
-  margin: 0;
-  overflow: hidden;
-  background: var(--color-bg-soft);
-  box-shadow:
-    0 32px 60px -20px rgba(10, 10, 10, 0.28),
-    0 10px 24px -10px rgba(10, 10, 10, 0.18);
-  transform-origin: center;
-  will-change: transform, opacity;
-  border-radius: 2px;
-}
-.deck__card img {
-  width: 100%;
+.rail__track {
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 2vw, 40px);
   height: 100%;
-  object-fit: cover;
-  object-position: center 25%;
-  pointer-events: none;
+  padding-inline: 12vw;    /* leading / trailing breathing room */
+  will-change: transform;
 }
-
-/* Caption/counter in the bottom-left of the viewport */
-.deck__caption {
-  position: absolute;
-  left:   clamp(20px, 4vw, 48px);
-  bottom: clamp(24px, 4vh, 48px);
-  z-index: 10;
-  color: var(--color-text);
-}
-.deck__label {
-  font-family: var(--font-body);
-  font-size: var(--text-xs);
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--color-text-dim);
-  margin: 0 0 8px;
-}
-.deck__counter {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 6px;
-  font-family: var(--font-display);
-  font-size: clamp(1.5rem, 2.8vw, 2.5rem);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.01em;
-  margin: 0;
-}
-.deck__counter-sep { color: var(--color-border); padding-inline: 2px; font-size: 0.8em; }
-[data-counter-current] { color: var(--color-text); }
-
-/* ---- Mobile / reduced-motion fallback: static grid ---- */
-.deck-fallback {
-  display: none;              /* desktop hides it */
-  padding-block: clamp(48px, 8vh, 96px);
-}
-.deck-fallback__grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: clamp(10px, 1.2vw, 20px);
-}
-@media (min-width: 500px) {
-  .deck-fallback__grid { grid-template-columns: 1fr 1fr; }
-}
-.deck-fallback__tile {
+.rail__slide {
+  flex: 0 0 auto;
   position: relative;
-  aspect-ratio: 4/5;
+  height: clamp(60vh, 72vh, 78vh);
+  aspect-ratio: 3/4;
   overflow: hidden;
   background: var(--color-bg-soft);
   margin: 0;
+  box-shadow: 0 20px 50px -24px rgba(10, 10, 10, 0.28);
 }
-.deck-fallback__tile img {
+/* Alternate heights for visual rhythm — like a magazine spread. */
+.rail__slide:nth-child(3n)   { height: clamp(50vh, 60vh, 64vh); align-self: center; }
+.rail__slide:nth-child(4n+2) { height: clamp(70vh, 80vh, 86vh); }
+.rail__slide img {
   width: 100%; height: 100%;
   object-fit: cover;
   object-position: center 25%;
   transition: transform 800ms cubic-bezier(0.16, 1, 0.3, 1);
 }
-.deck-fallback__tile:hover img { transform: scale(1.04); }
+.rail__slide:hover img { transform: scale(1.04); }
 
-/* Breakpoint rule: mobile hides the deck, shows the fallback grid */
-@media (max-width: 820px) {
-  .deck            { display: none; }
-  .deck-fallback   { display: block; }
+.rail__slide-cap {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  margin: 0;
+  padding: 4px 10px;
+  background: rgba(10, 10, 10, 0.55);
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
-/* If JS runs reduced-motion check and bails, the deck gets an attr */
-.deck[data-deck-skipped="true"]       { display: none; }
-.deck[data-deck-skipped="true"] ~ .deck-fallback { display: block; }
+
+/* ---- Chrome: eyebrow, counter, progress bar ---- */
+.rail__eyebrow {
+  position: absolute;
+  top: clamp(20px, 4vh, 40px);
+  left: clamp(20px, 4vw, 48px);
+  margin: 0;
+  z-index: 5;
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-text-dim);
+}
+
+.rail__counter {
+  position: absolute;
+  top: clamp(20px, 4vh, 40px);
+  right: clamp(20px, 4vw, 48px);
+  margin: 0;
+  z-index: 5;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2.2vw, 2rem);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+  color: var(--color-text-dim);
+}
+.rail__counter-sep { color: var(--color-border); font-size: 0.8em; padding-inline: 2px; }
+[data-counter-current] { color: var(--color-text); }
+
+.rail__progress {
+  position: absolute;
+  left: clamp(20px, 4vw, 48px);
+  right: clamp(20px, 4vw, 48px);
+  bottom: clamp(24px, 4vh, 40px);
+  height: 2px;
+  background: var(--color-border);
+  z-index: 5;
+  overflow: hidden;
+}
+.rail__progress-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--color-accent);
+  transform-origin: left;
+  transform: scaleX(0);
+  will-change: transform;
+}
+
+/* ---- Mobile / reduced-motion fallback: static grid ---- */
+.rail-fallback {
+  display: none;              /* desktop hides it */
+  padding-block: clamp(48px, 8vh, 96px);
+}
+.rail-fallback__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(10px, 1.2vw, 20px);
+}
+@media (min-width: 500px) {
+  .rail-fallback__grid { grid-template-columns: 1fr 1fr; }
+}
+.rail-fallback__tile {
+  position: relative;
+  aspect-ratio: 4/5;
+  overflow: hidden;
+  background: var(--color-bg-soft);
+  margin: 0;
+}
+.rail-fallback__tile img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center 25%;
+  transition: transform 800ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.rail-fallback__tile:hover img { transform: scale(1.04); }
+
+@media (max-width: 820px) {
+  .rail          { display: none; }
+  .rail-fallback { display: block; }
+}
+.rail[data-rail-skipped="true"]       { display: none; }
+.rail[data-rail-skipped="true"] ~ .rail-fallback { display: block; }
 
 @media (prefers-reduced-motion: reduce) {
-  .deck          { display: none; }
-  .deck-fallback { display: block; }
+  .rail          { display: none; }
+  .rail-fallback { display: block; }
 }
 
 /* ---- Socials callout ----------------------------- */
