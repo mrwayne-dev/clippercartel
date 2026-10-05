@@ -10,6 +10,7 @@ import { mountNav }        from './components/nav.js';
 import { mountFooter }     from './components/footer.js';
 import { installGuards }   from './lib/anti-cloning.js';
 import { startRouter }     from './router.js';
+import { initSmoothScroll } from './lib/motion.js';
 
 const bootstrap = async () => {
   mountNav(document.getElementById('nav'));
@@ -19,6 +20,12 @@ const bootstrap = async () => {
   // Skipped on localhost / .test so devtools stays usable in development.
   const isLocal = /\.test$|localhost|127\.0\.0\.1/.test(location.hostname);
   if (!isLocal) installGuards();
+
+  // Smooth scroll via Lenis, wired into GSAP's ticker so pinned
+  // ScrollTrigger sections and parallax animate against a smoothed
+  // scroll input. Reduced-motion users get native scroll.
+  // Fire-and-forget: the router doesn't need to wait on this.
+  initSmoothScroll().catch(() => { /* smooth scroll is a nice-to-have */ });
 
   await startRouter(document.getElementById('app'));
 };

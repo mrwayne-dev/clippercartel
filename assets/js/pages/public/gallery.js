@@ -173,10 +173,10 @@ const initRail = async (root) => {
       start:   'top top',
       end:     () => `+=${distance}`,
       pin:     true,
-      scrub:   1,
+      anticipatePin: 1,         // pre-prep the pin so entering/leaving doesn't jump
+      scrub:   0.6,             // tighter now that Lenis smooths the input
       invalidateOnRefresh: true,
       onUpdate: (self) => {
-        // Scroll-based counter: which slide is at the viewport centre?
         const p = self.progress;
         const idx = Math.min(slides.length - 1, Math.floor(p * slides.length));
         counter.textContent = String(idx + 1).padStart(2, '0');

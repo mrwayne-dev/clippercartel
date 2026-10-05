@@ -47,3 +47,57 @@ export const loadScrollTrigger = async () => {
   });
   return scrollTriggerPromise;
 };
+
+let lenisPromise = null;
+export const loadLenis = () => {
+  if (window.Lenis) return Promise.resolve(window.Lenis);
+  if (lenisPromise) return lenisPromise;
+  lenisPromise = loadScript('/assets/vendor/lenis.min.js').then(() => window.Lenis);
+  return lenisPromise;
+};
+
+/**
+ * Initialise global smooth scroll via Lenis, wired into GSAP's
+ * ticker so ScrollTrigger stays in sync (no desync between pinned
+ * sections, scroll-driven animations and the page's actual scroll
+ * position).
+ *
+ *   - Native scroll steps in discrete deltaY chunks (~100-500px per
+ *     wheel tick). ScrollTrigger scrub against raw native scroll
+ *     looks jumpy. Lenis interpolates the scroll position frame-by-
+ *     frame so animations get a continuous input.
+ *   - Pin-leave jumps vanish because Lenis holds the scroll
+ *     position continuously through the pin release.
+ *   - prefers-reduced-motion: skipped entirely — native scroll.
+ *   - Touch: left native (smoothTouch:false). iOS native inertia
+ *     is better than any JS smoothing on handheld.
+ */
+let lenisInstance = null;
+export const initSmoothScroll = async () => {
+  if (lenisInstance) return lenisInstance;
+  if (prefersReducedMotion()) return null;
+
+  const [Lenis, { gsap, ScrollTrigger }] = await Promise.all([
+    loadLenis(),
+    loadScrollTrigger(),
+  ]);
+
+  lenisInstance = new Lenis({
+    duration: 1.1,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),  // ease-out expo
+    smoothWheel: true,
+    smoothTouch: false,
+  });
+
+  // Keep ScrollTrigger in sync with every Lenis-reported scroll frame.
+  lenisInstance.on('scroll', ScrollTrigger.update);
+
+  // Drive Lenis's own RAF loop from GSAP's ticker so we have one
+  // shared frame clock. Prevents double-RAF jank.
+  gsap.ticker.add((time) => lenisInstance.raf(time * 1000));
+  gsap.ticker.lagSmoothing(0);
+
+  return lenisInstance;
+};
+
+export const getLenis = () => lenisInstance;
