@@ -165,75 +165,39 @@
   will-change: transform;
 }
 
-/* ---- Mobile — native horizontal swipe + scroll-snap ---- *
- *  Same rail markup. No pin, no ScrollTrigger. The viewport is
- *  a horizontal scroll container; chrome is relaid-out into
- *  stacked rows above/below the strip.                       */
+/* ---- Mobile — same pinned pattern, scaled-down chrome ---- *
+ *  Lenis smoothTouch:true (motion.js) drives vertical swipes
+ *  into ScrollTrigger frame-by-frame, so the pin + horizontal
+ *  pan work identically on mobile and desktop.                */
 @media (max-width: 820px) {
-  .rail {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    height: auto;
-    min-height: 0;
-    padding: 72px 0 56px;        /* clear fixed nav + breathing room */
-  }
-
-  .rail__viewport {
-    order: 2;
-    height: auto;
-    overflow-x: auto;
-    overflow-y: hidden;
-    scroll-snap-type: x mandatory;
-    scroll-padding-inline: 16px;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    scroll-behavior: smooth;
-  }
-  .rail__viewport::-webkit-scrollbar { display: none; }
-
   .rail__track {
-    display: flex;
-    gap: 12px;
-    padding-inline: 16px;
-    height: auto;
+    padding-inline: 8vw;
+    gap: clamp(10px, 2vw, 16px);
   }
   .rail__slide {
-    scroll-snap-align: start;
-    height: 70vh;
-    max-height: 580px;
-    flex: 0 0 auto;
-    aspect-ratio: 3/4;
-    box-shadow: 0 14px 32px -16px rgba(10, 10, 10, 0.25);
+    height: clamp(50vh, 60vh, 65vh);
   }
-  /* Reset the desktop varied-height rhythm on mobile for a clean strip */
-  .rail__slide:nth-child(3n),
-  .rail__slide:nth-child(4n+2) {
-    height: 70vh;
-    max-height: 580px;
-    align-self: auto;
-  }
+  .rail__slide:nth-child(3n)   { height: clamp(44vh, 52vh, 58vh); }
+  .rail__slide:nth-child(4n+2) { height: clamp(58vh, 68vh, 72vh); }
 
-  /* Chrome: eyebrow top, counter top-right, progress bar at the bottom */
+  .rail__slide-cap { top: 10px; left: 10px; padding: 3px 8px; font-size: 10px; }
+
   .rail__eyebrow {
-    order: 1;
-    position: static;
-    padding-inline: 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
+    top: calc(var(--nav-h) + 12px);
+    left: 16px;
+    font-size: 10px;
+    letter-spacing: 0.18em;
   }
   .rail__counter {
-    order: 3;
-    position: static;
-    padding-inline: 16px;
-    align-self: flex-end;
-    font-size: clamp(1rem, 4vw, 1.25rem);
+    top: calc(var(--nav-h) + 10px);
+    right: 16px;
+    font-size: clamp(1rem, 4.5vw, 1.4rem);
   }
   .rail__progress {
-    order: 4;
-    position: static;
-    margin-inline: 16px;
+    left: 16px;
+    right: 16px;
+    bottom: 20px;
+    height: 1.5px;
   }
 }
 
@@ -261,7 +225,9 @@
   width: 100%; height: 100%;
   object-fit: cover;
   object-position: center 25%;
+  transition: transform 800ms cubic-bezier(0.16, 1, 0.3, 1);
 }
+.rail-fallback__tile:hover img { transform: scale(1.04); }
 
 .rail[data-rail-skipped="true"]                     { display: none; }
 .rail[data-rail-skipped="true"] ~ .rail-fallback    { display: block; }

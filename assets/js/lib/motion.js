@@ -86,7 +86,13 @@ export const initSmoothScroll = async () => {
     duration: 1.1,
     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),  // ease-out expo
     smoothWheel: true,
-    smoothTouch: false,
+    // smoothTouch:true is needed so vertical finger-drag on mobile
+    // drives ScrollTrigger-scrubbed sections (pinned horizontal rail
+    // on /gallery) frame-by-frame instead of batching through the
+    // native fling. Mild inertia loss vs iOS native scroll is worth
+    // it for the parity in motion between desktop and mobile.
+    smoothTouch: true,
+    touchMultiplier: 1.5,
   });
 
   // Keep ScrollTrigger in sync with every Lenis-reported scroll frame.

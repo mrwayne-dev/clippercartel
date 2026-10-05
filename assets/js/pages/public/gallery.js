@@ -129,50 +129,24 @@ const render = () => `
 `;
 
 /* -------------------------------------------------------------
- *  Rail interaction
- *    - Desktop (≥821px, no reduced motion): GSAP ScrollTrigger
- *      pins the section; vertical scroll scrubs horizontal pan.
- *    - Mobile  (<821px, no reduced motion): native horizontal
- *      swipe with scroll-snap. We just listen for scroll on the
- *      viewport and update the counter + progress bar.
- *    - Reduced motion (any viewport): bail to the static grid
- *      fallback (data-rail-skipped flag).
+ *  Rail interaction — same pattern on every viewport.
+ *    Section is pinned; vertical scroll scrubs horizontal pan.
+ *    On mobile this works because Lenis's smoothTouch
+ *    interpolates finger-drag frame-by-frame into ScrollTrigger.
+ *    Reduced-motion users bail to the static grid fallback.
  * ----------------------------------------------------------- */
-
-const updateChrome = (viewport, slides, counter, progress) => {
-  const maxScroll = viewport.scrollWidth - viewport.clientWidth;
-  const p = maxScroll > 0 ? viewport.scrollLeft / maxScroll : 0;
-  const idx = Math.min(slides.length - 1, Math.round(p * (slides.length - 1)));
-  counter.textContent = String(idx + 1).padStart(2, '0');
-  if (progress) progress.style.transform = `scaleX(${p})`;
-};
-
-const initRailMobile = (root) => {
-  const viewport = root.querySelector('.rail__viewport');
-  const slides   = Array.from(root.querySelectorAll('.rail__slide'));
-  const counter  = root.querySelector('[data-counter-current]');
-  const progress = root.querySelector('[data-rail-progress]');
-  if (!viewport) return;
-
-  let frame;
-  const onScroll = () => {
-    if (frame) return;
-    frame = requestAnimationFrame(() => {
-      updateChrome(viewport, slides, counter, progress);
-      frame = null;
-    });
-  };
-  viewport.addEventListener('scroll', onScroll, { passive: true });
-  updateChrome(viewport, slides, counter, progress);
-};
-
-const initRailDesktop = async (root) => {
+const initRail = async (root) => {
   const rail     = root.querySelector('.rail');
   const track    = root.querySelector('[data-rail-track]');
   const slides   = Array.from(root.querySelectorAll('.rail__slide'));
   const counter  = root.querySelector('[data-counter-current]');
   const progress = root.querySelector('[data-rail-progress]');
   if (!rail || !track || !slides.length) return;
+
+  if (prefersReducedMotion()) {
+    rail.setAttribute('data-rail-skipped', 'true');
+    return;
+  }
 
   let gsapCtx;
   try { gsapCtx = await loadScrollTrigger(); } catch { return; }
@@ -210,24 +184,6 @@ const initRailDesktop = async (root) => {
       ScrollTrigger.refresh();
     }, { once: true });
   });
-};
-
-const initRail = async (root) => {
-  const rail = root.querySelector('.rail');
-  if (!rail) return;
-
-  // Reduced-motion → bail entirely; static grid fallback shows.
-  if (prefersReducedMotion()) {
-    rail.setAttribute('data-rail-skipped', 'true');
-    return;
-  }
-
-  const isMobile = window.matchMedia('(max-width: 820px)').matches;
-  if (isMobile) {
-    initRailMobile(root);
-  } else {
-    await initRailDesktop(root);
-  }
 };
 
 export default async (mount) => {
