@@ -10,12 +10,12 @@ if (!in_array($status, $allowed, true)) $status = 'all';
 $where  = [];
 $params = [];
 if ($status !== 'all') {
-    $where[]           = 'b.status = :st';
-    $params['st']      = $status;
+    $where[]      = 'b.status = :st';
+    $params['st'] = $status;
 }
 if (!empty($_GET['q'])) {
-    $where[]           = '(c.name LIKE :q OR c.phone LIKE :q OR b.confirmation_code LIKE :q)';
-    $params['q']       = '%' . $_GET['q'] . '%';
+    $where[]     = '(c.name LIKE :q OR c.phone LIKE :q OR b.confirmation_code LIKE :q)';
+    $params['q'] = '%' . $_GET['q'] . '%';
 }
 $whereSql = $where ? ('WHERE ' . implode(' AND ', $where)) : '';
 
@@ -30,43 +30,62 @@ $stmt = $pdo->prepare(
 $stmt->execute($params);
 $rows = $stmt->fetchAll();
 
+$initials = static function (string $name): string {
+    $parts = preg_split('/\s+/', trim($name));
+    $first = mb_substr($parts[0] ?? '', 0, 1);
+    $last  = count($parts) > 1 ? mb_substr(end($parts), 0, 1) : '';
+    return strtoupper($first . $last) ?: '•';
+};
+$fmtWhen = static function (string $dt): array {
+    $tz = new DateTimeZone(getenv('APP_TIMEZONE') ?: 'UTC');
+    $d  = (new DateTime($dt, new DateTimeZone('UTC')))->setTimezone($tz);
+    return [$d->format('D j M'), $d->format('H:i')];
+};
+
 admin_header('Bookings', 'bookings');
 ?>
-<div class="admin-head">
-  <h1 class="admin-h1">Bookings</h1>
-</div>
+<header class="admin-head">
+  <p class="admin-head__eyebrow">Bookings</p>
+  <h1 class="admin-h1">All chairs, past and future.</h1>
+</header>
 
 <form class="admin-filters" method="get" action="/admin/bookings">
   <label class="field field--inline">
     <span>Status</span>
     <select name="status">
       <?php foreach ($allowed as $s): ?>
-        <option value="<?= $s ?>" <?= $status === $s ? 'selected' : '' ?>><?= ucfirst(str_replace('_',' ', $s)) ?></option>
+        <option value="<?= $s ?>" <?= $status === $s ? 'selected' : '' ?>><?= ucfirst(str_replace('_', ' ', $s)) ?></option>
       <?php endforeach; ?>
     </select>
   </label>
-  <label class="field field--inline">
+  <label class="field field--grow">
     <span>Search</span>
-    <input type="search" name="q" placeholder="name, phone, code" value="<?= htmlspecialchars($_GET['q'] ?? '') ?>">
+    <input type="search" name="q" placeholder="name, phone or code" value="<?= htmlspecialchars($_GET['q'] ?? '') ?>">
   </label>
-  <button type="submit" class="btn btn--primary btn--sm">Filter</button>
+  <button type="submit" class="btn btn--primary btn--sm">Apply</button>
 </form>
 
 <?php if (!$rows): ?>
-  <p class="admin-empty">No bookings match that filter.</p>
+  <div class="admin-empty">No bookings match this filter.</div>
 <?php else: ?>
   <ul class="booking-list">
-    <?php foreach ($rows as $b): ?>
+    <?php foreach ($rows as $b):
+      [$whenDate, $whenTime] = $fmtWhen($b['starts_at']);
+    ?>
       <li class="booking-row">
         <a class="booking-row__main" href="/admin/booking?id=<?= (int) $b['id'] ?>">
-          <div class="booking-row__when"><?= admin_fmt_datetime($b['starts_at']) ?></div>
+          <span class="avatar" aria-hidden="true"><?= htmlspecialchars($initials($b['customer_name'])) ?></span>
+          <div class="booking-row__when">
+            <strong><?= htmlspecialchars($whenTime) ?></strong>
+            <small><?= htmlspecialchars($whenDate) ?></small>
+          </div>
           <div class="booking-row__who">
-            <?= htmlspecialchars($b['customer_name']) ?>
-            <small class="booking-row__phone"><?= htmlspecialchars($b['phone']) ?></small>
+            <strong><?= htmlspecialchars($b['customer_name']) ?></strong>
+            <span class="booking-row__phone"><?= htmlspecialchars($b['phone']) ?></span>
           </div>
           <div class="booking-row__svc"><?= htmlspecialchars($b['service_name']) ?></div>
           <div class="booking-row__code">
-            #<?= htmlspecialchars($b['confirmation_code']) ?>
+            <span>#<?= htmlspecialchars($b['confirmation_code']) ?></span>
             <?= admin_status_pill($b['status']) ?>
           </div>
         </a>
