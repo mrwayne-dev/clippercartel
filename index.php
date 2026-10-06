@@ -93,27 +93,12 @@ $openingSpec = $openDays ? [[
   <link rel="preload" as="image" href="/assets/images/hero/desktopherobg.webp"       type="image/webp" fetchpriority="high" media="(min-width: 761px)">
   <?php endif; ?>
 
-  <!-- Stylesheets -->
-  <link rel="stylesheet" href="/assets/css/main.css">
-  <link rel="stylesheet" href="/assets/css/layout.css">
-  <link rel="stylesheet" href="/assets/css/components.css">
-  <link rel="stylesheet" href="/assets/css/animations.css">
-  <link rel="stylesheet" href="/assets/css/hero.css">
-  <link rel="stylesheet" href="/assets/css/services-teaser.css">
-  <link rel="stylesheet" href="/assets/css/signature-work.css">
-  <link rel="stylesheet" href="/assets/css/about-teaser.css">
-  <link rel="stylesheet" href="/assets/css/gallery-marquee.css">
-  <link rel="stylesheet" href="/assets/css/visit.css">
-  <link rel="stylesheet" href="/assets/css/final-cta.css">
-  <link rel="stylesheet" href="/assets/css/footer.css">
-  <link rel="stylesheet" href="/assets/css/services-page.css">
-  <link rel="stylesheet" href="/assets/css/faq.css">
-  <link rel="stylesheet" href="/assets/css/gallery-page.css">
-  <link rel="stylesheet" href="/assets/css/about-page.css">
-  <link rel="stylesheet" href="/assets/css/contact-page.css">
-  <link rel="stylesheet" href="/assets/css/faq-page.css">
-  <link rel="stylesheet" href="/assets/css/legal-page.css">
-  <link rel="stylesheet" href="/assets/css/book-page.css">
+  <!-- One minified bundle. Source files live in assets/css/*.css;
+       re-run `./scripts/build-css.sh` after any CSS edit. -->
+  <link rel="stylesheet" href="/assets/css/bundle.min.css">
+
+  <!-- Admin area uses its own stylesheet; never loaded on public pages. -->
+
 
   <!-- JSON-LD: HairSalon LocalBusiness -->
   <script type="application/ld+json" id="ld-business">
