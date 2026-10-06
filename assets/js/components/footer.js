@@ -76,6 +76,9 @@ export const mountFooter = (mount) => {
 
       <div class="footer__bottom">
         <p class="footer__copy">© ${year} ${name}. All rights reserved.</p>
+        <p class="footer__credit">
+          Site by <a href="https://mgbah.dev" rel="noopener" target="_blank">mgbah.dev</a>
+        </p>
         <ul class="footer__legal">
           <li><a href="/privacy">Privacy</a></li>
           <li><a href="/terms">Terms</a></li>
