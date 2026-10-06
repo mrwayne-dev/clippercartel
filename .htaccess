@@ -30,7 +30,10 @@ RewriteRule ^(.*)$ index.php [L,QSA]
 # -------------------------------------------------------------
 # Deny access to source directories
 # -------------------------------------------------------------
-RewriteRule ^(vendor|includes|config|api/includes)/ - [F,L]
+RewriteRule ^(vendor|includes|config|database|api/includes)/ - [F,L]
+
+# Admin internals (anything starting with _) are includes only.
+RewriteRule ^admin/_ - [F,L]
 
 # -------------------------------------------------------------
 # Hotlink protection — only our own domain may embed our images.
