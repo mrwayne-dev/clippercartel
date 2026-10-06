@@ -66,7 +66,37 @@
   height: 100%;
   display: flex;
   align-items: center;
-  overflow: hidden;        /* ScrollTrigger moves the track inside */
+  overflow: hidden;        /* ScrollTrigger moves the track inside — desktop */
+}
+
+/* Mobile — native horizontal scroll + snap. Replaces the smoothTouch
+ * + ScrollTrigger combo so finger-drag no longer taxes the main thread
+ * every frame. Users swipe sideways through slides. */
+@media (max-width: 760px) {
+  .rail {
+    height: auto;
+    min-height: 70vh;
+    overflow: visible;
+  }
+  .rail__viewport {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .rail__viewport::-webkit-scrollbar { display: none; }
+  .rail__track {
+    transform: none !important;
+    padding-inline: 8vw;
+    will-change: auto;
+  }
+  .rail__slide {
+    scroll-snap-align: center;
+    height: 60vh;
+  }
+  .rail__slide:nth-child(3n),
+  .rail__slide:nth-child(4n+2) { height: 60vh; align-self: center; }
 }
 .rail__track {
   display: flex;

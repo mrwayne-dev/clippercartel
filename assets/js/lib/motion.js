@@ -88,10 +88,12 @@ export const initSmoothScroll = async () => {
     duration: 0.9,
     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),  // ease-out expo
     smoothWheel: true,
-    // smoothTouch:true drives vertical finger-drag frame-by-frame into
-    // ScrollTrigger-scrubbed sections (pinned horizontal rail on
-    // /gallery) so mobile matches desktop motion.
-    smoothTouch: true,
+    // smoothTouch:false — mobile uses native iOS/Android scroll inertia
+    // (lower main-thread cost, better battery). The /gallery horizontal
+    // rail that used to depend on scrubbed vertical→horizontal mapping
+    // now ships a native scroll-snap horizontal strip on mobile instead,
+    // so it still works without the per-frame JS tax.
+    smoothTouch: false,
     touchMultiplier: 1.2,
   });
 

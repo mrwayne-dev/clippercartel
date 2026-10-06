@@ -129,14 +129,17 @@ const render = () => `
 `;
 
 /* -------------------------------------------------------------
- *  Rail interaction — same pattern on every viewport.
- *    Section is pinned; vertical scroll scrubs horizontal pan.
- *    On mobile this works because Lenis's smoothTouch
- *    interpolates finger-drag frame-by-frame into ScrollTrigger.
- *    Reduced-motion users bail to the static grid fallback.
+ *  Rail interaction — two paths.
+ *   DESKTOP: section pinned via ScrollTrigger, vertical scroll
+ *     scrubs the horizontal track from 0 to -distance.
+ *   MOBILE: native horizontal scroll + scroll-snap on the viewport.
+ *     Zero JS during drag, native iOS inertia, way less main-thread
+ *     work than the smoothTouch+ScrollTrigger combo it replaces.
+ *   Reduced-motion users bail to the static grid fallback.
  * ----------------------------------------------------------- */
 const initRail = async (root) => {
   const rail     = root.querySelector('.rail');
+  const viewport = root.querySelector('.rail__viewport');
   const track    = root.querySelector('[data-rail-track]');
   const slides   = Array.from(root.querySelectorAll('.rail__slide'));
   const counter  = root.querySelector('[data-counter-current]');
@@ -148,6 +151,21 @@ const initRail = async (root) => {
     return;
   }
 
+  // Mobile path — native horizontal scroll, wire counter/progress by scrollLeft.
+  const isMobile = window.matchMedia('(max-width: 760px)').matches;
+  if (isMobile && viewport) {
+    const updateChrome = () => {
+      const max = Math.max(1, viewport.scrollWidth - viewport.clientWidth);
+      const p   = viewport.scrollLeft / max;
+      if (counter)  counter.textContent = String(Math.min(slides.length, Math.floor(p * slides.length) + 1)).padStart(2, '0');
+      if (progress) progress.style.transform = `scaleX(${p})`;
+    };
+    viewport.addEventListener('scroll', updateChrome, { passive: true });
+    updateChrome();
+    return;
+  }
+
+  // Desktop path — original ScrollTrigger pin-scrub.
   let gsapCtx;
   try { gsapCtx = await loadScrollTrigger(); } catch { return; }
   const { gsap, ScrollTrigger } = gsapCtx;
