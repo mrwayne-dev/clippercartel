@@ -15,7 +15,7 @@
 import { observeReveal } from '../utils/reveal.js';
 
 const portrait = {
-  src: '/assets/images/about/portrait.jpg',
+  src: '/assets/images/about/portrait.webp',
   alt: 'Portrait of the barber at ClipperCartel.',
 };
 

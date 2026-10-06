@@ -21,14 +21,14 @@
 import { observeReveal } from '../utils/reveal.js';
 
 const images = [
-  '/assets/images/gallery/galler2.jpeg',
-  '/assets/images/gallery/gallery4.jpeg',
-  '/assets/images/gallery/gallery8.jpeg',
-  '/assets/images/gallery/galler12.jpeg',
-  '/assets/images/gallery/gallery13.jpeg',
-  '/assets/images/gallery/galler14.jpeg',
-  '/assets/images/gallery/gallery15.jpeg',
-  '/assets/images/gallery/gallery19.jpeg',
+  '/assets/images/gallery/galler2.webp',
+  '/assets/images/gallery/gallery4.webp',
+  '/assets/images/gallery/gallery8.webp',
+  '/assets/images/gallery/galler12.webp',
+  '/assets/images/gallery/gallery13.webp',
+  '/assets/images/gallery/galler14.webp',
+  '/assets/images/gallery/gallery15.webp',
+  '/assets/images/gallery/gallery19.webp',
 ];
 
 const tile = (src, duplicate = false) => `

@@ -22,12 +22,12 @@ import { applyParallax }    from '../../lib/parallax.js';
 import { waLink }           from '../../services/shop.js';
 
 const services = [
-  { name: 'Low Cut',      note: 'A clean, close finish. The everyday standard.',            image: '/assets/images/gallery/gallery4.jpeg'  },
-  { name: 'Fade',         note: 'Taper, mid or skin. Sharp line to close.',                 image: '/assets/images/gallery/galler2.jpeg'   },
-  { name: 'Design',       note: 'Custom shapes cut sharp. Bring the idea, I match it.',     image: '/assets/images/gallery/gallery8.jpeg'  },
-  { name: 'Colour',       note: 'Dye, tips, highlights. Bold or subtle, your call.',        image: '/assets/images/gallery/galler12.jpeg'  },
-  { name: 'Beard Sculpt', note: 'Shape, trim, define. Face framed right.',                  image: '/assets/images/gallery/galler14.jpeg'  },
-  { name: 'Kids',         note: 'All ages. Patient hands, calm chair.',                     image: '/assets/images/gallery/gallery15.jpeg' },
+  { name: 'Low Cut',      note: 'A clean, close finish. The everyday standard.',            image: '/assets/images/gallery/gallery4.webp'  },
+  { name: 'Fade',         note: 'Taper, mid or skin. Sharp line to close.',                 image: '/assets/images/gallery/galler2.webp'   },
+  { name: 'Design',       note: 'Custom shapes cut sharp. Bring the idea, I match it.',     image: '/assets/images/gallery/gallery8.webp'  },
+  { name: 'Colour',       note: 'Dye, tips, highlights. Bold or subtle, your call.',        image: '/assets/images/gallery/galler12.webp'  },
+  { name: 'Beard Sculpt', note: 'Shape, trim, define. Face framed right.',                  image: '/assets/images/gallery/galler14.webp'  },
+  { name: 'Kids',         note: 'All ages. Patient hands, calm chair.',                     image: '/assets/images/gallery/gallery15.webp' },
 ];
 
 const faqItems = [

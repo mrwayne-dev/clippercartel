@@ -47,7 +47,7 @@ const render = () => `
         </div>
         <figure class="about-page__story-media" data-reveal="fade-left" style="--reveal-delay: 1">
           <img
-            src="/assets/images/about/portrait-full.jpg"
+            src="/assets/images/about/portrait-full.webp"
             alt="A portrait of the barber at ClipperCartel"
             loading="lazy"
             decoding="async"
@@ -92,7 +92,7 @@ const render = () => `
         </header>
         <figure class="about-page__shop-media" data-reveal="scale" style="--reveal-delay: 1">
           <img
-            src="/assets/images/gallery/mirror1.jpeg"
+            src="/assets/images/gallery/mirror1.webp"
             alt="Inside ClipperCartel. The CLIPPER CARTEL wordmark on the mirror, chair, checkered floor visible in the reflection."
             loading="lazy"
             decoding="async"

@@ -21,10 +21,10 @@
 import { observeReveal } from '../utils/reveal.js';
 
 const services = [
-  { name: 'Signature', note: 'An everyday precision cut, tailored to your head shape.',   image: '/assets/images/gallery/gallery5.jpeg' },
-  { name: 'Precision', note: 'Clean lines, defined edges. The look that gets noticed.',   image: '/assets/images/gallery/gallery3.jpeg' },
-  { name: 'Craft',     note: 'Shape, trim, sculpt. The full styling treatment.',          image: '/assets/images/gallery/gallery7.jpeg' },
-  { name: 'Finish',    note: 'Ritual close. Warm towel, line-up, every detail.',          image: '/assets/images/gallery/gallery9.jpeg' },
+  { name: 'Signature', note: 'An everyday precision cut, tailored to your head shape.',   image: '/assets/images/gallery/gallery5.webp' },
+  { name: 'Precision', note: 'Clean lines, defined edges. The look that gets noticed.',   image: '/assets/images/gallery/gallery3.webp' },
+  { name: 'Craft',     note: 'Shape, trim, sculpt. The full styling treatment.',          image: '/assets/images/gallery/gallery7.webp' },
+  { name: 'Finish',    note: 'Ritual close. Warm towel, line-up, every detail.',          image: '/assets/images/gallery/gallery9.webp' },
 ];
 
 const INTERVAL   = 6000;
