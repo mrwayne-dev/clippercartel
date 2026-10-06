@@ -3,17 +3,16 @@
  *
  * Flow: Hero → intake form + info sidebar → footer.
  *
- * No backend yet. On submit the form collects the booking details,
- * builds a nicely formatted WhatsApp message, and opens
- * wa.me/<number> with the message pre-filled. The barber answers
- * directly, confirms the slot + price, and the booking is sealed in
- * chat. When the admin backend lands this handler flips to posting
- * to /api/booking.php; the form UI stays.
+ * On submit the form POSTs to /api/booking.php. The endpoint saves
+ * the booking (status='pending'), notifies the owner on WhatsApp,
+ * and returns an 8-char confirmation code. The owner then confirms
+ * the slot + price over WhatsApp.
  *
  * Voice: first-person 'I' (single-barber shop).
  */
 
-import { observeReveal } from '../../utils/reveal.js';
+import { api, toast }     from '../../services/api.js';
+import { observeReveal }  from '../../utils/reveal.js';
 import { shop, telLink, waLink } from '../../services/shop.js';
 
 const services = [
@@ -123,7 +122,7 @@ const render = () => `
           </div>
 
           <button type="submit" class="btn btn-accent book-form__submit">
-            Continue on WhatsApp
+            Request this chair
             <span aria-hidden="true">→</span>
           </button>
         </form>
@@ -134,7 +133,7 @@ const render = () => `
           <p class="book-info__eyebrow">How it works</p>
           <ol class="book-info__steps">
             <li><span class="book-info__step-num">01</span><p>Fill in your details, pick a cut and a time.</p></li>
-            <li><span class="book-info__step-num">02</span><p>Hit continue — the request lands on my WhatsApp.</p></li>
+            <li><span class="book-info__step-num">02</span><p>Submit — the request lands on my WhatsApp straight away.</p></li>
             <li><span class="book-info__step-num">03</span><p>I confirm the slot and the price. Your chair is sealed.</p></li>
           </ol>
 
@@ -156,59 +155,34 @@ const render = () => `
   </div>
 `;
 
-/* -------------------------------------------------------------
- *  Submit handler — build a formatted WA message and open wa.me.
- * ----------------------------------------------------------- */
-const formatBookingMessage = (data) => {
-  const dateReadable = (() => {
-    if (!data.date) return '';
-    try {
-      return new Date(data.date).toLocaleDateString('en-GB', {
-        weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
-      });
-    } catch {
-      return data.date;
-    }
-  })();
-
-  const lines = [
-    "Hi, I'd like to book a chair:",
-    '',
-    `• Name: ${data.name}`,
-    `• Phone: ${data.phone}`,
-    `• Service: ${data.service}`,
-    `• Date: ${dateReadable}`,
-    `• Time: ${data.time}`,
-  ];
-  if (data.notes && data.notes.trim()) {
-    lines.push(`• Notes: ${data.notes.trim()}`);
-  }
-  return lines.join('\n');
-};
-
 export default async (mount) => {
   mount.innerHTML = render();
 
   const form = mount.querySelector('#book-form');
   if (form) {
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-
-      // Honeypot: bots fill this in. Real users never see it.
-      if ((new FormData(form).get('website') || '').toString().trim() !== '') {
-        return;                       // silently drop
-      }
 
       // Light client-side validation (native required attributes do the rest)
       if (!form.reportValidity()) return;
 
-      const data    = Object.fromEntries(new FormData(form).entries());
-      const message = formatBookingMessage(data);
-      const url     = waLink(message);
-      if (!url || url === '#') return;
+      const btn           = form.querySelector('button[type="submit"]');
+      const originalLabel = btn.innerHTML;
+      btn.disabled        = true;
+      btn.innerHTML       = 'Sending…';
 
-      // Open WhatsApp in a new tab/window.
-      window.open(url, '_blank', 'noopener,noreferrer');
+      const data = Object.fromEntries(new FormData(form).entries());
+      try {
+        const res = await api.post('/booking.php', data);
+        form.reset();
+        const code = res?.confirmation_code ? ` · ${res.confirmation_code}` : '';
+        toast(`Booking received${code}. I'll confirm on WhatsApp shortly.`);
+      } catch (err) {
+        toast(err.message || 'Could not send the booking. Try again.', 'error');
+      } finally {
+        btn.disabled  = false;
+        btn.innerHTML = originalLabel;
+      }
     });
   }
 
