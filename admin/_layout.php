@@ -7,7 +7,7 @@
  * showroom. One stylesheet, one small JS block for the mobile menu.
  */
 
-function admin_header(string $title = 'Admin', string $active = ''): void {
+function admin_header(string $title = 'Admin', string $active = '', string $bodyClass = ''): void {
     $admin = currentAdmin();
     $flashes = flashPull();
     $appName = getenv('APP_NAME') ?: 'ClipperCartel';
@@ -28,15 +28,19 @@ function admin_header(string $title = 'Admin', string $active = ''): void {
   <link rel="icon" href="/assets/favicon/icon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/assets/css/admin.css">
 </head>
-<body class="admin">
+<body class="admin<?= $bodyClass ? ' ' . htmlspecialchars($bodyClass) : '' ?>">
+  <?php if ($admin): ?>
   <header class="admin-topbar">
     <a class="admin-brand" href="/admin">
       <span class="admin-brand__name"><?= htmlspecialchars($appName) ?></span>
       <span class="admin-brand__tag">admin</span>
     </a>
-    <?php if ($admin): ?>
     <button class="admin-menu-btn" aria-expanded="false" aria-controls="admin-nav" aria-label="Toggle navigation">
-      <span></span><span></span><span></span>
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <line x1="4" y1="7"  x2="20" y2="7"/>
+        <line x1="4" y1="12" x2="20" y2="12"/>
+        <line x1="4" y1="17" x2="20" y2="17"/>
+      </svg>
     </button>
     <nav id="admin-nav" class="admin-nav" aria-label="Admin sections">
       <?php foreach ($nav as $key => $item): ?>
@@ -47,35 +51,26 @@ function admin_header(string $title = 'Admin', string $active = ''): void {
         <button type="submit" class="admin-nav__link admin-nav__link--logout">Log out</button>
       </form>
     </nav>
-    <?php endif; ?>
   </header>
+  <?php endif; ?>
 
+  <?php if ($flashes): ?>
+    <ul class="flash-queue" hidden>
+      <?php foreach ($flashes as $f): ?>
+        <li data-type="<?= htmlspecialchars($f['type']) ?>"><?= htmlspecialchars($f['message']) ?></li>
+      <?php endforeach; ?>
+    </ul>
+  <?php endif; ?>
+
+  <?php if ($admin): ?>
   <main class="admin-main">
-    <?php if ($flashes): ?>
-      <div class="admin-flashes">
-        <?php foreach ($flashes as $f): ?>
-          <div class="admin-flash admin-flash--<?= htmlspecialchars($f['type']) ?>"><?= htmlspecialchars($f['message']) ?></div>
-        <?php endforeach; ?>
-      </div>
-    <?php endif; ?>
-    <?php
+  <?php endif;
 }
 
-function admin_footer(): void {
+function admin_footer(bool $hasMain = true): void {
+    if ($hasMain) echo '</main>';
     ?>
-  </main>
-  <script>
-    // Mobile nav toggle — tiny, no deps.
-    (() => {
-      const btn = document.querySelector('.admin-menu-btn');
-      const nav = document.getElementById('admin-nav');
-      if (!btn || !nav) return;
-      btn.addEventListener('click', () => {
-        const open = nav.classList.toggle('is-open');
-        btn.setAttribute('aria-expanded', String(open));
-      });
-    })();
-  </script>
+  <script src="/assets/js/admin.js" defer></script>
 </body>
 </html>
     <?php

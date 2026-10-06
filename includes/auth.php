@@ -100,10 +100,19 @@ function csrfField(): string {
 function csrfCheck(): void {
     adminSessionStart();
     $sent = $_POST['_csrf'] ?? $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
+    // JSON body (ajax forms serialise all fields including _csrf into JSON).
+    if (!$sent && str_contains(strtolower($_SERVER['CONTENT_TYPE'] ?? ''), 'application/json')) {
+        static $jsonCache = null;
+        if ($jsonCache === null) {
+            $jsonCache = json_decode(file_get_contents('php://input') ?: '[]', true) ?: [];
+        }
+        $sent = $jsonCache['_csrf'] ?? '';
+    }
     $expected = $_SESSION['csrf'] ?? '';
     if (!$sent || !$expected || !hash_equals($expected, $sent)) {
         http_response_code(419);
-        echo 'CSRF token mismatch. Reload the page and retry.';
+        header('Content-Type: application/json');
+        echo json_encode(['ok' => false, 'message' => 'Session expired. Reload the page and retry.']);
         exit;
     }
 }

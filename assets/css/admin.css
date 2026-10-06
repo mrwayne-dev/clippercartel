@@ -43,10 +43,12 @@ input, select, textarea { color: inherit; }
 
 /* ---------- topbar ---------- */
 .admin-topbar {
-  position: sticky; top: 0; z-index: 10;
+  position: sticky; top: 0; z-index: 50;
   display: flex; align-items: center; gap: 16px;
   padding: 14px 20px;
-  background: var(--surface);
+  background: rgba(255, 255, 255, 0.86);
+  -webkit-backdrop-filter: saturate(140%) blur(8px);
+  backdrop-filter: saturate(140%) blur(8px);
   border-bottom: 1px solid var(--border);
 }
 .admin-brand {
@@ -297,19 +299,167 @@ input, select, textarea { color: inherit; }
 .admin-flash--warn  { background: var(--warn-soft);   border-color: #ecd4a3; color: #7a4e13; }
 .admin-flash--error { background: var(--danger-soft); border-color: #ecb9b3; color: #7c2117; }
 
+/* ---------- toast ---------- */
+.admin-toast {
+  position: fixed; left: 50%; bottom: 24px;
+  transform: translate(-50%, 20px);
+  padding: 12px 20px; border-radius: 999px;
+  background: var(--text); color: var(--surface);
+  font-size: 0.9rem; font-weight: 500;
+  box-shadow: 0 12px 32px rgba(10,10,10,0.25);
+  z-index: 1000; cursor: pointer;
+  max-width: calc(100vw - 48px);
+  opacity: 0; transition: opacity 220ms ease, transform 220ms cubic-bezier(0.16,1,0.3,1);
+}
+.admin-toast.is-visible { opacity: 1; transform: translate(-50%, 0); }
+.admin-toast--ok    { background: var(--ok);     color: #fff; }
+.admin-toast--error { background: var(--danger); color: #fff; }
+.admin-toast--info  { background: var(--text);   color: var(--surface); }
+
+/* ---------- spinner ---------- */
+.spinner {
+  display: inline-block;
+  width: 1em; height: 1em;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: cc-spin 650ms linear infinite;
+  vertical-align: middle;
+}
+@keyframes cc-spin { to { transform: rotate(360deg); } }
+.btn[aria-busy="true"] { pointer-events: none; opacity: 0.9; }
+
+/* ---------- sr-only (accessibility) ---------- */
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* ---------- password toggle ---------- */
+.password-toggle {
+  position: relative;
+}
+.password-toggle input {
+  padding-right: 42px;
+}
+.password-toggle__btn {
+  position: absolute; right: 6px; top: 50%;
+  transform: translateY(-50%);
+  width: 32px; height: 32px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: none; background: transparent;
+  color: var(--muted); cursor: pointer; border-radius: 6px;
+  transition: color 150ms ease, background 150ms ease;
+}
+.password-toggle__btn:hover { color: var(--text); background: var(--bg); }
+.password-toggle__btn svg { width: 18px; height: 18px; }
+
+/* keeps the label span above the wrapper, since .field is flex-column */
+.field > .password-toggle { display: flex; }
+.field > .password-toggle input { flex: 1; }
+
+/* ---------- split login ---------- */
+.auth-shell {
+  min-height: 100vh;
+  display: grid; grid-template-columns: 1.1fr 1fr;
+  background: var(--bg);
+}
+.auth-brand {
+  position: relative; overflow: hidden;
+  background: linear-gradient(160deg, #141210 0%, #2a1b11 100%);
+  color: #fff;
+  padding: 48px;
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+.auth-brand::after {
+  content: ""; position: absolute; inset: -20%;
+  background: radial-gradient(circle at 20% 20%, rgba(122, 74, 43, 0.35), transparent 55%),
+              radial-gradient(circle at 80% 90%, rgba(240, 230, 220, 0.08), transparent 50%);
+  pointer-events: none;
+}
+.auth-brand__mark {
+  position: relative; z-index: 1;
+  font-family: 'Kudryashev', ui-serif, Georgia, serif;
+  font-size: 1.5rem; font-weight: 400; letter-spacing: 0.02em;
+}
+.auth-brand__eyebrow {
+  position: relative; z-index: 1;
+  font-size: 0.78rem; text-transform: uppercase;
+  letter-spacing: 0.12em; color: rgba(255,255,255,0.65);
+  margin-bottom: 20px;
+}
+.auth-brand__h1 {
+  position: relative; z-index: 1;
+  font-family: 'Kudryashev', ui-serif, Georgia, serif;
+  font-weight: 400; font-size: clamp(2rem, 4.5vw, 3.4rem);
+  line-height: 1.08; letter-spacing: -0.01em;
+  max-width: 18ch;
+}
+.auth-brand__h1 em {
+  font-family: 'Instrument Serif', ui-serif, serif;
+  font-style: italic; color: #e9d7c1;
+}
+.auth-brand__meta {
+  position: relative; z-index: 1;
+  display: flex; gap: 16px; align-items: center;
+  color: rgba(255,255,255,0.6); font-size: 0.85rem;
+}
+.auth-brand__meta span { display: inline-flex; align-items: center; gap: 6px; }
+.auth-brand__dot { width: 6px; height: 6px; background: var(--ok); border-radius: 50%; display: inline-block; }
+
+.auth-form-side {
+  display: flex; align-items: center; justify-content: center;
+  padding: 48px 32px;
+}
+.auth-card {
+  width: 100%; max-width: 420px;
+  display: flex; flex-direction: column; gap: 24px;
+}
+.auth-card__head h1 {
+  font-size: 1.7rem; font-weight: 700; letter-spacing: -0.015em;
+  color: var(--text);
+}
+.auth-card__head p { color: var(--muted); margin-top: 4px; }
+.auth-card .admin-form button[type="submit"] { height: 44px; }
+.auth-card__helper {
+  font-size: 0.82rem; color: var(--dim); text-align: center;
+}
+.auth-card__helper a { color: var(--accent); font-weight: 500; }
+
+/* Preload Kudryashev + Instrument Serif only on auth pages */
+@font-face {
+  font-family: 'Kudryashev';
+  src: url('/assets/fonts/kudryashev/KudryashevDisplay.woff2') format('woff2');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Instrument Serif';
+  src: url('/assets/fonts/instrument-serif/InstrumentSerif-Italic.woff2') format('woff2');
+  font-weight: 400; font-style: italic; font-display: swap;
+}
+
 /* ---------- mobile ---------- */
 @media (max-width: 760px) {
-  .admin-menu-btn { display: block; }
+  .admin-menu-btn { display: inline-flex; align-items: center; justify-content: center; margin-left: auto; }
   .admin-nav {
-    position: absolute; top: 100%; left: 0; right: 0;
+    position: fixed; top: 69px; left: 0; right: 0;
     flex-direction: column; align-items: stretch; gap: 2px;
-    padding: 10px 16px 16px; margin-left: 0;
+    padding: 12px 16px 20px; margin-left: 0;
     background: var(--surface); border-bottom: 1px solid var(--border);
-    display: none;
+    box-shadow: 0 20px 40px rgba(10,10,10,0.06);
+    transform: translateY(-8px); opacity: 0; pointer-events: none;
+    transition: transform 220ms cubic-bezier(0.16,1,0.3,1), opacity 180ms ease;
+    z-index: 40;
   }
-  .admin-nav.is-open { display: flex; }
-  .admin-nav__link { padding: 12px 14px; }
-  .admin-nav__logout { margin: 8px 0 0; }
+  html[data-menu-open] .admin-nav {
+    transform: translateY(0); opacity: 1; pointer-events: auto;
+  }
+  html[data-menu-open] body { overflow: hidden; }
+
+  .admin-nav__link { padding: 14px 14px; font-size: 1rem; border-radius: 8px; }
+  .admin-nav__logout { margin: 8px 0 0; display: block; }
+  .admin-nav__link--logout { width: 100%; text-align: left; }
 
   .admin-stats { grid-template-columns: repeat(2, 1fr); }
 
@@ -324,4 +474,10 @@ input, select, textarea { color: inherit; }
   .schedule-row { grid-template-columns: 1fr; gap: 8px; }
   .kv { grid-template-columns: 1fr; row-gap: 2px; }
   .kv dt { margin-top: 10px; }
+
+  /* Split login stacks */
+  .auth-shell { grid-template-columns: 1fr; min-height: auto; }
+  .auth-brand { padding: 32px 24px; }
+  .auth-brand__h1 { font-size: 1.8rem; }
+  .auth-form-side { padding: 32px 20px; }
 }
