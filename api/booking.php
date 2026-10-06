@@ -23,7 +23,7 @@ require_once __DIR__ . '/../includes/booking_helpers.php';
 require_once __DIR__ . '/../includes/rate_limit.php';
 require_once __DIR__ . '/../includes/honeypot.php';
 require_once __DIR__ . '/../includes/turnstile.php';
-require_once __DIR__ . '/../includes/whatsapp.php';
+require_once __DIR__ . '/../includes/telegram.php';
 require_once __DIR__ . '/../includes/mailer.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') jsonError('Method not allowed', 405);
@@ -147,16 +147,18 @@ try {
 }
 
 /* --- notify owner (best effort) ------------------------------- */
+// Note: $name, $service, $notes are already htmlspecialchars'd by
+// sanitize(); $phone is digits + '+', also safe. $code is A-Z/2-9.
 $startHuman = $startsAt->format('l j F Y · H:i');
-$waBody = "New booking request · {$code}\n"
-        . "------------------------------\n"
-        . "Name: {$name}\n"
-        . "Phone: {$phone}\n"
-        . "Service: {$service}\n"
-        . "When: {$startHuman}\n"
-        . ($notes ? "\nNotes: {$notes}\n" : '')
-        . "\nReply to confirm. Status is pending.";
-$waOk = sendWhatsApp($waBody);
+$tgBody = "<b>✂️ New booking · {$code}</b>\n"
+        . "\n"
+        . "<b>Name:</b> {$name}\n"
+        . "<b>Phone:</b> {$phone}\n"
+        . "<b>Service:</b> {$service}\n"
+        . "<b>When:</b> {$startHuman}\n"
+        . ($notes ? "\n<b>Notes:</b>\n{$notes}\n" : '')
+        . "\n<i>Status: pending. Reply to the customer to confirm.</i>";
+$tgOk = sendTelegram($tgBody);
 
 $mailOk = false;
 try {
@@ -179,11 +181,13 @@ try {
 }
 
 /* --- flip notify flags --------------------------------------- */
+// `notified_whatsapp` column repurposed as the "chat notify" flag — Telegram
+// is the sender now; same column, same semantics.
 try {
     $pdo->prepare(
         'UPDATE bookings SET notified_whatsapp = :wa, notified_email = :em WHERE id = :id'
     )->execute([
-        'wa' => $waOk  ? 1 : 0,
+        'wa' => $tgOk  ? 1 : 0,
         'em' => $mailOk ? 1 : 0,
         'id' => $bookingId,
     ]);

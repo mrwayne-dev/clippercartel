@@ -4,7 +4,7 @@
  *
  * Pipeline:
  *   method guard → rate limit → honeypot → turnstile → validate
- *   → INSERT into messages → WhatsApp-notify owner → email (best-effort)
+ *   → INSERT into messages → Telegram-notify owner → email (best-effort)
  *   → flip notify flags → jsonSuccess
  *
  * Email is best-effort: it ships through PHPMailer if SMTP is wired,
@@ -21,7 +21,7 @@ require_once __DIR__ . '/../includes/booking_helpers.php';
 require_once __DIR__ . '/../includes/rate_limit.php';
 require_once __DIR__ . '/../includes/honeypot.php';
 require_once __DIR__ . '/../includes/turnstile.php';
-require_once __DIR__ . '/../includes/whatsapp.php';
+require_once __DIR__ . '/../includes/telegram.php';
 require_once __DIR__ . '/../includes/mailer.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') jsonError('Method not allowed', 405);
@@ -69,14 +69,16 @@ try {
 }
 
 /* --- notify (best effort) -------------------------------------- */
-$waBody  = "New contact form submission\n"
-         . "---------------------------\n"
-         . "Name: {$name}\n"
-         . "Email: {$email}\n"
-         . "Subject: {$subject}\n"
-         . "\n"
-         . $message;
-$waOk    = sendWhatsApp($waBody);
+// Note: $name, $email, $subject, $message are already htmlspecialchars'd
+// by sanitize() upstream — safe to drop into HTML parse_mode.
+$tgBody = "<b>📬 New contact message</b>\n"
+        . "\n"
+        . "<b>From:</b> {$name}\n"
+        . "<b>Email:</b> {$email}\n"
+        . "<b>Subject:</b> {$subject}\n"
+        . "\n"
+        . $message;
+$tgOk   = sendTelegram($tgBody);
 
 $mailOk  = false;
 try {
@@ -111,11 +113,13 @@ try {
 }
 
 /* --- update notify flags --------------------------------------- */
+// `notified_whatsapp` column is reused as the "chat notify" flag — Telegram
+// now, with WhatsApp Business API later if we ever add a second channel.
 try {
     $pdo->prepare(
         'UPDATE messages SET notified_whatsapp = :wa, notified_email = :em WHERE id = :id'
     )->execute([
-        'wa' => $waOk  ? 1 : 0,
+        'wa' => $tgOk  ? 1 : 0,
         'em' => $mailOk ? 1 : 0,
         'id' => $messageId,
     ]);
