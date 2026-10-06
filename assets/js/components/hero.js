@@ -20,11 +20,11 @@
 import { loadGsap, prefersReducedMotion } from '../lib/motion.js';
 
 const mobileSlides = [
-  '/assets/images/hero/mobileheroimagemain.png',   // brand slide leads
-  '/assets/images/hero/mobileheroimg1.png',
-  '/assets/images/hero/mobileheroimg2.png',
-  '/assets/images/hero/mobileheroimg3.png',
-  '/assets/images/hero/mobileheroimg4.png',
+  '/assets/images/hero/mobileheroimagemain.webp',   // brand slide leads
+  '/assets/images/hero/mobileheroimg1.webp',
+  '/assets/images/hero/mobileheroimg2.webp',
+  '/assets/images/hero/mobileheroimg3.webp',
+  '/assets/images/hero/mobileheroimg4.webp',
 ];
 
 const render = () => `
@@ -33,7 +33,7 @@ const render = () => `
     <!-- Desktop background (hidden on mobile) -->
     <div class="hero__bg hero__bg--desktop" data-hero-el="desktop" aria-hidden="true">
       <img
-        src="/assets/images/hero/desktopherobg.png"
+        src="/assets/images/hero/desktopherobg.webp"
         alt=""
         fetchpriority="high"
         decoding="async"

@@ -36,12 +36,16 @@ RewriteRule ^(vendor|includes|config|database|api/includes)/ - [F,L]
 RewriteRule ^admin/_ - [F,L]
 
 # -------------------------------------------------------------
-# Hotlink protection — only our own domain may embed our images.
+# Hotlink protection — only our own domains may embed our images.
 # Direct hits (empty referrer) still allowed so users can right-save
 # via the privacy page's download links, feeds work, etc.
+#
+# Allowed hosts: clippercartel.{com,test} + any *.mgbah.dev subdomain
+# (clippercartel.mgbah.dev, future staging, etc.).
 # -------------------------------------------------------------
 RewriteCond %{HTTP_REFERER} !^$
 RewriteCond %{HTTP_REFERER} !^https?://(www\.)?clippercartel\.(com|test) [NC]
+RewriteCond %{HTTP_REFERER} !^https?://([a-z0-9-]+\.)?mgbah\.dev [NC]
 RewriteRule \.(jpe?g|png|webp|avif|gif|svg)$ - [F,NC,L]
 
 # -------------------------------------------------------------

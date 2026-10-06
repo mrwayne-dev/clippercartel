@@ -83,6 +83,16 @@ $openingSpec = $openDays ? [[
   <link rel="preload" href="/assets/fonts/Switzer-400.woff2"                                 as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/Switzer-500.woff2"                                 as="font" type="font/woff2" crossorigin>
 
+  <?php
+  // LCP preload — only on the home route, since the hero is home-only.
+  // Mobile and desktop LCP images are different; media= gives the browser
+  // only the one it will actually render for this viewport.
+  $isHome = ($_SERVER['REQUEST_URI'] ?? '/') === '/' || preg_match('#^/\?#', $_SERVER['REQUEST_URI'] ?? '/');
+  if ($isHome): ?>
+  <link rel="preload" as="image" href="/assets/images/hero/mobileheroimagemain.webp" type="image/webp" fetchpriority="high" media="(max-width: 760px)">
+  <link rel="preload" as="image" href="/assets/images/hero/desktopherobg.webp"       type="image/webp" fetchpriority="high" media="(min-width: 761px)">
+  <?php endif; ?>
+
   <!-- Stylesheets -->
   <link rel="stylesheet" href="/assets/css/main.css">
   <link rel="stylesheet" href="/assets/css/layout.css">
