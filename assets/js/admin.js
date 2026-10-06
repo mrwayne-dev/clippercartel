@@ -173,6 +173,27 @@
   };
 
   /* ------------------------------------------------------------
+   *  Row-click navigation — <tr data-href="/path"> treats the row
+   *  as a link. Buttons / forms / anchors inside the row still work
+   *  because click events bubble, and we skip the nav when the
+   *  original target is interactive. Mod-click opens in a new tab.
+   * ---------------------------------------------------------- */
+  const wireRowLinks = () => {
+    document.querySelectorAll('tr[data-href]').forEach((row) => {
+      row.addEventListener('click', (ev) => {
+        if (ev.target.closest('a, button, input, label, select, textarea, form')) return;
+        const href = row.dataset.href;
+        if (!href) return;
+        if (ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.button === 1) {
+          window.open(href, '_blank', 'noopener');
+        } else {
+          window.location.assign(href);
+        }
+      });
+    });
+  };
+
+  /* ------------------------------------------------------------
    *  Flash queue — server renders:
    *    <ul class="flash-queue" hidden>
    *      <li data-type="ok">Saved</li>
@@ -193,6 +214,7 @@
     wirePasswordToggles();
     wireAjaxForms();
     wireMenu();
+    wireRowLinks();
     consumeFlashQueue();
   };
 

@@ -15,11 +15,6 @@ $timeOff = $pdo->query(
 
 admin_header('Hours & time off', 'schedule');
 ?>
-<div class="admin-head">
-  <h1 class="admin-h1">Hours & time off</h1>
-  <p class="admin-sub">Weekly working window. Time off blocks override it.</p>
-</div>
-
 <form action="/admin/actions" method="post" class="admin-card">
   <?= csrfField() ?>
   <input type="hidden" name="action" value="save_schedule">

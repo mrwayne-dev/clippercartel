@@ -11,11 +11,6 @@ $rows = $pdo->query(
 
 admin_header('Messages', 'messages');
 ?>
-<div class="admin-head">
-  <h1 class="admin-h1">Messages</h1>
-  <p class="admin-sub">Contact-form inbox.</p>
-</div>
-
 <nav class="admin-tabs">
   <a href="/admin/messages"           class="admin-tabs__link<?= $show !== 'unread' ? ' is-active' : '' ?>">All</a>
   <a href="/admin/messages?show=unread" class="admin-tabs__link<?= $show === 'unread' ? ' is-active' : '' ?>">Unread</a>

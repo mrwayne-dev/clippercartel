@@ -44,11 +44,6 @@ $fmtWhen = static function (string $dt): array {
 
 admin_header('Bookings', 'bookings');
 ?>
-<header class="admin-head">
-  <p class="admin-head__eyebrow">Bookings</p>
-  <h1 class="admin-h1">All chairs, past and future.</h1>
-</header>
-
 <form class="admin-filters" method="get" action="/admin/bookings">
   <label class="field field--inline">
     <span>Status</span>
@@ -68,30 +63,45 @@ admin_header('Bookings', 'bookings');
 <?php if (!$rows): ?>
   <div class="admin-empty">No bookings match this filter.</div>
 <?php else: ?>
-  <ul class="booking-list">
-    <?php foreach ($rows as $b):
-      [$whenDate, $whenTime] = $fmtWhen($b['starts_at']);
-    ?>
-      <li class="booking-row">
-        <a class="booking-row__main" href="/admin/booking?id=<?= (int) $b['id'] ?>">
-          <span class="avatar" aria-hidden="true"><?= htmlspecialchars($initials($b['customer_name'])) ?></span>
-          <div class="booking-row__when">
-            <strong><?= htmlspecialchars($whenTime) ?></strong>
-            <small><?= htmlspecialchars($whenDate) ?></small>
-          </div>
-          <div class="booking-row__who">
-            <strong><?= htmlspecialchars($b['customer_name']) ?></strong>
-            <span class="booking-row__phone"><?= htmlspecialchars($b['phone']) ?></span>
-          </div>
-          <div class="booking-row__svc"><?= htmlspecialchars($b['service_name']) ?></div>
-          <div class="booking-row__code">
-            <span>#<?= htmlspecialchars($b['confirmation_code']) ?></span>
-            <?= admin_status_pill($b['status']) ?>
-          </div>
-        </a>
-      </li>
-    <?php endforeach; ?>
-  </ul>
+  <div class="data-table-wrap">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th scope="col" class="data-table__col-avatar"></th>
+          <th scope="col">When</th>
+          <th scope="col">Customer</th>
+          <th scope="col">Service</th>
+          <th scope="col">Code</th>
+          <th scope="col" class="data-table__col-end">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php foreach ($rows as $b):
+          [$whenDate, $whenTime] = $fmtWhen($b['starts_at']);
+          $href = '/admin/booking?id=' . (int) $b['id'];
+        ?>
+          <tr data-href="<?= $href ?>">
+            <td><span class="avatar" aria-hidden="true"><?= htmlspecialchars($initials($b['customer_name'])) ?></span></td>
+            <td>
+              <div class="cell-stack">
+                <strong><?= htmlspecialchars($whenTime) ?></strong>
+                <small><?= htmlspecialchars($whenDate) ?></small>
+              </div>
+            </td>
+            <td>
+              <div class="cell-stack">
+                <strong><?= htmlspecialchars($b['customer_name']) ?></strong>
+                <small><?= htmlspecialchars($b['phone']) ?></small>
+              </div>
+            </td>
+            <td class="cell-muted"><?= htmlspecialchars($b['service_name']) ?></td>
+            <td class="cell-mono">#<?= htmlspecialchars($b['confirmation_code']) ?></td>
+            <td class="data-table__col-end"><?= admin_status_pill($b['status']) ?></td>
+          </tr>
+        <?php endforeach; ?>
+      </tbody>
+    </table>
+  </div>
 <?php endif; ?>
 
 <?php admin_footer();
