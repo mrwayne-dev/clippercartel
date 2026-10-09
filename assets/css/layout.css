@@ -158,7 +158,7 @@ body.body--locked #nav { background: transparent; border-bottom-color: transpare
   grid-template-columns: auto 1fr;
   align-items: baseline;
   gap: clamp(16px, 4vw, 28px);
-  padding-block: clamp(14px, 2.2vh, 22px);
+  padding-block: clamp(18px, 2.8vh, 28px);
   border-bottom: 1px solid var(--color-border);
   color: var(--color-text);
   opacity: 0;
@@ -178,10 +178,10 @@ body.body--locked #nav { background: transparent; border-bottom-color: transpare
 }
 .nav__sheet-label {
   font-family: var(--font-display);
-  font-weight: 400;
-  font-size: clamp(2rem, 8.5vw, 3rem);
-  line-height: 1.02;
-  letter-spacing: -0.012em;
+  font-weight: 600;             /* Switzer semibold reads as a confident label */
+  font-size: clamp(1.75rem, 7.5vw, 2.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
 }
 .nav__sheet[aria-hidden="false"] .nav__sheet-link {
   opacity: 1;

@@ -14,6 +14,7 @@ const links = [
   { href: '/gallery',  label: 'Gallery'  },
   { href: '/about',    label: 'About'    },
   { href: '/contact',  label: 'Contact'  },
+  { href: '/faq',      label: 'FAQ'      },
 ];
 
 const link = (href, label) =>

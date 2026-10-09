@@ -175,7 +175,10 @@
     grid-template-rows: auto 55svh;
     min-height: 0;                  /* let content height drive, not viewport */
   }
-  .services__text       { order: 1; padding-block: clamp(32px, 5vh, 56px); padding-top: calc(var(--nav-h) + clamp(32px, 5vh, 56px)); }
+  /* The text panel sits straight below the hero on mobile. Padding-top
+   * is a visible breathing gap from the hero's bottom edge, not just
+   * clearance for the sticky nav. */
+  .services__text       { order: 1; padding-block: clamp(72px, 10vh, 112px) clamp(40px, 6vh, 64px); }
   .services__image-pane { order: 2; min-height: 0; }
   .services__text-inner { max-width: 100%; }
   .services__name       { font-size: clamp(2.75rem, 11vw, 4rem); }
