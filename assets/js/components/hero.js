@@ -56,9 +56,6 @@ const render = () => `
 
     <!-- Centered editorial copy block -->
     <div class="hero__copy">
-      <p class="hero__eyebrow" data-hero-el="eyebrow">
-        Fades · Designs · Beard sculpts · Port Harcourt
-      </p>
       <h1 class="hero__title" data-hero-el="title" id="hero-heading">
         The <em>sharpest</em> chair in Port Harcourt.
       </h1>
@@ -139,22 +136,20 @@ const animate = async (root) => {
 
   const desktopBg = root.querySelector('[data-hero-el="desktop"]');
   const carousel  = root.querySelector('[data-hero-el="carousel"]');
-  const eyebrow   = root.querySelector('[data-hero-el="eyebrow"]');
   const title     = root.querySelector('[data-hero-el="title"]');
   const sub       = root.querySelector('[data-hero-el="sub"]');
   const cta       = root.querySelector('[data-hero-el="cta"]');
 
   gsap.set([desktopBg, carousel], { opacity: 0 });
   gsap.set(desktopBg, { scale: 1.04 });
-  gsap.set([eyebrow, title, sub, cta], { opacity: 0, y: 24 });
+  gsap.set([title, sub, cta], { opacity: 0, y: 24 });
 
   const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
   tl.to(desktopBg,  { opacity: 1, scale: 1, duration: 1.6, ease: 'power1.out' }, 0)
     .to(carousel,   { opacity: 1, duration: 0.9 }, 0)
-    .to(eyebrow,    { opacity: 1, y: 0, duration: 0.6 }, 0.35)
-    .to(title,      { opacity: 1, y: 0, duration: 0.9 }, 0.5)
-    .to(sub,        { opacity: 1, y: 0, duration: 0.7 }, 0.85)
-    .to(cta,        { opacity: 1, y: 0, duration: 0.6 }, 1.05);
+    .to(title,      { opacity: 1, y: 0, duration: 0.9 }, 0.4)
+    .to(sub,        { opacity: 1, y: 0, duration: 0.7 }, 0.75)
+    .to(cta,        { opacity: 1, y: 0, duration: 0.6 }, 1.0);
 };
 
 export const mountHero = async (mount) => {
