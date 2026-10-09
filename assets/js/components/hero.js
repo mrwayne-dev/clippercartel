@@ -30,7 +30,7 @@ const mobileSlides = [
 const render = () => `
   <section class="hero" aria-label="ClipperCartel introduction">
 
-    <!-- Desktop background (hidden on mobile) -->
+    <!-- Desktop background (hidden on mobile) — full-bleed cover -->
     <div class="hero__bg hero__bg--desktop" data-hero-el="desktop" aria-hidden="true">
       <img
         src="/assets/images/hero/desktopherobg.webp"
@@ -51,22 +51,29 @@ const render = () => `
       </div>
     </div>
 
-    <!-- Mobile gradient scrim (only shown on mobile via CSS) -->
-    <div class="hero__gradient" aria-hidden="true"></div>
+    <!-- Dark overlay for text legibility over the photo (both breakpoints) -->
+    <div class="hero__overlay" aria-hidden="true"></div>
 
-    <!-- Headline + CTAs — bottom-left, both breakpoints -->
+    <!-- Centered editorial copy block -->
     <div class="hero__copy">
-      <h1 class="hero__title">
-        <span data-hero-el="title-line">Precision cuts.</span>
-        <span data-hero-el="title-line">A sharper you.</span>
+      <p class="hero__eyebrow" data-hero-el="eyebrow">
+        Fades · Designs · Beard sculpts · Port Harcourt
+      </p>
+      <h1 class="hero__title" data-hero-el="title" id="hero-heading">
+        The <em>sharpest</em> chair in Port Harcourt.
       </h1>
+      <p class="hero__sub" data-hero-el="sub">
+        Precision cuts, hot-towel shaves and beard sculpts. Walk-ins welcome, bookings open.
+      </p>
       <div class="hero__cta" data-hero-el="cta">
-        <a href="/book" class="btn btn-accent">Book your chair</a>
-        <a href="/services" class="btn btn-outline">See services</a>
+        <a href="/book" class="hero__cta-primary">
+          Book your chair
+          <span aria-hidden="true">→</span>
+        </a>
       </div>
     </div>
 
-    <!-- Mobile dot indicators (bottom-right so they don't collide with copy) -->
+    <!-- Mobile dot indicators (bottom, centered under the copy) -->
     <div class="hero__carousel-dots" role="tablist" aria-label="Choose slide">
       ${mobileSlides.map((_, i) => `
         <button class="hero__dot ${i === 0 ? 'is-active' : ''}" role="tab" aria-label="Slide ${i + 1}" aria-selected="${i === 0 ? 'true' : 'false'}" data-slide-to="${i}" type="button"></button>
@@ -130,20 +137,24 @@ const animate = async (root) => {
   let gsap;
   try { gsap = await loadGsap(); } catch { return; }
 
-  const desktopBg  = root.querySelector('[data-hero-el="desktop"]');
-  const carousel   = root.querySelector('[data-hero-el="carousel"]');
-  const titleLines = root.querySelectorAll('[data-hero-el="title-line"]');
-  const cta        = root.querySelector('[data-hero-el="cta"]');
+  const desktopBg = root.querySelector('[data-hero-el="desktop"]');
+  const carousel  = root.querySelector('[data-hero-el="carousel"]');
+  const eyebrow   = root.querySelector('[data-hero-el="eyebrow"]');
+  const title     = root.querySelector('[data-hero-el="title"]');
+  const sub       = root.querySelector('[data-hero-el="sub"]');
+  const cta       = root.querySelector('[data-hero-el="cta"]');
 
   gsap.set([desktopBg, carousel], { opacity: 0 });
-  gsap.set(desktopBg, { scale: 1.02 });
-  gsap.set([...titleLines, cta], { opacity: 0, y: 24 });
+  gsap.set(desktopBg, { scale: 1.04 });
+  gsap.set([eyebrow, title, sub, cta], { opacity: 0, y: 24 });
 
   const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
-  tl.to(desktopBg, { opacity: 1, scale: 1, duration: 1.4, ease: 'power1.out' }, 0)
-    .to(carousel,  { opacity: 1, duration: 0.9 }, 0)
-    .to(titleLines, { opacity: 1, y: 0, duration: 0.75, stagger: 0.12 }, 0.45)
-    .to(cta,        { opacity: 1, y: 0, duration: 0.6 }, 0.85);
+  tl.to(desktopBg,  { opacity: 1, scale: 1, duration: 1.6, ease: 'power1.out' }, 0)
+    .to(carousel,   { opacity: 1, duration: 0.9 }, 0)
+    .to(eyebrow,    { opacity: 1, y: 0, duration: 0.6 }, 0.35)
+    .to(title,      { opacity: 1, y: 0, duration: 0.9 }, 0.5)
+    .to(sub,        { opacity: 1, y: 0, duration: 0.7 }, 0.85)
+    .to(cta,        { opacity: 1, y: 0, duration: 0.6 }, 1.05);
 };
 
 export const mountHero = async (mount) => {

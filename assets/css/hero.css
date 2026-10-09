@@ -1,48 +1,37 @@
 /* hero.css — home hero.
  *
- * One container, two backgrounds (desktop plate / mobile carousel), one
- * copy block pinned bottom-left. On mobile the carousel is the bg; a
- * bottom-up gradient scrim lifts the copy out of the photo so you don't
- * have to scroll to see the CTAs.
+ * Editorial centred layout (Primal Pastures pattern):
+ *   full-bleed cover image → dark overlay → centered copy stack
+ *   (eyebrow → italic-accent headline → sub → one pill CTA).
+ *
+ * Desktop uses a single cover image; mobile keeps the 5-slide
+ * carousel. Dark overlay works for both breakpoints — the copy
+ * is always white, always readable, no bottom-only gradient hack.
  */
 
 .hero {
   position: relative;
   width: 100%;
   height: 100svh;
-  min-height: 560px;
+  min-height: 640px;
   overflow: hidden;
-  background: var(--color-bg);
+  background: #0a0a0a;
   isolation: isolate;
   /* Hero bleeds under the fixed nav; main.css :has(> .hero) kills padding. */
 }
 
-/* ---------- Backgrounds ----------
- * One of the two is visible per breakpoint. z-index 0.
- */
+/* ---------- Backgrounds — full-bleed cover ---------- */
 .hero__bg {
   position: absolute;
   inset: 0;
   z-index: 0;
   will-change: transform, opacity;
 }
-
-/* desktop plate — contained within a safe-area box so the headline at
- * bottom-left has physical breathing room beneath the wordmark. */
-.hero__bg--desktop {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding:
-    calc(var(--nav-h) + clamp(32px, 5vh, 56px))   /* top: clear the nav */
-    clamp(32px, 10vw, 120px)                      /* sides */
-    clamp(220px, 32vh, 320px);                    /* reserve bottom for the copy stack */
-}
 .hero__bg--desktop img {
-  width: auto;
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
 /* mobile carousel — hidden on desktop */
@@ -60,98 +49,140 @@
   object-position: center 25%;
 }
 
-/* ---------- Gradient scrim (mobile only) ---------- */
-.hero__gradient {
+/* ---------- Dark overlay (both breakpoints) ---------- */
+.hero__overlay {
   position: absolute;
-  left: 0; right: 0; bottom: 0;
-  height: 72%;
+  inset: 0;
   z-index: 1;
-  background:
-    linear-gradient(180deg,
-      rgba(10,10,10,0)    0%,
-      rgba(10,10,10,0.00) 22%,
-      rgba(10,10,10,0.55) 68%,
-      rgba(10,10,10,0.90) 100%);
-  display: none;        /* only on mobile */
   pointer-events: none;
+  background:
+    radial-gradient(ellipse at center,
+      rgba(10, 10, 10, 0.35) 0%,
+      rgba(10, 10, 10, 0.55) 60%,
+      rgba(10, 10, 10, 0.75) 100%),
+    linear-gradient(180deg,
+      rgba(10, 10, 10, 0.15) 0%,
+      rgba(10, 10, 10, 0.0)  40%,
+      rgba(10, 10, 10, 0.4)  100%);
 }
+
+/* ---------- Centered copy ---------- */
+.hero__copy {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0 var(--container-pad);
+  padding-top: var(--nav-h);
+}
+
+.hero__eyebrow {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: clamp(0.72rem, 1vw, 0.82rem);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.82);
+  margin: 0 0 clamp(18px, 2.4vh, 28px);
+}
+
+.hero__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2.5rem, 7.5vw, 5.5rem);
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  color: #fff;
+  margin: 0;
+  max-width: 15ch;
+}
+.hero__title em {
+  font-family: var(--font-accent);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  color: #e9d7c1;              /* warm cream — reads as accent against the overlay */
+}
+
+.hero__sub {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: clamp(0.98rem, 1.3vw, 1.12rem);
+  line-height: 1.55;
+  margin: clamp(20px, 2.6vh, 28px) 0 0;
+  max-width: 54ch;
+}
+
+/* ---------- Pill CTA ---------- */
+.hero__cta {
+  margin-top: clamp(28px, 3.6vh, 40px);
+  display: inline-flex;
+  will-change: transform, opacity;
+}
+.hero__cta-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 32px;
+  background: var(--color-accent);
+  color: #fff;
+  border-radius: var(--radius-full);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  box-shadow: 0 10px 30px rgba(10, 10, 10, 0.3);
+  transition: background var(--t-fast), transform var(--t-fast), box-shadow var(--t-fast);
+}
+.hero__cta-primary:hover {
+  background: var(--color-accent-deep);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 14px 36px rgba(10, 10, 10, 0.4);
+}
+.hero__cta-primary:active { transform: translateY(0); }
+.hero__cta-primary span   { transition: transform var(--t-fast); }
+.hero__cta-primary:hover span { transform: translateX(3px); }
 
 /* ---------- Dot indicators (mobile only) ---------- */
 .hero__carousel-dots {
   position: absolute;
-  right: var(--container-pad);
+  left: 50%; transform: translateX(-50%);
   bottom: clamp(28px, 5vh, 56px);
   z-index: 3;
-  display: none;        /* only on mobile */
+  display: none;
   gap: 8px;
 }
 .hero__dot {
   width: 22px; height: 3px;
   border-radius: 2px;
-  background: rgba(255,255,255,0.4);
+  background: rgba(255, 255, 255, 0.4);
   border: none; padding: 0;
   cursor: pointer;
   transition: background var(--t-fast), width var(--t-base);
 }
-.hero__dot.is-active       { background: #fff; width: 34px; }
-.hero__dot:focus-visible   { outline: 2px solid var(--color-accent); outline-offset: 2px; }
-
-/* ---------- Copy — bottom-left both breakpoints ---------- */
-.hero__copy {
-  position: absolute;
-  left: var(--container-pad);
-  right: var(--container-pad);
-  bottom: clamp(32px, 6vh, 72px);
-  z-index: 2;
-  max-width: 820px;
-}
-.hero__title {
-  font-family: var(--font-display);
-  font-weight: 400;
-  font-size: clamp(2.5rem, 7.5vw, 5.75rem);
-  line-height: 1.0;
-  letter-spacing: -0.01em;
-  color: var(--color-text);
-}
-.hero__title span          { display: block; will-change: transform, opacity; }
-.hero__title span:nth-child(2) {
-  font-family: var(--font-accent);     /* Instrument Serif italic */
-  font-style: italic;
-  color: var(--color-accent);
-  letter-spacing: -0.015em;
-}
-
-.hero__cta {
-  display: inline-flex;
-  gap: var(--space-md);
-  margin-top: clamp(20px, 3vh, 32px);
-  flex-wrap: wrap;
-  will-change: transform, opacity;
-}
+.hero__dot.is-active     { background: #fff; width: 34px; }
+.hero__dot:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
 
 /* ---------- Mobile ---------- */
 @media (max-width: 820px) {
-  .hero                       { height: 100svh; min-height: 640px; }
-  .hero__bg--desktop          { display: none; }
-  .hero__bg--mobile           { display: block; }
-  .hero__gradient             { display: block; }
-  .hero__carousel-dots        { display: flex; }
+  .hero                  { height: 100svh; min-height: 640px; }
+  .hero__bg--desktop     { display: none; }
+  .hero__bg--mobile      { display: block; }
+  .hero__carousel-dots   { display: flex; }
 
-  .hero__copy                 { bottom: clamp(72px, 10vh, 120px); max-width: 100%; }
-  .hero__title                { color: #fff; font-size: clamp(2.5rem, 11vw, 3.75rem); }
-  .hero__title span:nth-child(2) { color: var(--color-accent-soft); }
-
-  .hero__cta                  { gap: 10px; width: 100%; }
-  .hero__cta .btn             { flex: 1 1 auto; justify-content: center; }
-
-  /* Second button: white border/text on the dark gradient; inverts to
-   * dark text on a white fill on hover. */
-  .hero__cta .btn-outline {
-    --btn-outline-color:  #ffffff;
-    --btn-outline-invert: #0a0a0a;
-  }
+  .hero__copy            { padding-top: calc(var(--nav-h) + 20px); padding-bottom: 72px; }
+  .hero__title           { font-size: clamp(2.4rem, 11vw, 3.75rem); max-width: 14ch; }
+  .hero__sub             { font-size: 1rem; }
+  .hero__cta-primary     { padding: 14px 28px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero__slide                { transition: none; }
+  .hero__slide           { transition: none; }
 }
