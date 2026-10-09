@@ -177,9 +177,18 @@
   .hero__bg--mobile      { display: block; }
   .hero__carousel-dots   { display: flex; }
 
-  .hero__copy            { padding-top: calc(var(--nav-h) + 20px); padding-bottom: 72px; }
+  /* Copy sits LOW on mobile, right above the dot indicators —
+   * reads over the carousel photos without covering the subject. */
+  .hero__copy {
+    justify-content: flex-end;
+    text-align: left;
+    align-items: flex-start;
+    padding-top: var(--nav-h);
+    padding-bottom: clamp(80px, 14vh, 120px);
+  }
   .hero__title           { font-size: clamp(2.4rem, 11vw, 3.75rem); max-width: 14ch; }
-  .hero__sub             { font-size: 1rem; }
+  .hero__sub             { font-size: 1rem; max-width: 36ch; }
+  .hero__cta             { margin-top: clamp(20px, 3vh, 28px); }
   .hero__cta-primary     { padding: 14px 28px; }
 }
 
