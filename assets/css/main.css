@@ -8,33 +8,6 @@
  *  Self-hosted woff2. font-display: swap so first paint is never blocked.
  * ------------------------------------------------------------------ */
 
-/* Kudryashev — primary display face for all headings. Editorial serif
- * with high contrast; pairs with the ClipperCartel wordmark. */
-@font-face {
-  font-family: 'Kudryashev';
-  src: url('/assets/fonts/kudryashev/KudryashevDisplay.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Kudryashev';
-  src: url('/assets/fonts/kudryashev/KudryashevHeadline.woff2') format('woff2');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Cal Sans kept available but no longer the display default. */
-@font-face {
-  font-family: 'Cal Sans';
-  src: url('/assets/fonts/CalSans-Variable.woff2') format('woff2-variations'),
-       url('/assets/fonts/CalSans-Variable.woff2') format('woff2');
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-
 /* Instrument Serif — italic companion for display accents (hero second
  * line, pull quotes). Matches the italic used on mgbah.dev's Maison Eko. */
 @font-face {
@@ -116,9 +89,10 @@
   --color-danger:      #c0392b;
   --color-success:     #2e7d4f;
 
-  /* Typography */
-  --font-display: 'Kudryashev', 'Cal Sans', ui-serif, Georgia, serif;
-  --font-accent:  'Instrument Serif', 'Kudryashev', ui-serif, Georgia, serif;
+  /* Typography — two faces total: Switzer for everything + Instrument
+     Serif for the italic accents in headings (via <em>). */
+  --font-display: 'Switzer', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-accent:  'Instrument Serif', ui-serif, Georgia, serif;
   --font-body:    'Switzer', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --font-mono:    ui-monospace, 'JetBrains Mono', 'Fira Code', monospace;
 
@@ -211,9 +185,9 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
-  font-weight: 400;      /* Kudryashev display is beautiful at regular weight */
-  line-height: 1.05;
-  letter-spacing: -0.005em;
+  font-weight: 600;      /* Switzer semibold reads as a confident heading */
+  line-height: 1.1;
+  letter-spacing: -0.02em;
 }
 
 p { line-height: 1.7; }
@@ -241,17 +215,32 @@ ul, ol { list-style: none; }
   border: 0;
 }
 
+/* Skip link: fully off-screen until a keyboard user Tabs into it, then
+ * pops to the top-left as a visible button. The earlier `top: -40px`
+ * trick had a wrong containing block on some mobile browsers and showed
+ * a sliver — the clip-path pattern is bulletproof across every engine. */
 .skip-link {
   position: absolute;
-  top: -40px;
-  left: var(--space-md);
-  z-index: 999;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+.skip-link:focus {
+  position: fixed;
+  top: var(--space-md); left: var(--space-md);
+  width: auto; height: auto;
   padding: var(--space-sm) var(--space-md);
+  margin: 0;
+  clip: auto;
+  overflow: visible;
+  z-index: 999;
   background: var(--color-text);
   color: var(--color-bg);
   border-radius: var(--radius-sm);
 }
-.skip-link:focus { top: var(--space-md); }
 
 :focus-visible {
   outline: 2px solid var(--color-accent);

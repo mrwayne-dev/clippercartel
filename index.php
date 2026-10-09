@@ -78,7 +78,6 @@ $openingSpec = $openDays ? [[
   <link rel="apple-touch-icon" href="/assets/favicon/apple-touch-icon.png">
 
   <!-- Font preloads — self-hosted, highest-priority payload -->
-  <link rel="preload" href="/assets/fonts/kudryashev/KudryashevDisplay.woff2"                as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/instrument-serif/InstrumentSerif-Italic.woff2"     as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/Switzer-400.woff2"                                 as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/Switzer-500.woff2"                                 as="font" type="font/woff2" crossorigin>
