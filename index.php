@@ -88,7 +88,7 @@ $openingSpec = $openDays ? [[
   // only the one it will actually render for this viewport.
   $isHome = ($_SERVER['REQUEST_URI'] ?? '/') === '/' || preg_match('#^/\?#', $_SERVER['REQUEST_URI'] ?? '/');
   if ($isHome): ?>
-  <link rel="preload" as="image" href="/assets/images/hero/mobileheroimagemain.webp" type="image/webp" fetchpriority="high" media="(max-width: 760px)">
+  <link rel="preload" as="image" href="/assets/images/hero/mobileheroimg1.webp"      type="image/webp" fetchpriority="high" media="(max-width: 760px)">
   <link rel="preload" as="image" href="/assets/images/hero/desktopherobg.webp"       type="image/webp" fetchpriority="high" media="(min-width: 761px)">
   <?php endif; ?>
 

@@ -20,7 +20,6 @@
 import { loadGsap, prefersReducedMotion } from '../lib/motion.js';
 
 const mobileSlides = [
-  '/assets/images/hero/mobileheroimagemain.webp',   // brand slide leads
   '/assets/images/hero/mobileheroimg1.webp',
   '/assets/images/hero/mobileheroimg2.webp',
   '/assets/images/hero/mobileheroimg3.webp',
