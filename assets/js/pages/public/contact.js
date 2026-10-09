@@ -33,7 +33,6 @@ const render = () => {
     <!-- Hero -->
     <section class="contact-page__hero" aria-labelledby="contact-page-heading">
       <div class="contact-page__hero-inner container">
-        <p class="contact-page__eyebrow" data-reveal>Reach me</p>
         <h1 class="contact-page__title" id="contact-page-heading" data-reveal="clip" style="--reveal-delay: 1">
           Send a <em>line</em>.
         </h1>

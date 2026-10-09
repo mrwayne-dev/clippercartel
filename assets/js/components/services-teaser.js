@@ -38,12 +38,6 @@ const render = () => `
       <div class="services__text">
         <div class="services__text-inner">
 
-          <p class="services__index">
-            <span data-active-index>01</span>
-            <span class="services__index-sep" aria-hidden="true">/</span>
-            <span>${String(services.length).padStart(2, '0')}</span>
-          </p>
-
           <h2 class="services__name" id="services-heading" data-active-name>${services[0].name}</h2>
           <p class="services__note" data-active-note>${services[0].note}</p>
 

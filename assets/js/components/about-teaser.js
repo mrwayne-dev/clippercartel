@@ -24,7 +24,6 @@ const render = () => `
     <div class="about-teaser__inner container">
 
       <div class="about-teaser__text">
-        <p class="about-teaser__label" data-reveal="fade-right">About</p>
         <h2 class="about-teaser__title" id="about-teaser-heading" data-reveal="fade-right" style="--reveal-delay: 1">
           A Port Harcourt <em>chair</em>, built on the small things.
         </h2>

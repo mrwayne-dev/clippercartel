@@ -28,7 +28,6 @@ const render = () => {
     <div class="visit__inner container">
 
       <div class="visit__text">
-        <p class="visit__label" data-reveal="fade-right">Visit</p>
         <h2 class="visit__title" id="visit-heading" data-reveal="fade-right" style="--reveal-delay: 1">
           Come <em>through</em>.
         </h2>

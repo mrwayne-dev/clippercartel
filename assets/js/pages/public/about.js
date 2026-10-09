@@ -24,7 +24,6 @@ const render = () => `
     <!-- Hero -->
     <section class="about-page__hero" aria-labelledby="about-page-heading">
       <div class="about-page__hero-inner container">
-        <p class="about-page__eyebrow" data-reveal>About</p>
         <h1 class="about-page__title" id="about-page-heading" data-reveal="clip" style="--reveal-delay: 1">
           The chair, and the <em>hands</em> behind it.
         </h1>
@@ -61,7 +60,6 @@ const render = () => `
     <section class="about-page__principles" aria-labelledby="about-page-principles-heading">
       <div class="about-page__principles-inner container">
         <header class="about-page__principles-header">
-          <p class="about-page__eyebrow" data-reveal>Principles</p>
           <h2 class="about-page__principles-title" id="about-page-principles-heading" data-reveal="clip" style="--reveal-delay: 1">
             What the chair <em>runs on</em>.
           </h2>
@@ -82,7 +80,6 @@ const render = () => `
     <section class="about-page__shop" aria-labelledby="about-page-shop-heading">
       <div class="about-page__shop-inner container">
         <header class="about-page__shop-header">
-          <p class="about-page__eyebrow" data-reveal>The shop</p>
           <h2 class="about-page__shop-title" id="about-page-shop-heading" data-reveal="clip" style="--reveal-delay: 1">
             Where the <em>work</em> happens.
           </h2>

@@ -14,7 +14,6 @@ export default async (mount) => {
 
       <section class="legal-page__hero" aria-labelledby="terms-heading">
         <div class="legal-page__hero-inner container">
-          <p class="legal-page__eyebrow" data-reveal>Terms</p>
           <h1 class="legal-page__title" id="terms-heading" data-reveal="clip" style="--reveal-delay: 1">
             The <em>agreement</em>.
           </h1>

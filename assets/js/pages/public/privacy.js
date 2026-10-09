@@ -14,7 +14,6 @@ export default async (mount) => {
 
       <section class="legal-page__hero" aria-labelledby="privacy-heading">
         <div class="legal-page__hero-inner container">
-          <p class="legal-page__eyebrow" data-reveal>Privacy</p>
           <h1 class="legal-page__title" id="privacy-heading" data-reveal="clip" style="--reveal-delay: 1">
             What I <em>keep</em>.
           </h1>

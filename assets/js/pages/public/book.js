@@ -50,7 +50,6 @@ const render = () => `
     <!-- Hero -->
     <section class="book-page__hero" aria-labelledby="book-page-heading">
       <div class="book-page__hero-inner container">
-        <p class="book-page__eyebrow" data-reveal>Book</p>
         <h1 class="book-page__title" id="book-page-heading" data-reveal="clip" style="--reveal-delay: 1">
           Reserve the <em>chair</em>.
         </h1>

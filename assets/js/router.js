@@ -126,6 +126,10 @@ const navigate = async (path, { push = true } = {}) => {
 
   // Scroll to top on navigation
   window.scrollTo({ top: 0, behavior: 'instant' });
+
+  // Let the nav (and anyone else interested) sync to the new route.
+  // Fires AFTER history.pushState so listeners read the fresh pathname.
+  window.dispatchEvent(new CustomEvent('cc:route', { detail: { path } }));
 };
 
 const onLinkClick = (e) => {

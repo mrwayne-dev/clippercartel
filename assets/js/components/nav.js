@@ -103,11 +103,13 @@ export const mountNav = (mount) => {
   });
 
   const highlight = () => {
-    mount.querySelectorAll('[data-nav-link]').forEach(a => {
+    // Query both the nav bar + the mobile sheet (lives on document.body).
+    document.querySelectorAll('[data-nav-link]').forEach(a => {
       a.toggleAttribute('aria-current', a.getAttribute('href') === location.pathname);
     });
   };
   highlight();
-  window.addEventListener('popstate', highlight);
-  document.addEventListener('click', () => queueMicrotask(highlight));
+  // Fires after the router has pushed the new URL (see router.js).
+  window.addEventListener('cc:route',  highlight);
+  window.addEventListener('popstate',  highlight);
 };

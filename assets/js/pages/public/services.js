@@ -74,7 +74,6 @@ const render = () => `
     <!-- Hero -->
     <section class="services-page__hero" aria-labelledby="services-page-heading">
       <div class="services-page__hero-inner container">
-        <p class="services-page__eyebrow" data-reveal>The menu</p>
         <h1 class="services-page__title" id="services-page-heading" data-reveal="clip" style="--reveal-delay: 1">
           Everything, <em>basically</em>.
         </h1>
@@ -96,7 +95,6 @@ const render = () => `
     <!-- Custom-cuts callout (warm soft bg) -->
     <section class="services-page__callout" aria-label="Custom cuts">
       <div class="services-page__callout-inner container">
-        <p class="services-page__callout-eyebrow" data-reveal>Not on the list?</p>
         <h3 class="services-page__callout-title" data-reveal="clip" style="--reveal-delay: 1">
           If you can describe it, <em>I can cut it</em>.
         </h3>
@@ -118,7 +116,7 @@ export default async (mount) => {
 
   // FAQ accordion (reusable component, also used on /faq later).
   mount.insertAdjacentHTML('beforeend', renderFaq({
-    eyebrow:   'Questions',
+    eyebrow:   '',
     title:     'Fair <em>ones</em>.',
     items:     faqItems,
     headingId: 'services-faq-heading',

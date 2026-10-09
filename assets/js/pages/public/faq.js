@@ -55,7 +55,6 @@ const render = () => `
   <div class="faq-page">
     <section class="faq-page__hero" aria-labelledby="faq-page-heading">
       <div class="faq-page__hero-inner container">
-        <p class="faq-page__eyebrow" data-reveal>FAQ</p>
         <h1 class="faq-page__title" id="faq-page-heading" data-reveal="clip" style="--reveal-delay: 1">
           Fair <em>questions</em>.
         </h1>

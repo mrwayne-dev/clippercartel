@@ -25,6 +25,19 @@ const render = () => `
   <section class="signature section" aria-labelledby="signature-heading">
     <div class="signature__inner container">
 
+      <div class="signature__text">
+        <h2 class="signature__title" id="signature-heading" data-reveal="fade-right">
+          Recent <em>work</em>.
+        </h2>
+        <p class="signature__sub" data-reveal="fade-right" style="--reveal-delay: 1">
+          A selection of cuts from the chair, lately.
+        </p>
+        <a href="/gallery" class="signature__cta" data-reveal="fade-right" style="--reveal-delay: 2">
+          View the gallery
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+
       <figure class="signature__media" data-reveal="scale">
         <img
           src="${heroImage.src}"
@@ -34,19 +47,6 @@ const render = () => `
           data-parallax="60"
         >
       </figure>
-
-      <div class="signature__text">
-        <h2 class="signature__title" id="signature-heading" data-reveal="fade-left">
-          Recent <em>work</em>.
-        </h2>
-        <p class="signature__sub" data-reveal="fade-left" style="--reveal-delay: 1">
-          A selection of cuts from the chair, lately.
-        </p>
-        <a href="/gallery" class="signature__cta" data-reveal="fade-left" style="--reveal-delay: 2">
-          View the gallery
-          <span aria-hidden="true">→</span>
-        </a>
-      </div>
 
     </div>
   </section>

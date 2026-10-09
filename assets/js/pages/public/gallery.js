@@ -63,7 +63,6 @@ const render = () => `
     <!-- Hero -->
     <section class="gallery-page__hero" aria-labelledby="gallery-page-heading">
       <div class="gallery-page__hero-inner container">
-        <p class="gallery-page__eyebrow" data-reveal>Portfolio</p>
         <h1 class="gallery-page__title" id="gallery-page-heading" data-reveal="clip" style="--reveal-delay: 1">
           The whole <em>catalogue</em>.
         </h1>
@@ -109,7 +108,6 @@ const render = () => `
     <!-- Socials -->
     <section class="gallery-page__more">
       <div class="gallery-page__more-inner container">
-        <p class="gallery-page__more-eyebrow" data-reveal>Still looking?</p>
         <h2 class="gallery-page__more-title" data-reveal="clip" style="--reveal-delay: 1">
           Fresh cuts, <em>daily</em>.
         </h2>
