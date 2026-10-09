@@ -190,8 +190,13 @@
     );
   }
 
-  /* Copy stays centred (inherits desktop layout) with nav clearance. */
-  .hero__copy            { padding-top: var(--nav-h); padding-bottom: clamp(72px, 10vh, 96px); }
+  /* Copy stays horizontally centred (text + items), but anchored to
+   * the bottom of the viewport right above the dot indicators. */
+  .hero__copy {
+    justify-content: flex-end;
+    padding-top: var(--nav-h);
+    padding-bottom: clamp(90px, 14vh, 130px);
+  }
   .hero__title           { font-size: clamp(2.4rem, 11vw, 3.75rem); max-width: 14ch; }
   .hero__sub             { font-size: 1rem; max-width: 36ch; }
   .hero__cta             { margin-top: clamp(20px, 3vh, 28px); }
