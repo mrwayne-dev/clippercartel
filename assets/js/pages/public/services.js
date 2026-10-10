@@ -27,7 +27,7 @@ const services = [
   { name: 'Design',       note: 'Custom shapes cut sharp. Bring the idea, I match it.',     image: '/assets/images/gallery/gallery8.webp'  },
   { name: 'Colour',       note: 'Dye, tips, highlights. Bold or subtle, your call.',        image: '/assets/images/gallery/galler12.webp'  },
   { name: 'Beard Sculpt', note: 'Shape, trim, define. Face framed right.',                  image: '/assets/images/gallery/galler14.webp'  },
-  { name: 'Kids',         note: 'All ages. Patient hands, calm chair.',                     image: '/assets/images/gallery/gallery15.webp' },
+  { name: 'Line-Up',      note: 'Crisp hairline, clean edges. The detail that sets the cut off.', image: '/assets/images/gallery/gallery15.webp' },
 ];
 
 const faqItems = [
