@@ -54,7 +54,7 @@ const render = () => `
           Reserve the <em>chair</em>.
         </h1>
         <p class="book-page__sub" data-reveal style="--reveal-delay: 2">
-          Fill in the details below. The final yes happens on WhatsApp — I confirm the slot and the price before anything is locked in.
+          Fill in the details below. The final yes happens on WhatsApp. I confirm the slot and the price before anything is locked in.
         </p>
       </div>
     </section>
@@ -66,7 +66,7 @@ const render = () => `
         <form id="book-form" class="book-form" novalidate data-reveal="fade-right">
 
           <fieldset class="book-form__group">
-            <legend class="book-form__legend">01 — You</legend>
+            <legend class="book-form__legend">01. You</legend>
             <div class="field">
               <label for="b-name">Name</label>
               <input id="b-name" name="name" type="text" required autocomplete="name" placeholder="How I should greet you">
@@ -78,7 +78,7 @@ const render = () => `
           </fieldset>
 
           <fieldset class="book-form__group">
-            <legend class="book-form__legend">02 — The cut</legend>
+            <legend class="book-form__legend">02. The cut</legend>
             <div class="book-form__chips" role="radiogroup" aria-label="Pick a service">
               ${services.map((s, i) => `
                 <label class="book-form__chip">
@@ -90,7 +90,7 @@ const render = () => `
           </fieldset>
 
           <fieldset class="book-form__group">
-            <legend class="book-form__legend">03 — Preferred time</legend>
+            <legend class="book-form__legend">03. Preferred time</legend>
             <div class="book-form__row">
               <div class="field">
                 <label for="b-date">Date</label>
@@ -107,7 +107,7 @@ const render = () => `
           </fieldset>
 
           <fieldset class="book-form__group">
-            <legend class="book-form__legend">04 — Anything else? <span class="book-form__legend-opt">(optional)</span></legend>
+            <legend class="book-form__legend">04. Anything else? <span class="book-form__legend-opt">(optional)</span></legend>
             <div class="field">
               <label class="sr-only" for="b-notes">Notes</label>
               <textarea id="b-notes" name="notes" rows="4" placeholder="A reference photo you'll bring, a style request, anything I should know."></textarea>
@@ -132,7 +132,7 @@ const render = () => `
           <p class="book-info__eyebrow">How it works</p>
           <ol class="book-info__steps">
             <li><span class="book-info__step-num">01</span><p>Fill in your details, pick a cut and a time.</p></li>
-            <li><span class="book-info__step-num">02</span><p>Submit — the request lands on my WhatsApp straight away.</p></li>
+            <li><span class="book-info__step-num">02</span><p>Submit, and the request lands on my WhatsApp straight away.</p></li>
             <li><span class="book-info__step-num">03</span><p>I confirm the slot and the price. Your chair is sealed.</p></li>
           </ol>
 

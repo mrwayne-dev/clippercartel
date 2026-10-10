@@ -14,7 +14,7 @@ $user = getAuthUser();
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin — clippercartel</title>
+  <title>Admin | clippercartel</title>
   <link rel="stylesheet" href="../../assets/css/main.css">
   <link rel="stylesheet" href="../../assets/css/components.css">
   <style>

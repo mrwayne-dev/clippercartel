@@ -21,6 +21,12 @@ export const observeReveal = (scope = document) => {
     return;
   }
 
+  // threshold: 0 (reveal as soon as the box crosses into the shrunk root),
+  // NOT an area threshold. The "clip" variant starts at
+  // clip-path: inset(0 100% 0 0) — zero visible width — and Chromium reports
+  // its intersectionRatio as 0, so any area-based threshold (e.g. 0.08) would
+  // never fire and the heading would stay clipped forever. The -8% bottom
+  // rootMargin still holds the "a little into view" trigger feel.
   const io = new IntersectionObserver((entries) => {
     for (const e of entries) {
       if (e.isIntersecting) {
@@ -28,7 +34,7 @@ export const observeReveal = (scope = document) => {
         io.unobserve(e.target);
       }
     }
-  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0 });
 
   targets.forEach((el) => io.observe(el));
 };

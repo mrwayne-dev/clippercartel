@@ -46,11 +46,17 @@ for name in "${ORDER[@]}"; do
   echo "" >> "$TMP"
 done
 
-# Minify: strip /* comments */, collapse all whitespace, trim around { } ; : , > + ~
+# Minify: strip /* comments */, collapse all whitespace, trim around { } ; : , >
+# NOTE: we deliberately do NOT trim around + or ~. Inside calc() the + is a
+# binary operator that REQUIRES surrounding whitespace (`calc(a + b)`), so
+# collapsing it to `calc(a+b)` makes the whole value invalid and the property
+# silently drops to its initial value (this once zeroed the mobile nav drawer
+# padding). As selector combinators, `a + b` / `a ~ b` are valid with spaces
+# too, so keeping them costs a few bytes and nothing else.
 perl -0777 -pe '
   s{/\*.*?\*/}{}gs;              # block comments
   s/\s+/ /g;                     # collapse whitespace
-  s/\s*([{};,:>+~])\s*/$1/g;     # trim around special chars
+  s/\s*([{};,:>])\s*/$1/g;       # trim around special chars (not + or ~)
   s/;}/}/g;                      # drop trailing semicolons before }
   s/^\s+//; s/\s+$//;            # outer trim
 ' "$TMP" > "$OUT"

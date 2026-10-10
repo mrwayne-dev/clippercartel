@@ -126,7 +126,7 @@
             loading(btn, false);
           }
         } catch (err) {
-          toast('Network error — please try again.', 'error');
+          toast('Network error. Please try again.', 'error');
           loading(btn, false);
         }
       });
